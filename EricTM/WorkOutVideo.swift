@@ -7,10 +7,26 @@
 //
 
 import UIKit
+import AVKit
+import AVFoundation
 
-//MARK: Properties
+class WorkOutVideo {
+    
 
-var name: String
-var video: UIVideo
+    //MARK: Properties
 
+    var name: String
+    var path: URL
+
+    init?(name: String, path: URL) {
+        
+        // Initialization should fail if there is no name or if the rating is negative.
+        if name.isEmpty || !(path.isFileURL)  {
+            return nil
+        }
+        
+        self.name = name
+        self.path = path
+    }
+}
 
