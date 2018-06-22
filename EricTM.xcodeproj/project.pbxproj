@@ -14,6 +14,7 @@
 		82340FE220DCD6BE003079A2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 82340FE020DCD6BE003079A2 /* LaunchScreen.storyboard */; };
 		82340FEA20DCDBCC003079A2 /* WorkOutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82340FE920DCDBCC003079A2 /* WorkOutTableViewCell.swift */; };
 		82340FEC20DCE2D0003079A2 /* WorkOutTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82340FEB20DCE2D0003079A2 /* WorkOutTableViewController.swift */; };
+		82340FEE20DCE9C2003079A2 /* WorkOutVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82340FED20DCE9C2003079A2 /* WorkOutVideo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		82340FE320DCD6BE003079A2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		82340FE920DCDBCC003079A2 /* WorkOutTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkOutTableViewCell.swift; sourceTree = "<group>"; };
 		82340FEB20DCE2D0003079A2 /* WorkOutTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkOutTableViewController.swift; sourceTree = "<group>"; };
+		82340FED20DCE9C2003079A2 /* WorkOutVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkOutVideo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,7 @@
 				82340FDE20DCD6BE003079A2 /* Assets.xcassets */,
 				82340FE020DCD6BE003079A2 /* LaunchScreen.storyboard */,
 				82340FE320DCD6BE003079A2 /* Info.plist */,
+				82340FED20DCE9C2003079A2 /* WorkOutVideo.swift */,
 			);
 			path = EricTM;
 			sourceTree = "<group>";
@@ -145,6 +148,7 @@
 				82340FDA20DCD6BE003079A2 /* ViewController.swift in Sources */,
 				82340FD820DCD6BE003079A2 /* AppDelegate.swift in Sources */,
 				82340FEC20DCE2D0003079A2 /* WorkOutTableViewController.swift in Sources */,
+				82340FEE20DCE9C2003079A2 /* WorkOutVideo.swift in Sources */,
 				82340FEA20DCDBCC003079A2 /* WorkOutTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
