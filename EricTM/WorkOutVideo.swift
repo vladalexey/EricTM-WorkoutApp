@@ -16,17 +16,19 @@ class WorkOutVideo {
     //MARK: Properties
 
     var name: String
-    var path: URL
+    var path: String
+    var image: UIImage?
 
-    init?(name: String, path: URL) {
+    init?(name: String, path: String, image: UIImage) {
         
         // Initialization should fail if there is no name or if the rating is negative.
-        if name.isEmpty || !(path.isFileURL)  {
+        if name.isEmpty || path.isEmpty  {
             return nil
         }
         
         self.name = name
         self.path = path
+        self.image = image
     }
 }
 

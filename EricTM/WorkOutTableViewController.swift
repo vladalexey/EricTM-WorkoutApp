@@ -7,16 +7,60 @@
 //
 
 import UIKit
+import AVKit
+import AVFoundation
 
 class WorkOutTableViewController: UITableViewController {
     
     //MARK: Properties
+    var workOutVideos = [WorkOutVideo]()
     
+    var playerController = AVPlayerViewController()
+    var player:AVPlayer?
     
+    //MARK: Private Methods
+    
+    private func loadSampleWOV() {
+        
+        let photo1 = UIImage(named: "full_body")
+        let photo2 = UIImage(named: "full_body")
+        let photo3 = UIImage(named: "full_body")
+        
+        let path = Bundle.main.path(forResource: "Teaser1Final", ofType: "mp4")
+        
+        guard let wov1 = WorkOutVideo(name: "Full Body", path: path!, image: photo1!) else {
+            fatalError("Error")
+        }
+        
+        guard let wov2 = WorkOutVideo(name: "Upper Body", path: path!, image: photo2!) else {
+            fatalError("Error")
+        }
+        
+        guard let wov3 = WorkOutVideo(name: "Lower Body", path: path!, image: photo3!) else {
+            fatalError("Error")
+        }
+        
+        workOutVideos += [wov1, wov2, wov3]
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.isEditing = true  // allow users to reorder cells
+        
+        self.view.backgroundColor = UIColor.black
+        
+        loadSampleWOV()
+        
+        let videoString: String? = Bundle.main.path(forResource: "Teaser1Final", ofType: ".mp4")
+        
+        if let url = videoString {
+            
+            let videoURL = NSURL(fileURLWithPath: url)
+            
+            self.player = AVPlayer(url: videoURL as URL)
+            self.playerController.player = self.player
+        }
+        
+//        self.tableView.isEditing = true  // allow users to reorder cells
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -33,24 +77,36 @@ class WorkOutTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        return workOutVideos.count
     }
 
-    /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
+        
+        // Table view cells are reused and should be dequeued using a cell identifier.
+        let cellIdentifier = "WorkOutTableViewCell"
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? WorkOutTableViewCell  else {
+            fatalError("The dequeued cell is not an instance of WorkOutTableViewCell.")
+        }
+        
+        // Fetches the appropriate meal for the data source layout.
+        let workOutVideo = workOutVideos[indexPath.row]
+        
+        cell.nameLabel.text = workOutVideo.name
+        cell.photoImageView.image = workOutVideo.image
 
         return cell
     }
-    */
+    
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.backgroundColor = UIColor.clear
+    }
+    
+    
 
     /*
     // Override to support conditional editing of the table view.
@@ -96,5 +152,12 @@ class WorkOutTableViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
-
+    
+    @IBAction func playVideo(_ sender: Any) {
+        
+        self.present(self.playerController, animated: true, completion: {
+            self.playerController.player?.play()
+        })
+    }
+    
 }
