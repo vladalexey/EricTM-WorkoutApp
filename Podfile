@@ -6,6 +6,6 @@ target 'EricTM' do
   use_frameworks!
 
   # Pods for EricTM
-  pod 'Firebase/Core'
+  pod 'Firebase'
 
 end
