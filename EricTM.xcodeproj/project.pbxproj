@@ -17,9 +17,13 @@
 		82340FEE20DCE9C2003079A2 /* WorkOutVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82340FED20DCE9C2003079A2 /* WorkOutVideo.swift */; };
 		82340FF020DCF2E0003079A2 /* Teaser1Final.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 82340FEF20DCF2E0003079A2 /* Teaser1Final.mp4 */; };
 		82A219D120DF40F900F19132 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 82A219D020DF40F900F19132 /* GoogleService-Info.plist */; };
+		CD5662103D49FA68BDE5AAFD /* Pods_EricTM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04A4D67E757F772902D9E46B /* Pods_EricTM.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		04A4D67E757F772902D9E46B /* Pods_EricTM.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EricTM.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		20F9D56DC0FCA7593D6DE152 /* Pods-EricTM.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EricTM.release.xcconfig"; path = "Pods/Target Support Files/Pods-EricTM/Pods-EricTM.release.xcconfig"; sourceTree = "<group>"; };
+		247DE3C76EB8E08143B09F16 /* Pods-EricTM.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EricTM.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EricTM/Pods-EricTM.debug.xcconfig"; sourceTree = "<group>"; };
 		82340FD420DCD6BE003079A2 /* EricTM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EricTM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		82340FD720DCD6BE003079A2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		82340FD920DCD6BE003079A2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -39,17 +43,29 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD5662103D49FA68BDE5AAFD /* Pods_EricTM.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4A3B7B2629F92E40B91FBFAC /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				247DE3C76EB8E08143B09F16 /* Pods-EricTM.debug.xcconfig */,
+				20F9D56DC0FCA7593D6DE152 /* Pods-EricTM.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		82340FCB20DCD6BE003079A2 = {
 			isa = PBXGroup;
 			children = (
 				82340FD620DCD6BE003079A2 /* EricTM */,
 				82340FD520DCD6BE003079A2 /* Products */,
+				4A3B7B2629F92E40B91FBFAC /* Pods */,
+				BC9616DE737CF277F7ECF073 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -79,6 +95,14 @@
 			path = EricTM;
 			sourceTree = "<group>";
 		};
+		BC9616DE737CF277F7ECF073 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				04A4D67E757F772902D9E46B /* Pods_EricTM.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -86,9 +110,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 82340FE620DCD6BE003079A2 /* Build configuration list for PBXNativeTarget "EricTM" */;
 			buildPhases = (
+				B224CA0CFBF2693D922D4104 /* [CP] Check Pods Manifest.lock */,
 				82340FD020DCD6BE003079A2 /* Sources */,
 				82340FD120DCD6BE003079A2 /* Frameworks */,
 				82340FD220DCD6BE003079A2 /* Resources */,
+				F3BF28641864163F8E053AB0 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -147,6 +173,47 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		B224CA0CFBF2693D922D4104 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-EricTM-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F3BF28641864163F8E053AB0 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-EricTM/Pods-EricTM-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-EricTM/Pods-EricTM-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		82340FD020DCD6BE003079A2 /* Sources */ = {
@@ -292,6 +359,7 @@
 		};
 		82340FE720DCD6BE003079A2 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 247DE3C76EB8E08143B09F16 /* Pods-EricTM.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -307,6 +375,7 @@
 		};
 		82340FE820DCD6BE003079A2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 20F9D56DC0FCA7593D6DE152 /* Pods-EricTM.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
