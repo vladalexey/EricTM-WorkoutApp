@@ -10,6 +10,8 @@ import UIKit
 import AVKit
 import AVFoundation
 
+import FirebaseStorage
+
 class WorkOutTableViewController: UITableViewController {
     
     //MARK: Properties
@@ -17,6 +19,10 @@ class WorkOutTableViewController: UITableViewController {
     
     var playerController = AVPlayerViewController()
     var player:AVPlayer?
+    
+    var videoReference: StorageReference {
+        return Storage.storage().reference()
+    }
     
     //MARK: Private Methods
     
@@ -28,15 +34,15 @@ class WorkOutTableViewController: UITableViewController {
         
         let path = Bundle.main.path(forResource: "Teaser1Final", ofType: "mp4")
         
-        guard let wov1 = WorkOutVideo(name: "Full Body", path: path!, image: photo1!) else {
+        guard let wov1 = WorkOutVideo(name: "FULL BODY", path: path!, image: photo1!) else {
             fatalError("Error")
         }
         
-        guard let wov2 = WorkOutVideo(name: "Upper Body", path: path!, image: photo2!) else {
+        guard let wov2 = WorkOutVideo(name: "UPPER BODY", path: path!, image: photo2!) else {
             fatalError("Error")
         }
         
-        guard let wov3 = WorkOutVideo(name: "Lower Body", path: path!, image: photo3!) else {
+        guard let wov3 = WorkOutVideo(name: "LOWER BODY", path: path!, image: photo3!) else {
             fatalError("Error")
         }
         
@@ -46,27 +52,47 @@ class WorkOutTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = UIColor.black
         
+        //MARK: Setup background interface
+        let backgroundColor = UIColor(
+            red: 0.25,
+            green: 0.25,
+            blue: 0.25,
+            alpha: 1.0
+        )
+        
+        
+        self.view.backgroundColor = backgroundColor
+        navigationController?.navigationBar.barTintColor = backgroundColor // color top bar black
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]  // color top bar text white
+        tabBarController?.tabBar.tintColor = UIColor.white // color tab bar white
+        
+        
+        //MARK: Setting logo on NavBar
+//        let imageView = UIImageView(frame: CGRect(x: 0, y: 2, width: 5, height: 5))
+//        imageView.contentMode = .scaleAspectFill
+//
+//        imageView.clipsToBounds = true
+//        let image = UIImage(named: "logo")
+//        imageView.image = image
+//        navigationItem.titleView = imageView
+        
+        
+        //MARK: Load workout sessions
         loadSampleWOV()
         
-        let videoString: String? = Bundle.main.path(forResource: "Teaser1Final", ofType: ".mp4")
         
-        if let url = videoString {
-            
-            let videoURL = NSURL(fileURLWithPath: url)
-            
-            self.player = AVPlayer(url: videoURL as URL)
-            self.playerController.player = self.player
-        }
+        //MARK: Play videos
+        let videoURL: NSURL? = NSURL(string: "https://firebasestorage.googleapis.com/v0/b/erictmworkout.appspot.com/o/Evie's%20Transformation.mov?alt=media&token=67afdb85-8b44-4359-86f7-b2c9f0dcf016")
         
-//        self.tableView.isEditing = true  // allow users to reorder cells
+        self.player = AVPlayer(url: videoURL! as URL)
+        self.playerController.player = self.player
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+//         Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+         self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
     override func didReceiveMemoryWarning() {
@@ -74,7 +100,7 @@ class WorkOutTableViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    // MARK: - Table view data source
+    //MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -128,20 +154,16 @@ class WorkOutTableViewController: UITableViewController {
     }
     */
 
-    /*
     // Override to support rearranging the table view.
     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
 
     }
-    */
 
-    /*
     // Override to support conditional rearranging of the table view.
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the item to be re-orderable.
         return true
     }
-    */
 
     /*
     // MARK: - Navigation
@@ -161,3 +183,4 @@ class WorkOutTableViewController: UITableViewController {
     }
     
 }
+

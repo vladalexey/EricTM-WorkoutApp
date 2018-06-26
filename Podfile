@@ -7,5 +7,6 @@ target 'EricTM' do
 
   # Pods for EricTM
   pod 'Firebase'
+  pod 'Firebase/Storage'
 
 end

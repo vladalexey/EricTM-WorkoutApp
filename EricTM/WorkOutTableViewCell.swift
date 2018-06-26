@@ -13,6 +13,9 @@ class WorkOutTableViewCell: UITableViewCell {
     //MARK: Properties
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var photoImageView: UIImageView!
+    @IBOutlet weak var minuteWorkout: UITextView!
+    
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
