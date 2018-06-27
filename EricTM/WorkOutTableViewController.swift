@@ -252,6 +252,11 @@ class WorkOutTableViewController: UITableViewController {
 //        self.present(self.playerController, animated: true, completion: {
 //            self.playerController.player?.play()
 //        })
+        UIDevice.current.setValue(UIInterfaceOrientation.landscapeLeft.rawValue, forKey: "orientation")
+        self.present(self.playerController, animated: true, completion: {
+            self.playerController.player?.play()
+        })
+        
     }
     
 }
