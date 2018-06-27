@@ -183,10 +183,11 @@ class WorkOutTableViewController: UITableViewController {
     */
     
     @IBAction func playVideo(_ sender: Any) {
-        
+        UIDevice.current.setValue(UIInterfaceOrientation.landscapeLeft.rawValue, forKey: "orientation")
         self.present(self.playerController, animated: true, completion: {
             self.playerController.player?.play()
         })
+        
     }
     
 }
