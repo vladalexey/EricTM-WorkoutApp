@@ -71,12 +71,19 @@ class WorkOutTableViewController: UITableViewController {
         //MARK: Setting logo on NavBar
 //        let imageView = UIImageView(frame: CGRect(x: 0, y: 2, width: 5, height: 5))
 //        imageView.contentMode = .scaleAspectFill
-//
 //        imageView.clipsToBounds = true
 //        let image = UIImage(named: "logo")
 //        imageView.image = image
 //        navigationItem.titleView = imageView
+        let logoContainer = UIView(frame: CGRect(x: 0, y: 0, width: 270, height: 30))
         
+        let imageView = UIImageView(frame: CGRect(x: 40, y: 5, width: 200, height: 20))
+        imageView.contentMode = .scaleAspectFit
+        let image = UIImage(named: "logo")
+        imageView.image = image
+        logoContainer.addSubview(imageView)
+        navigationItem.titleView = logoContainer
+
         
         //MARK: Load workout sessions
         loadSampleWOV()
