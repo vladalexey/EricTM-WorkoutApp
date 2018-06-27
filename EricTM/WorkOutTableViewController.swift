@@ -53,6 +53,31 @@ class WorkOutTableViewController: UITableViewController {
         super.viewDidLoad()
         
         
+//        let videoString1: String? = Bundle.main.path(forResource: "Teaser1Final", ofType: ".mp4")
+//        let videoString2: String? = Bundle.main.path(forResource: "Teaser1Final", ofType: ".mp4")
+//        let videoString3: String? = Bundle.main.path(forResource: "Teaser1Final", ofType: ".mp4")
+
+
+//        func playplay(url: NSURL) {
+//            let item = AVPlayerItem(url: url! as URL)
+//
+//            NotificationCenter.defaultCenter().addObserver(self, selector:  "playerDidFinishPlaying:", name:   AVPlayerItemDidPlayToEndTimeNotification, object: item)
+//
+//            let player = AVPlayer(playerItem: item)
+//            player.play()
+//        }
+//
+//        func playerDidFinishPlaying(note: NSNotification) {
+//            // Your code here
+//        }
+//
+//        // Process error here
+        
+        
+        
+        
+        
+        
         //MARK: Setup background interface
         let backgroundColor = UIColor(
             red: 0.25,
@@ -75,6 +100,7 @@ class WorkOutTableViewController: UITableViewController {
 //        let image = UIImage(named: "logo")
 //        imageView.image = image
 //        navigationItem.titleView = imageView
+        
         let logoContainer = UIView(frame: CGRect(x: 0, y: 0, width: 270, height: 30))
         
         let imageView = UIImageView(frame: CGRect(x: 40, y: 5, width: 200, height: 20))
@@ -90,16 +116,39 @@ class WorkOutTableViewController: UITableViewController {
         
         
         //MARK: Play videos
-        let videoURL: NSURL? = NSURL(string: "https://firebasestorage.googleapis.com/v0/b/erictmworkout.appspot.com/o/Evie's%20Transformation.mov?alt=media&token=67afdb85-8b44-4359-86f7-b2c9f0dcf016")
+//        let videoURL: NSURL? = NSURL(string: "https://firebasestorage.googleapis.com/v0/b/erictmworkout.appspot.com/o/Evie's%20Transformation.mov?alt=media&token=67afdb85-8b44-4359-86f7-b2c9f0dcf016")
+//
+//        self.player = AVPlayer(url: videoURL! as URL)
+//        self.playerController.player = self.player
         
-        self.player = AVPlayer(url: videoURL! as URL)
-        self.playerController.player = self.player
+//        NotificationCenter.defaultCenter().addObserver(self, selector: "videoMPMoviePlayerWillEnterFullscreen:", name: MPMoviePlayerWillEnterFullscreenNotification, object: nil);
+//        //change orientation to portrait when user exits the full screen
+//        
+//        
+//        NotificationCenter.defaultCenter.addObserver(self, selector: "videoMPMoviePlayerWillExitFullscreenNotification:", name: videoMPMoviePlayerWillExitFullscreenNotification, object: nil);
+//        
+//        }
+//    
+//        func  videoMPMoviePlayerWillEnterFullscreen(notification:NSNotification)
+//        {
+//            let value = UIInterfaceOrientation.landscapeLeft.rawValue ;// UIInterfaceOrientation.LandscapeRight.rawValue
+//            UIDevice.current.setValue(value, forKey: "orientation")
+//        }
+//    
+//    
+//    
+//        func  videoMPMoviePlayerWillExitFullscreenNotification(notification:NSNotification)
+//        {
+//            let value = UIInterfaceOrientation.portrait.rawValue ;// UIInterfaceOrientation.LandscapeRight.rawValue
+//            UIDevice.current.setValue(value, forKey: "orientation")
+//        }
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
 //         Uncomment the following line to display an Edit button in the navigation bar for this view controller.
          self.navigationItem.rightBarButtonItem = self.editButtonItem
+//         editButtonItem?.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
     }
 
     override func didReceiveMemoryWarning() {
@@ -140,14 +189,11 @@ class WorkOutTableViewController: UITableViewController {
     }
     
     
-
-    /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
     }
-    */
 
     /*
     // Override to support editing the table view.
@@ -184,9 +230,28 @@ class WorkOutTableViewController: UITableViewController {
     
     @IBAction func playVideo(_ sender: Any) {
         
-        self.present(self.playerController, animated: true, completion: {
-            self.playerController.player?.play()
-        })
+        var currentTrack = 0
+        
+        let url = NSURL(string: "https://firebasestorage.googleapis.com/v0/b/erictmworkout.appspot.com/o/Evie's%20Transformation.mov?alt=media&token=67afdb85-8b44-4359-86f7-b2c9f0dcf016")
+        
+        let item1 = AVPlayerItem(url: url! as URL)
+        let item2 = AVPlayerItem(url: url! as URL)
+        let item3 = AVPlayerItem(url: url! as URL)
+        
+        
+        let itemsToPlay = [item1, item2, item3]
+        
+        _ = AVQueuePlayer(items: itemsToPlay)
+        
+        
+        if itemsToPlay.count > 0 {
+            player?.replaceCurrentItem(with: itemsToPlay[currentTrack])
+            player?.play()
+        }
+        
+//        self.present(self.playerController, animated: true, completion: {
+//            self.playerController.player?.play()
+//        })
     }
     
 }
