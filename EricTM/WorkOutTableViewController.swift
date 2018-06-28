@@ -24,6 +24,9 @@ class WorkOutTableViewController: UITableViewController {
         return Storage.storage().reference()
     }
     
+    var videoCount = 0
+    
+    
     //MARK: Private Methods
     
     private func loadSampleWOV() {
@@ -52,7 +55,6 @@ class WorkOutTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
 //        let videoString1: String? = Bundle.main.path(forResource: "Teaser1Final", ofType: ".mp4")
 //        let videoString2: String? = Bundle.main.path(forResource: "Teaser1Final", ofType: ".mp4")
 //        let videoString3: String? = Bundle.main.path(forResource: "Teaser1Final", ofType: ".mp4")
@@ -74,81 +76,32 @@ class WorkOutTableViewController: UITableViewController {
 //        // Process error here
         
         
-        
-        
-        
-        
         //MARK: Setup background interface
-        let backgroundColor = UIColor(
-            red: 0.25,
-            green: 0.25,
-            blue: 0.25,
-            alpha: 1.0
-        )
-        
-        
-        self.view.backgroundColor = backgroundColor
-        navigationController?.navigationBar.barTintColor = backgroundColor // color top bar black
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]  // color top bar text white
-        tabBarController?.tabBar.tintColor = UIColor.white // color tab bar white
-        
-        
-        //MARK: Setting logo on NavBar
-//        let imageView = UIImageView(frame: CGRect(x: 0, y: 2, width: 5, height: 5))
-//        imageView.contentMode = .scaleAspectFill
-//        imageView.clipsToBounds = true
-//        let image = UIImage(named: "logo")
-//        imageView.image = image
-//        navigationItem.titleView = imageView
-        
-        let logoContainer = UIView(frame: CGRect(x: 0, y: 0, width: 270, height: 30))
-        
-        let imageView = UIImageView(frame: CGRect(x: 40, y: 5, width: 200, height: 20))
-        imageView.contentMode = .scaleAspectFit
-        let image = UIImage(named: "logo")
-        imageView.image = image
-        logoContainer.addSubview(imageView)
-        navigationItem.titleView = logoContainer
-
+        setupBackground()
         
         //MARK: Load workout sessions
         loadSampleWOV()
         
-        
-        //MARK: Play videos
-//        let videoURL: NSURL? = NSURL(string: "https://firebasestorage.googleapis.com/v0/b/erictmworkout.appspot.com/o/Evie's%20Transformation.mov?alt=media&token=67afdb85-8b44-4359-86f7-b2c9f0dcf016")
-//
-//        self.player = AVPlayer(url: videoURL! as URL)
-//        self.playerController.player = self.player
-        
-//        NotificationCenter.defaultCenter().addObserver(self, selector: "videoMPMoviePlayerWillEnterFullscreen:", name: MPMoviePlayerWillEnterFullscreenNotification, object: nil);
-//        //change orientation to portrait when user exits the full screen
-//        
-//        
-//        NotificationCenter.defaultCenter.addObserver(self, selector: "videoMPMoviePlayerWillExitFullscreenNotification:", name: videoMPMoviePlayerWillExitFullscreenNotification, object: nil);
-//        
-//        }
-//    
-//        func  videoMPMoviePlayerWillEnterFullscreen(notification:NSNotification)
-//        {
-//            let value = UIInterfaceOrientation.landscapeLeft.rawValue ;// UIInterfaceOrientation.LandscapeRight.rawValue
-//            UIDevice.current.setValue(value, forKey: "orientation")
-//        }
-//    
-//    
-//    
-//        func  videoMPMoviePlayerWillExitFullscreenNotification(notification:NSNotification)
-//        {
-//            let value = UIInterfaceOrientation.portrait.rawValue ;// UIInterfaceOrientation.LandscapeRight.rawValue
-//            UIDevice.current.setValue(value, forKey: "orientation")
-//        }
+        //MARK: Prepare Video player
+        prepareVideoPlayer()
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
 //         Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-         self.navigationItem.rightBarButtonItem = self.editButtonItem
-//         editButtonItem?.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
+        self.navigationItem.rightBarButtonItem = self.editButtonItem
+        self.editButtonItem.setTitleTextAttributes( [NSAttributedStringKey.foregroundColor: UIColor.white], for: .selected)
+        
+    }
+    
+    //MARK: Listen to VideoPlayer dismissal event
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?)
+    {
+        
+        if (playerController.isBeingDismissed) {
+            // Video was dismissed -> apply logic here
+            UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")   // set portrait mode after video closes
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -228,37 +181,111 @@ class WorkOutTableViewController: UITableViewController {
     }
     */
     
+    
+    func setupBackground() {
+        
+        let backgroundColor = UIColor(
+            red: 0.25,
+            green: 0.25,
+            blue: 0.25,
+            alpha: 1.0
+        )
+        
+        
+        self.view.backgroundColor = backgroundColor
+        navigationController?.navigationBar.barTintColor = backgroundColor // color top bar black
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]  // color top bar text white
+        tabBarController?.tabBar.tintColor = UIColor.white // color tab bar white
+        
+        
+        //MARK: Setting logo on NavBar
+        
+        let logoContainer = UIView(frame: CGRect(x: 0, y: 0, width: 270, height: 30))
+        
+        let imageView = UIImageView(frame: CGRect(x: 40, y: 5, width: 200, height: 20))
+        imageView.contentMode = .scaleAspectFit
+        let image = UIImage(named: "logo")
+        imageView.image = image
+        logoContainer.addSubview(imageView)
+        navigationItem.titleView = logoContainer
+    }
+    
+    
+    //MARK: Play video IB Action
+    
     @IBAction func playVideo(_ sender: Any) {
-
         
-        var currentTrack = 0
-        
-        let url = NSURL(string: "https://firebasestorage.googleapis.com/v0/b/erictmworkout.appspot.com/o/Evie's%20Transformation.mov?alt=media&token=67afdb85-8b44-4359-86f7-b2c9f0dcf016")
-        
-        let item1 = AVPlayerItem(url: url! as URL)
-        let item2 = AVPlayerItem(url: url! as URL)
-        let item3 = AVPlayerItem(url: url! as URL)
-        
-        
-        let itemsToPlay = [item1, item2, item3]
-        
-        _ = AVQueuePlayer(items: itemsToPlay)
-        
-        
-        if itemsToPlay.count > 0 {
-            player?.replaceCurrentItem(with: itemsToPlay[currentTrack])
-            player?.play()
-        }
-        
-//        self.present(self.playerController, animated: true, completion: {
-//            self.playerController.player?.play()
-//        })
-        UIDevice.current.setValue(UIInterfaceOrientation.landscapeLeft.rawValue, forKey: "orientation")
-        self.present(self.playerController, animated: true, completion: {
-            self.playerController.player?.play()
-        })
+        playPlayVideo()
     
     }
     
+    private func playPlayVideo() {
+        
+        self.present(self.playerController, animated: true, completion: {
+            
+            UIDevice.current.setValue(UIInterfaceOrientation.landscapeRight.rawValue, forKey: "orientation")
+            
+            self.playerController.player?.seek(to: kCMTimeZero)  //set video play from start
+            self.playerController.player?.play()
+        })
+    }
+
+    
+    func prepareVideoPlayer() {
+        
+        let videoURL: NSURL? = NSURL(string: "https://firebasestorage.googleapis.com/v0/b/erictmworkout.appspot.com/o/Evie's%20Transformation.mov?alt=media&token=67afdb85-8b44-4359-86f7-b2c9f0dcf016")
+        
+        let item1 = AVPlayerItem(url: videoURL! as URL)
+        let item2 = AVPlayerItem(url: videoURL! as URL)
+        let item3 = AVPlayerItem(url: videoURL! as URL)
+        
+        let itemsToPlay = [item1, item2, item3]
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidPlayToEndTime), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: item1)
+        
+        self.player = AVPlayer(playerItem: itemsToPlay[videoCount])
+        self.player?.addObserver(self, forKeyPath: "rate", options: NSKeyValueObservingOptions(rawValue: 0), context: nil)
+        self.playerController.player = self.player
+        
+    }
+    
+    @objc func playerItemDidPlayToEndTime() {
+        
+        if videoCount <= 2 {
+            return
+        } else {
+            UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+            self.playerController.dismiss(animated: true, completion: nil)
+        }
+    }
+    
+//    private func playQueueVideos() {
+//
+//                var currentTrack = 0
+//
+//                let url = NSURL(string: "https://firebasestorage.googleapis.com/v0/b/erictmworkout.appspot.com/o/Evie's%20Transformation.mov?alt=media&token=67afdb85-8b44-4359-86f7-b2c9f0dcf016")
+//
+//                let item1 = AVPlayerItem(url: url! as URL)
+//                let item2 = AVPlayerItem(url: url! as URL)
+//                let item3 = AVPlayerItem(url: url! as URL)
+//
+//
+//                let itemsToPlay = [item1, item2, item3]
+//
+//                _ = AVQueuePlayer(items: itemsToPlay)
+//
+//
+//                if itemsToPlay.count > 0 {
+//                    player?.replaceCurrentItem(with: itemsToPlay[currentTrack])
+//                    player?.play()
+//                }
+//
+//                self.present(self.playerController, animated: true, completion: {
+//                    self.playerController.player?.play()
+//                })
+//
+//    }
+    
 }
+
 
