@@ -23,67 +23,25 @@ class WorkOutTableViewController: UITableViewController {
     var videoReference: StorageReference {
         return Storage.storage().reference()
     }
-    
     var videoCount = 0
     
-    
-    //MARK: Private Methods
-    
-    private func loadSampleWOV() {
-        
-        let photo1 = UIImage(named: "full_body")
-        let photo2 = UIImage(named: "full_body")
-        let photo3 = UIImage(named: "full_body")
-        
-        let path = Bundle.main.path(forResource: "Teaser1Final", ofType: "mp4")
-        
-        guard let wov1 = WorkOutVideo(name: "FULL BODY", path: path!, image: photo1!) else {
-            fatalError("Error")
-        }
-        
-        guard let wov2 = WorkOutVideo(name: "UPPER BODY", path: path!, image: photo2!) else {
-            fatalError("Error")
-        }
-        
-        guard let wov3 = WorkOutVideo(name: "LOWER BODY", path: path!, image: photo3!) else {
-            fatalError("Error")
-        }
-        
-        workOutVideos += [wov1, wov2, wov3]
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-//        let videoString1: String? = Bundle.main.path(forResource: "Teaser1Final", ofType: ".mp4")
-//        let videoString2: String? = Bundle.main.path(forResource: "Teaser1Final", ofType: ".mp4")
-//        let videoString3: String? = Bundle.main.path(forResource: "Teaser1Final", ofType: ".mp4")
-
-
-//        func playplay(url: NSURL) {
-//            let item = AVPlayerItem(url: url! as URL)
-//
-//            NotificationCenter.defaultCenter().addObserver(self, selector:  "playerDidFinishPlaying:", name:   AVPlayerItemDidPlayToEndTimeNotification, object: item)
-//
-//            let player = AVPlayer(playerItem: item)
-//            player.play()
-//        }
-//
-//        func playerDidFinishPlaying(note: NSNotification) {
-//            // Your code here
-//        }
-//
-//        // Process error here
-        
-        
-        //MARK: Setup background interface
+    
         setupBackground()
-        
-        //MARK: Load workout sessions
         loadSampleWOV()
         
         //MARK: Prepare Video player
-        prepareVideoPlayer()
+        
+        let videoURL: NSURL? = NSURL(string: "https://firebasestorage.googleapis.com/v0/b/erictmworkout.appspot.com/o/Evie's%20Transformation.mov?alt=media&token=67afdb85-8b44-4359-86f7-b2c9f0dcf016")
+
+        let item = AVPlayerItem(url: videoURL! as URL)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidPlayToEndTime), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: item )
+        
+        self.player = AVPlayer(playerItem: item)
+        self.player?.addObserver(self, forKeyPath: "rate", options: NSKeyValueObservingOptions(rawValue: 0), context: nil)
+        self.playerController.player = self.player
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -92,16 +50,6 @@ class WorkOutTableViewController: UITableViewController {
         self.navigationItem.rightBarButtonItem = self.editButtonItem
         self.editButtonItem.setTitleTextAttributes( [NSAttributedStringKey.foregroundColor: UIColor.white], for: .selected)
         
-    }
-    
-    //MARK: Listen to VideoPlayer dismissal event
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?)
-    {
-        
-        if (playerController.isBeingDismissed) {
-            // Video was dismissed -> apply logic here
-            UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")   // set portrait mode after video closes
-        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -182,6 +130,35 @@ class WorkOutTableViewController: UITableViewController {
     */
     
     
+    //MARK: Private Methods
+    
+    
+    //MARK: Load workout sessions
+    private func loadSampleWOV() {
+        
+        let photo1 = UIImage(named: "full_body")
+        let photo2 = UIImage(named: "full_body")
+        let photo3 = UIImage(named: "full_body")
+        
+        let path = Bundle.main.path(forResource: "Teaser1Final", ofType: "mp4")
+        
+        guard let wov1 = WorkOutVideo(name: "FULL BODY", path: path!, image: photo1!) else {
+            fatalError("Error")
+        }
+        
+        guard let wov2 = WorkOutVideo(name: "UPPER BODY", path: path!, image: photo2!) else {
+            fatalError("Error")
+        }
+        
+        guard let wov3 = WorkOutVideo(name: "LOWER BODY", path: path!, image: photo3!) else {
+            fatalError("Error")
+        }
+        
+        workOutVideos += [wov1, wov2, wov3]
+    }
+
+    
+    //MARK: Setup background interface
     func setupBackground() {
         
         let backgroundColor = UIColor(
@@ -191,12 +168,10 @@ class WorkOutTableViewController: UITableViewController {
             alpha: 1.0
         )
         
-        
         self.view.backgroundColor = backgroundColor
         navigationController?.navigationBar.barTintColor = backgroundColor // color top bar black
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]  // color top bar text white
         tabBarController?.tabBar.tintColor = UIColor.white // color tab bar white
-        
         
         //MARK: Setting logo on NavBar
         
@@ -210,6 +185,45 @@ class WorkOutTableViewController: UITableViewController {
         navigationItem.titleView = logoContainer
     }
     
+    @objc func playerItemDidPlayToEndTime() {
+        
+        if videoCount == 2 {
+            
+            videoCount = 0
+            
+            UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+            self.playerController.dismiss(animated: true, completion: nil)
+            
+        } else {
+            
+            let videoURL: NSURL? = NSURL(string: getURL())
+            videoCount += 1
+            print(videoCount)
+            
+            let item = AVPlayerItem(url: videoURL! as URL)
+            self.player?.replaceCurrentItem(with: item)
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidPlayToEndTime), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: item )
+            self.player?.addObserver(self, forKeyPath: "rate", options: NSKeyValueObservingOptions(rawValue: 0), context: nil)
+            
+            self.player?.play()
+        }
+    }
+    
+    func getURL() -> String {
+        return "https://firebasestorage.googleapis.com/v0/b/erictmworkout.appspot.com/o/Evie's%20Transformation.mov?alt=media&token=67afdb85-8b44-4359-86f7-b2c9f0dcf016"
+    }
+    
+    
+    //MARK: Listen to VideoPlayer dismissal event
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?)
+    {
+        
+        if (playerController.isBeingDismissed) {
+            // Video was dismissed -> apply logic here
+            UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")   // set portrait mode after video closes
+        }
+    }
     
     //MARK: Play video IB Action
     
@@ -231,61 +245,24 @@ class WorkOutTableViewController: UITableViewController {
     }
 
     
-    func prepareVideoPlayer() {
-        
-        let videoURL: NSURL? = NSURL(string: "https://firebasestorage.googleapis.com/v0/b/erictmworkout.appspot.com/o/Evie's%20Transformation.mov?alt=media&token=67afdb85-8b44-4359-86f7-b2c9f0dcf016")
-        
-        let item1 = AVPlayerItem(url: videoURL! as URL)
-        let item2 = AVPlayerItem(url: videoURL! as URL)
-        let item3 = AVPlayerItem(url: videoURL! as URL)
-        
-        let itemsToPlay = [item1, item2, item3]
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidPlayToEndTime), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: item1)
-        
-        self.player = AVPlayer(playerItem: itemsToPlay[videoCount])
-        self.player?.addObserver(self, forKeyPath: "rate", options: NSKeyValueObservingOptions(rawValue: 0), context: nil)
-        self.playerController.player = self.player
-        
-    }
-    
-    @objc func playerItemDidPlayToEndTime() {
-        
-        if videoCount <= 2 {
-            return
-        } else {
-            UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
-            self.playerController.dismiss(animated: true, completion: nil)
-        }
-    }
-    
-//    private func playQueueVideos() {
+//    func prepareVideoPlayer() {
 //
-//                var currentTrack = 0
+//        let videoURL: NSURL? = NSURL(string: "https://firebasestorage.googleapis.com/v0/b/erictmworkout.appspot.com/o/Evie's%20Transformation.mov?alt=media&token=67afdb85-8b44-4359-86f7-b2c9f0dcf016")
 //
-//                let url = NSURL(string: "https://firebasestorage.googleapis.com/v0/b/erictmworkout.appspot.com/o/Evie's%20Transformation.mov?alt=media&token=67afdb85-8b44-4359-86f7-b2c9f0dcf016")
+//        let item1 = AVPlayerItem(url: videoURL! as URL)
+//        let item2 = AVPlayerItem(url: videoURL! as URL)
+//        let item3 = AVPlayerItem(url: videoURL! as URL)
 //
-//                let item1 = AVPlayerItem(url: url! as URL)
-//                let item2 = AVPlayerItem(url: url! as URL)
-//                let item3 = AVPlayerItem(url: url! as URL)
+//        let itemsToPlay = [item1, item2, item3]
 //
+//        NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidPlayToEndTime), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: item1)
 //
-//                let itemsToPlay = [item1, item2, item3]
-//
-//                _ = AVQueuePlayer(items: itemsToPlay)
-//
-//
-//                if itemsToPlay.count > 0 {
-//                    player?.replaceCurrentItem(with: itemsToPlay[currentTrack])
-//                    player?.play()
-//                }
-//
-//                self.present(self.playerController, animated: true, completion: {
-//                    self.playerController.player?.play()
-//                })
+//        self.player = AVPlayer(playerItem: itemsToPlay[videoCount])
+//        self.player?.addObserver(self, forKeyPath: "rate", options: NSKeyValueObservingOptions(rawValue: 0), context: nil)
+//        self.playerController.player = self.player
 //
 //    }
-    
+
 }
 
 
