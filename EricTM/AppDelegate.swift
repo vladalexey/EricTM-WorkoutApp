@@ -22,6 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         FirebaseApp.configure()
         
+        
+        
         return true
     }
 
@@ -48,14 +50,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
     
-
-    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
-        if window == self.window {
-            return .portrait
-        } else {
-            return .allButUpsideDown
-        }
-    }
+    //MARK: Set locked portrait mode for all screen
     
+//    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+//        if window == self.window {
+//            return .portrait
+//        } else {
+//            return .allButUpsideDown
+//        }
+//    }
+    
+    //MARK: Set locked portrait mode for one screen
+    
+//    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+//        if self.window?.rootViewController?.presentedViewController is WorkOutTableViewController {
+//            return UIInterfaceOrientationMask.portrait
+//        } else {
+//            return UIInterfaceOrientationMask.all
+//        }
+//    }
 }
+
+
 
