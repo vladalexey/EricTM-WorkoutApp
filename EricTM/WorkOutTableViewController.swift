@@ -9,6 +9,7 @@
 import UIKit
 import AVKit
 import AVFoundation
+import Darwin
 
 import FirebaseStorage
 
@@ -32,7 +33,7 @@ class WorkOutTableViewController: UITableViewController {
         loadSampleWOV()
         
         //MARK: Prepare Video player
-        
+    
         let videoURL: NSURL? = NSURL(string: "https://firebasestorage.googleapis.com/v0/b/erictmworkout.appspot.com/o/Evie's%20Transformation.mov?alt=media&token=67afdb85-8b44-4359-86f7-b2c9f0dcf016")
 
         let item = AVPlayerItem(url: videoURL! as URL)
@@ -243,6 +244,11 @@ class WorkOutTableViewController: UITableViewController {
             self.playerController.player?.play()
         })
     }
+//
+//    func getRandom() -> Int {
+//        let randomInt = Int.random(in: 0..<6)
+//        return randomInt
+//    }
 
     
 //    func prepareVideoPlayer() {
