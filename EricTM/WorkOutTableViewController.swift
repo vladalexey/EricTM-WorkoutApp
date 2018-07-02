@@ -12,7 +12,7 @@ import AVFoundation
 
 import FirebaseStorage
 
-class WorkOutTableViewController: UITableViewController {
+class WorkOutTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     //MARK: Properties
     var workOutVideos = [WorkOutVideo]()
@@ -24,7 +24,24 @@ class WorkOutTableViewController: UITableViewController {
         return Storage.storage().reference()
     }
     var videoCount = 0
+    var myIndex = 0
     
+    var listWorkOut = ["Full", "Upper", "Lower"]
+
+
+//    override var shouldAutorotate: Bool {
+//        return false
+//    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
+    }
+    
+//    override func viewWillDisappear(_ animated: Bool) {
+//        super.viewWillDisappear(animated)
+//        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.landscapeRight, andRotateTo: UIInterfaceOrientation.landscapeRight)
+//    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
     
@@ -59,15 +76,15 @@ class WorkOutTableViewController: UITableViewController {
 
     //MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return workOutVideos.count
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         // Table view cells are reused and should be dequeued using a cell identifier.
         let cellIdentifier = "WorkOutTableViewCell"
@@ -85,15 +102,24 @@ class WorkOutTableViewController: UITableViewController {
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.backgroundColor = UIColor.clear
     }
     
     
     // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
+    }
+    
+    // Override to handle actions in cell touch
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // initialization code
+        
+        myIndex = indexPath.row
+        playPlayVideo(myIndex: myIndex)
+        
     }
 
     /*
@@ -109,12 +135,21 @@ class WorkOutTableViewController: UITableViewController {
     */
 
     // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
+    func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
+        
+        let videoWorkout = workOutVideos[fromIndexPath.row]
+        let listLabel = listWorkOut[fromIndexPath.row]
+        
+        workOutVideos.remove(at: fromIndexPath.row)
+        listWorkOut.remove(at: fromIndexPath.row)
+        
+        workOutVideos.insert(videoWorkout, at: to.row)
+        listWorkOut.insert(listLabel, at: to.row)
+        
     }
 
     // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the item to be re-orderable.
         return true
     }
@@ -191,7 +226,9 @@ class WorkOutTableViewController: UITableViewController {
             
             videoCount = 0
             
-            UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+//            UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+
+            AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
             self.playerController.dismiss(animated: true, completion: nil)
             
         } else {
@@ -221,26 +258,29 @@ class WorkOutTableViewController: UITableViewController {
         
         if (playerController.isBeingDismissed) {
             // Video was dismissed -> apply logic here
-            UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")   // set portrait mode after video closes
+//            UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")   // set portrait mode after video closes
+            
+            AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
         }
     }
+
     
-    //MARK: Play video IB Action
-    
-    @IBAction func playVideo(_ sender: Any) {
+    private func playPlayVideo(myIndex: Int) {
         
-        playPlayVideo()
-    
-    }
-    
-    private func playPlayVideo() {
+        if myIndex == 1 {
+            
+        }
         
         self.present(self.playerController, animated: true, completion: {
             
-            UIDevice.current.setValue(UIInterfaceOrientation.landscapeRight.rawValue, forKey: "orientation")
+//            UIDevice.current.setValue(UIInterfaceOrientation.landscapeRight.rawValue, forKey: "orientation")
+
+            AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.landscapeRight, andRotateTo: UIInterfaceOrientation.landscapeRight)
             
             self.playerController.player?.seek(to: kCMTimeZero)  //set video play from start
             self.playerController.player?.play()
+            
+            
         })
     }
 
@@ -264,5 +304,6 @@ class WorkOutTableViewController: UITableViewController {
 //    }
 
 }
+
 
 
