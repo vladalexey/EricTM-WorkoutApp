@@ -47,7 +47,12 @@ class WorkOutTableViewController: UIViewController, UITableViewDelegate, UITable
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        videoReference.child("WO_Ep4.mp4").downloadURL(completion: { (url, error) in
+        let random = Int(arc4random_uniform(12) + 1)
+        
+        let videoName: String = "WO_Ep" + String(random) + ".mp4"     //retrieve random videos
+        
+        
+        videoReference.child(videoName).downloadURL(completion: { (url, error) in
             if error != nil {
                 print("Error")
             } else {
@@ -245,7 +250,11 @@ class WorkOutTableViewController: UIViewController, UITableViewDelegate, UITable
             
         } else {
             
-            videoReference.child("WO_Ep4.mp4").downloadURL(completion: { (url, error) in
+            let random = Int(arc4random_uniform(12) + 1)
+            
+            let videoName: String = "WO_Ep" + String(random) + ".mp4"
+            
+            videoReference.child(videoName).downloadURL(completion: { (url, error) in
                 if error != nil {
                     print("Error")
                 } else {
