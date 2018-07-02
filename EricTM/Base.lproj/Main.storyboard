@@ -70,6 +70,7 @@
                                     <outlet property="minuteWorkout" destination="ofy-sn-G2g" id="jYD-6g-LgI"/>
                                     <outlet property="nameLabel" destination="4dr-hx-h1G" id="Fdy-Hd-n1U"/>
                                     <outlet property="photoImageView" destination="BCB-cy-KRg" id="drd-kM-pBE"/>
+                                    <segue destination="VYw-Ql-bz3" kind="presentation" id="Wfq-LR-gpF"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -83,6 +84,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9OY-2W-KPX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="661.60000000000002" y="234.33283358320841"/>
+        </scene>
+        <!--AV Player View Controller-->
+        <scene sceneID="fZ5-3e-v0b">
+            <objects>
+                <avPlayerViewController videoGravity="AVLayerVideoGravityResizeAspect" id="VYw-Ql-bz3" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="flE-ZR-0yP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1586" y="235"/>
         </scene>
         <!--Eric TM-->
         <scene sceneID="uB3-fE-uLe">

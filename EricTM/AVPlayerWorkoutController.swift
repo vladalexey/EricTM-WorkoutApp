@@ -1,28 +1,29 @@
 //
-//  TabBarViewController.swift
+//  AVPlayerWorkoutController.swift
 //  EricTM
 //
-//  Created by Phan Quân on 6/25/18.
+//  Created by Phan Quân on 7/2/18.
 //  Copyright © 2018 Phan Quân. All rights reserved.
 //
 
 import UIKit
 
-class TabBarViewController: UITabBarController {
+class AVPlayerWorkoutController: AVPlayerViewController {
+    
+    
+    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return UIInterfaceOrientation.portrait
+    }
+    
+    override var shouldAutorotate: Bool {
+        return false
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.selectedIndex = 1
+        // Do any additional setup after loading the view.
     }
-    
-//    override var shouldAutorotate: Bool {
-//        return false
-//    }
-//    
-//    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-//        return UIInterfaceOrientationMask.all
-//    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
