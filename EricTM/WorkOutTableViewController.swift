@@ -34,6 +34,7 @@ class WorkOutTableViewController: UIViewController, UITableViewDelegate, UITable
 //        return false
 //    }
     
+    
     override func viewWillAppear(_ animated: Bool) {
 //        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
     }
@@ -56,21 +57,35 @@ class WorkOutTableViewController: UIViewController, UITableViewDelegate, UITable
         
         
 //        (UIApplication.shared.delegate as! AppDelegate).restrictRotation = .all
+        let random = Int(arc4random_uniform(12) + 1)
+        
+        let videoName: String = "WO_Ep" + String(random) + ".mp4"     //retrieve random videos
+        
+        
+        videoReference.child(videoName).downloadURL(completion: { (url, error) in
+            if error != nil {
+                print("Error")
+            } else {
+                
+                let item = AVPlayerItem(url: url!)
+                
+                NotificationCenter.default.addObserver(self, selector: #selector(self.playerItemDidPlayToEndTime), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: item )
+                
+                self.player = AVPlayer(playerItem: item)
+                self.player?.addObserver(self, forKeyPath: "rate", options: NSKeyValueObservingOptions(rawValue: 0), context: nil)
+                self.playerController.player = self.player
+                
+            }
+        })
     
         setupBackground()
         loadSampleWOV()
         
         //MARK: Prepare Video player
-    
-        let videoURL: NSURL? = NSURL(string: "https://firebasestorage.googleapis.com/v0/b/erictmworkout.appspot.com/o/Evie's%20Transformation.mov?alt=media&token=67afdb85-8b44-4359-86f7-b2c9f0dcf016")
+        
+//        let videoURL: NSURL? = NSURL(string: "https://firebasestorage.googleapis.com/v0/b/erictmworkout.appspot.com/o/Evie's%20Transformation.mov?alt=media&token=67afdb85-8b44-4359-86f7-b2c9f0dcf016")
 
-        let item = AVPlayerItem(url: videoURL! as URL)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidPlayToEndTime), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: item )
-        
-        self.player = AVPlayer(playerItem: item)
-        self.player?.addObserver(self, forKeyPath: "rate", options: NSKeyValueObservingOptions(rawValue: 0), context: nil)
-        self.playerController.player = self.player
+
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -245,23 +260,47 @@ class WorkOutTableViewController: UIViewController, UITableViewDelegate, UITable
             
         } else {
             
-            let videoURL: NSURL? = NSURL(string: getURL())
-            videoCount += 1
-            print(videoCount)
+            let random = Int(arc4random_uniform(12) + 1)
             
-            let item = AVPlayerItem(url: videoURL! as URL)
-            self.player?.replaceCurrentItem(with: item)
+            let videoName: String = "WO_Ep" + String(random) + ".mp4"
             
-            NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidPlayToEndTime), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: item )
-            self.player?.addObserver(self, forKeyPath: "rate", options: NSKeyValueObservingOptions(rawValue: 0), context: nil)
+            videoReference.child(videoName).downloadURL(completion: { (url, error) in
+                if error != nil {
+                    print("Error")
+                } else {
             
-            self.player?.play()
+                    
+//                    let videoURL: NSURL? = NSURL(string: getURL())
+                    self.videoCount += 1
+                    print(self.videoCount)
+                    
+                    let item = AVPlayerItem(url: url!)
+                    self.player?.replaceCurrentItem(with: item)
+                    
+                    NotificationCenter.default.addObserver(self, selector: #selector(self.playerItemDidPlayToEndTime), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: item )
+                    self.player?.addObserver(self, forKeyPath: "rate", options: NSKeyValueObservingOptions(rawValue: 0), context: nil)
+                    
+                    self.player?.play()
+
+                }
+            })
         }
     }
+
     
-    func getURL() -> String {
-        return "https://firebasestorage.googleapis.com/v0/b/erictmworkout.appspot.com/o/Evie's%20Transformation.mov?alt=media&token=67afdb85-8b44-4359-86f7-b2c9f0dcf016"
-    }
+    
+//    func getURL() -> String {
+//        return "https://firebasestorage.googleapis.com/v0/b/erictmworkout.appspot.com/o/Evie's%20Transformation.mov?alt=media&token=67afdb85-8b44-4359-86f7-b2c9f0dcf016"
+//         let videoReference = storageRef.child()
+//
+//        videoReference.child("WO_Ep4.mp4").downloadURL(completion: { (url, error) in
+//            if error != nil {
+//                print("Error")
+//            } else {
+//                return url?.absoluteString
+//            }
+//        })
+//    }
     
     
     //MARK: Listen to VideoPlayer dismissal event
