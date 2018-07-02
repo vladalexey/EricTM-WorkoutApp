@@ -9,6 +9,7 @@
 import UIKit
 import AVKit
 import AVFoundation
+import Darwin
 
 import FirebaseStorage
 
@@ -314,6 +315,11 @@ class WorkOutTableViewController: UIViewController, UITableViewDelegate, UITable
             
         })
     }
+//
+//    func getRandom() -> Int {
+//        let randomInt = Int.random(in: 0..<6)
+//        return randomInt
+//    }
 
     
 //    func prepareVideoPlayer() {
