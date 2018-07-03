@@ -15,14 +15,6 @@ class TabBarViewController: UITabBarController {
 
         self.selectedIndex = 1
     }
-    
-//    override var shouldAutorotate: Bool {
-//        return false
-//    }
-//    
-//    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-//        return UIInterfaceOrientationMask.all
-//    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

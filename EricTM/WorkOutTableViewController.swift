@@ -13,7 +13,7 @@ import Darwin
 
 import FirebaseStorage
 
-class WorkOutTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class WorkOutTableViewController: UITableViewController {
     
     //MARK: Properties
     var workOutVideos = [WorkOutVideo]()
@@ -28,21 +28,27 @@ class WorkOutTableViewController: UIViewController, UITableViewDelegate, UITable
     var myIndex = 0
     
     var listWorkOut = ["Full", "Upper", "Lower"]
-
-
-//    override var shouldAutorotate: Bool {
-//        return false
-//    }
+    var workoutLabel = String()
+    var workoutCode = String()
+    
+    let backgroundColor = UIColor(
+        red: 0.25,
+        green: 0.25,
+        blue: 0.25,
+        alpha: 1.0
+    )
+    
+    @IBAction func cancel(_ sender: UIBarButtonItem) {
+        
+        dismiss(animated: true, completion: nil)
+    }
+    
     
     
     override func viewWillAppear(_ animated: Bool) {
-//        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
+        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
     }
-    
-//    override func viewWillDisappear(_ animated: Bool) {
-//        super.viewWillDisappear(animated)
-//        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.landscapeRight, andRotateTo: UIInterfaceOrientation.landscapeRight)
-//    }
+
     
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
         return UIInterfaceOrientation.portrait
@@ -55,44 +61,16 @@ class WorkOutTableViewController: UIViewController, UITableViewDelegate, UITable
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-//        (UIApplication.shared.delegate as! AppDelegate).restrictRotation = .all
-        let random = Int(arc4random_uniform(12) + 1)
-        
-        let videoName: String = "WO_Ep" + String(random) + ".mp4"     //retrieve random videos
-        
-        
-        videoReference.child(videoName).downloadURL(completion: { (url, error) in
-            if error != nil {
-                print("Error")
-            } else {
-                
-                let item = AVPlayerItem(url: url!)
-                
-                NotificationCenter.default.addObserver(self, selector: #selector(self.playerItemDidPlayToEndTime), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: item )
-                
-                self.player = AVPlayer(playerItem: item)
-                self.player?.addObserver(self, forKeyPath: "rate", options: NSKeyValueObservingOptions(rawValue: 0), context: nil)
-                self.playerController.player = self.player
-                
-            }
-        })
-    
         setupBackground()
         loadSampleWOV()
-        
-        //MARK: Prepare Video player
-        
-//        let videoURL: NSURL? = NSURL(string: "https://firebasestorage.googleapis.com/v0/b/erictmworkout.appspot.com/o/Evie's%20Transformation.mov?alt=media&token=67afdb85-8b44-4359-86f7-b2c9f0dcf016")
-
-
+    
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
 //         Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         self.navigationItem.rightBarButtonItem = self.editButtonItem
-        self.editButtonItem.setTitleTextAttributes( [NSAttributedStringKey.foregroundColor: UIColor.white], for: .selected)
+    self.editButtonItem.setTitleTextAttributes( [NSAttributedStringKey.foregroundColor: UIColor.white], for: .selected)
         
     }
 
@@ -103,15 +81,15 @@ class WorkOutTableViewController: UIViewController, UITableViewDelegate, UITable
 
     //MARK: - Table view data source
 
-    func numberOfSections(in tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return workOutVideos.count
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         // Table view cells are reused and should be dequeued using a cell identifier.
         let cellIdentifier = "WorkOutTableViewCell"
@@ -129,40 +107,142 @@ class WorkOutTableViewController: UIViewController, UITableViewDelegate, UITable
         return cell
     }
     
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cell.backgroundColor = UIColor.clear
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.backgroundColor = backgroundColor
     }
     
     
     // Override to support conditional editing of the table view.
-     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
     }
     
     // Override to handle actions in cell touch
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // initialization code
         
         myIndex = indexPath.row
-        playPlayVideo(myIndex: myIndex)
+        workoutLabel = listWorkOut[myIndex]
         
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == "VideoPlayer" {
+        
+            AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.landscapeRight, andRotateTo: UIInterfaceOrientation.landscapeRight)
+            
+            if workoutLabel == "Upper" {
+                workoutCode = "U"
+            } else if workoutLabel == "Lower" {
+                workoutCode = "L"
+            } else if workoutLabel == "Full" {
+                workoutCode = "F"
+            }
 
-    /*
+            
+            let random1 = Int(arc4random_uniform(12) + 1)  // get random number
+
+            let videoName1: String = "WO_Ep" + String(random1) + ".mp4"  // get random workout label
+            
+
+            videoReference.child(videoName1).downloadURL(completion: { (url, error) in
+                if error != nil {
+                    print("Error" + videoName1)
+                } else {
+                    
+                    self.videoCount += 1
+                    print(self.videoCount)
+                    
+                    let url1: URL = url!
+                    let item1 = AVPlayerItem(url: url1)
+                    
+                    let random2 = Int(arc4random_uniform(12) + 1)
+                    let videoName2: String = "WO_Ep" + String(random2) + ".mp4"
+                    
+                    self.videoReference.child(videoName2).downloadURL(completion: { (url, error) in
+                        if error != nil {
+                            print("Error 2" + videoName2)
+                        } else {
+                            self.videoCount += 1
+                            print(self.videoCount)
+                            
+                            let url2: URL = url!
+                            let item2 = AVPlayerItem(url: url2)
+                            
+                            let random3 = Int(arc4random_uniform(12) + 1)
+                            let videoName3: String = "WO_Ep" + String(random3) + ".mp4"
+                            
+                            self.videoReference.child(videoName3).downloadURL(completion: { (url, error) in
+                                if error != nil {
+                                    print("Error 3" + videoName3)
+                                } else {
+                                    self.videoCount += 1
+                                    print(self.videoCount)
+                                    
+                                    let url3: URL = url!
+                                    let item3 = AVPlayerItem(url: url3)
+                                    
+                                    
+                                    
+                                        let destination = segue.destination as! AVPlayerViewController
+                                    
+                                    
+                                        destination.player = AVQueuePlayer(items: [item1, item2, item3])
+        //                                destination.navigationController?.isNavigationBarHidden = true
+                                        destination.navigationController?.navigationBar.backgroundColor = UIColor.black
+                                        destination.player?.play()
+                                    
+                                    
+                                        destination.player?.addObserver(self, forKeyPath: "rate", options: NSKeyValueObservingOptions.new, context: nil)
+                                    
+                                    
+                                        func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+                                            
+                                            if keyPath == "rate" {
+                                                if let rate = change?[NSKeyValueChangeKey.newKey] as? Float {
+                                                    if rate == 0.0 {
+                                                        
+                                                        if destination.player?.timeControlStatus == .paused {
+                                                            
+                                                            print("playback stopped")
+                                                            
+        //                                                    destination.navigationController?.navigationBar.backgroundColor = UIColor.black
+                                                            destination.navigationController?.isNavigationBarHidden = false
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        
+                                    }
+                                }
+                            })
+                        }
+                    })
+                
+                }
+            })
+        }
+    }
+
+
+
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
+//        if editingStyle == .delete {
+//            // Delete the row from the data source
+//            tableView.deleteRows(at: [indexPath], with: .fade)
+        if editingStyle == .insert {
+            
+            
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
-    */
+
 
     // Override to support rearranging the table view.
-    func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
+    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
         
         let videoWorkout = workOutVideos[fromIndexPath.row]
         let listLabel = listWorkOut[fromIndexPath.row]
@@ -176,7 +256,7 @@ class WorkOutTableViewController: UIViewController, UITableViewDelegate, UITable
     }
 
     // Override to support conditional rearranging of the table view.
-    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the item to be re-orderable.
         return true
     }
@@ -223,17 +303,10 @@ class WorkOutTableViewController: UIViewController, UITableViewDelegate, UITable
     //MARK: Setup background interface
     func setupBackground() {
         
-        let backgroundColor = UIColor(
-            red: 0.25,
-            green: 0.25,
-            blue: 0.25,
-            alpha: 1.0
-        )
-        
         self.view.backgroundColor = backgroundColor
         navigationController?.navigationBar.barTintColor = backgroundColor // color top bar black
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]  // color top bar text white
-        tabBarController?.tabBar.tintColor = UIColor.white // color tab bar white
+//        tabBarController?.tabBar.tintColor = UIColor.white // color tab bar white
         
         //MARK: Setting logo on NavBar
         
@@ -247,118 +320,6 @@ class WorkOutTableViewController: UIViewController, UITableViewDelegate, UITable
         navigationItem.titleView = logoContainer
     }
     
-    @objc func playerItemDidPlayToEndTime() {
-        
-        if videoCount == 2 {
-            
-            videoCount = 0
-            
-            UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
-
-//            AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
-            self.playerController.dismiss(animated: true, completion: nil)
-            
-        } else {
-            
-            let random = Int(arc4random_uniform(12) + 1)
-            
-            let videoName: String = "WO_Ep" + String(random) + ".mp4"
-            
-            videoReference.child(videoName).downloadURL(completion: { (url, error) in
-                if error != nil {
-                    print("Error")
-                } else {
-            
-                    
-//                    let videoURL: NSURL? = NSURL(string: getURL())
-                    self.videoCount += 1
-                    print(self.videoCount)
-                    
-                    let item = AVPlayerItem(url: url!)
-                    self.player?.replaceCurrentItem(with: item)
-                    
-                    NotificationCenter.default.addObserver(self, selector: #selector(self.playerItemDidPlayToEndTime), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: item )
-                    self.player?.addObserver(self, forKeyPath: "rate", options: NSKeyValueObservingOptions(rawValue: 0), context: nil)
-                    
-                    self.player?.play()
-
-                }
-            })
-        }
-    }
-
-    
-    
-//    func getURL() -> String {
-//        return "https://firebasestorage.googleapis.com/v0/b/erictmworkout.appspot.com/o/Evie's%20Transformation.mov?alt=media&token=67afdb85-8b44-4359-86f7-b2c9f0dcf016"
-//         let videoReference = storageRef.child()
-//
-//        videoReference.child("WO_Ep4.mp4").downloadURL(completion: { (url, error) in
-//            if error != nil {
-//                print("Error")
-//            } else {
-//                return url?.absoluteString
-//            }
-//        })
-//    }
-    
-    
-    //MARK: Listen to VideoPlayer dismissal event
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?)
-    {
-        
-        if (playerController.isBeingDismissed) {
-            // Video was dismissed -> apply logic here
-            UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")   // set portrait mode after video closes
-            
-//            AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
-        }
-    }
-
-    
-    private func playPlayVideo(myIndex: Int) {
-        
-        if myIndex == 1 {
-            
-        }
-        
-        self.present(self.playerController, animated: true, completion: {
-            
-            UIDevice.current.setValue(UIInterfaceOrientation.landscapeRight.rawValue, forKey: "orientation")
-
-//            AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.landscapeRight, andRotateTo: UIInterfaceOrientation.landscapeRight)
-            
-            self.playerController.player?.seek(to: kCMTimeZero)  //set video play from start
-            self.playerController.player?.play()
-            
-            
-        })
-    }
-//
-//    func getRandom() -> Int {
-//        let randomInt = Int.random(in: 0..<6)
-//        return randomInt
-//    }
-
-    
-//    func prepareVideoPlayer() {
-//
-//        let videoURL: NSURL? = NSURL(string: "https://firebasestorage.googleapis.com/v0/b/erictmworkout.appspot.com/o/Evie's%20Transformation.mov?alt=media&token=67afdb85-8b44-4359-86f7-b2c9f0dcf016")
-//
-//        let item1 = AVPlayerItem(url: videoURL! as URL)
-//        let item2 = AVPlayerItem(url: videoURL! as URL)
-//        let item3 = AVPlayerItem(url: videoURL! as URL)
-//
-//        let itemsToPlay = [item1, item2, item3]
-//
-//        NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidPlayToEndTime), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: item1)
-//
-//        self.player = AVPlayer(playerItem: itemsToPlay[videoCount])
-//        self.player?.addObserver(self, forKeyPath: "rate", options: NSKeyValueObservingOptions(rawValue: 0), context: nil)
-//        self.playerController.player = self.player
-//
-//    }
-
 }
 
 

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8223CDFE20EA2E9500569D3F /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8223CDFD20EA2E9500569D3F /* PlayerViewController.swift */; };
 		82340FD820DCD6BE003079A2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82340FD720DCD6BE003079A2 /* AppDelegate.swift */; };
 		82340FDA20DCD6BE003079A2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82340FD920DCD6BE003079A2 /* ViewController.swift */; };
 		82340FDD20DCD6BE003079A2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 82340FDB20DCD6BE003079A2 /* Main.storyboard */; };
@@ -15,11 +16,10 @@
 		82340FEA20DCDBCC003079A2 /* WorkOutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82340FE920DCDBCC003079A2 /* WorkOutTableViewCell.swift */; };
 		82340FEC20DCE2D0003079A2 /* WorkOutTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82340FEB20DCE2D0003079A2 /* WorkOutTableViewController.swift */; };
 		82340FEE20DCE9C2003079A2 /* WorkOutVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82340FED20DCE9C2003079A2 /* WorkOutVideo.swift */; };
-		82340FF020DCF2E0003079A2 /* Teaser1Final.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 82340FEF20DCF2E0003079A2 /* Teaser1Final.mp4 */; };
 		828C262D20E34C8F00AFF5D9 /* AppUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 828C262C20E34C8F00AFF5D9 /* AppUtility.swift */; };
 		829FBCB720E0E5070052601F /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 829FBCB620E0E5070052601F /* TabBarViewController.swift */; };
 		82A219D120DF40F900F19132 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 82A219D020DF40F900F19132 /* GoogleService-Info.plist */; };
-		82BC332520E9D62900D4F443 /* AVPlayerWorkoutController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82BC332420E9D62900D4F443 /* AVPlayerWorkoutController.swift */; };
+		82E2E1CE20EB168C00D3CA2D /* Teaser1Final.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 82E2E1CD20EB148000D3CA2D /* Teaser1Final.mp4 */; };
 		CD5662103D49FA68BDE5AAFD /* Pods_EricTM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04A4D67E757F772902D9E46B /* Pods_EricTM.framework */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +27,7 @@
 		04A4D67E757F772902D9E46B /* Pods_EricTM.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EricTM.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		20F9D56DC0FCA7593D6DE152 /* Pods-EricTM.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EricTM.release.xcconfig"; path = "Pods/Target Support Files/Pods-EricTM/Pods-EricTM.release.xcconfig"; sourceTree = "<group>"; };
 		247DE3C76EB8E08143B09F16 /* Pods-EricTM.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EricTM.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EricTM/Pods-EricTM.debug.xcconfig"; sourceTree = "<group>"; };
+		8223CDFD20EA2E9500569D3F /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
 		82340FD420DCD6BE003079A2 /* EricTM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EricTM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		82340FD720DCD6BE003079A2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		82340FD920DCD6BE003079A2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -37,11 +38,10 @@
 		82340FE920DCDBCC003079A2 /* WorkOutTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkOutTableViewCell.swift; sourceTree = "<group>"; };
 		82340FEB20DCE2D0003079A2 /* WorkOutTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkOutTableViewController.swift; sourceTree = "<group>"; };
 		82340FED20DCE9C2003079A2 /* WorkOutVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkOutVideo.swift; sourceTree = "<group>"; };
-		82340FEF20DCF2E0003079A2 /* Teaser1Final.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = Teaser1Final.mp4; sourceTree = "<group>"; };
 		828C262C20E34C8F00AFF5D9 /* AppUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUtility.swift; sourceTree = "<group>"; };
 		829FBCB620E0E5070052601F /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		82A219D020DF40F900F19132 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		82BC332420E9D62900D4F443 /* AVPlayerWorkoutController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVPlayerWorkoutController.swift; sourceTree = "<group>"; };
+		82E2E1CD20EB148000D3CA2D /* Teaser1Final.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = Teaser1Final.mp4; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,13 +86,12 @@
 		82340FD620DCD6BE003079A2 /* EricTM */ = {
 			isa = PBXGroup;
 			children = (
+				82E2E1CD20EB148000D3CA2D /* Teaser1Final.mp4 */,
 				82A219D020DF40F900F19132 /* GoogleService-Info.plist */,
-				82340FEF20DCF2E0003079A2 /* Teaser1Final.mp4 */,
 				82340FD720DCD6BE003079A2 /* AppDelegate.swift */,
 				82340FD920DCD6BE003079A2 /* ViewController.swift */,
 				82340FE920DCDBCC003079A2 /* WorkOutTableViewCell.swift */,
 				82340FEB20DCE2D0003079A2 /* WorkOutTableViewController.swift */,
-				82BC332420E9D62900D4F443 /* AVPlayerWorkoutController.swift */,
 				82340FED20DCE9C2003079A2 /* WorkOutVideo.swift */,
 				829FBCB620E0E5070052601F /* TabBarViewController.swift */,
 				828C262C20E34C8F00AFF5D9 /* AppUtility.swift */,
@@ -100,6 +99,7 @@
 				82340FDE20DCD6BE003079A2 /* Assets.xcassets */,
 				82340FE020DCD6BE003079A2 /* LaunchScreen.storyboard */,
 				82340FE320DCD6BE003079A2 /* Info.plist */,
+				8223CDFD20EA2E9500569D3F /* PlayerViewController.swift */,
 			);
 			path = EricTM;
 			sourceTree = "<group>";
@@ -173,10 +173,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				82E2E1CE20EB168C00D3CA2D /* Teaser1Final.mp4 in Resources */,
 				82340FE220DCD6BE003079A2 /* LaunchScreen.storyboard in Resources */,
 				82340FDF20DCD6BE003079A2 /* Assets.xcassets in Resources */,
 				82A219D120DF40F900F19132 /* GoogleService-Info.plist in Resources */,
-				82340FF020DCF2E0003079A2 /* Teaser1Final.mp4 in Resources */,
 				82340FDD20DCD6BE003079A2 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -232,11 +232,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				828C262D20E34C8F00AFF5D9 /* AppUtility.swift in Sources */,
+				8223CDFE20EA2E9500569D3F /* PlayerViewController.swift in Sources */,
 				82340FDA20DCD6BE003079A2 /* ViewController.swift in Sources */,
 				82340FD820DCD6BE003079A2 /* AppDelegate.swift in Sources */,
 				82340FEC20DCE2D0003079A2 /* WorkOutTableViewController.swift in Sources */,
 				82340FEE20DCE9C2003079A2 /* WorkOutVideo.swift in Sources */,
-				82BC332520E9D62900D4F443 /* AVPlayerWorkoutController.swift in Sources */,
 				829FBCB720E0E5070052601F /* TabBarViewController.swift in Sources */,
 				82340FEA20DCDBCC003079A2 /* WorkOutTableViewCell.swift in Sources */,
 			);

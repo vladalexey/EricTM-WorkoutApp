@@ -1,5 +1,5 @@
 //
-//  AVPlayerWorkoutController.swift
+//  PlayerViewController.swift
 //  EricTM
 //
 //  Created by Phan Quân on 7/2/18.
@@ -7,12 +7,13 @@
 //
 
 import UIKit
+import Foundation
+import AVKit
 
-class AVPlayerWorkoutController: AVPlayerViewController {
-    
+class PlayerViewController: AVPlayerViewController {
     
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-        return UIInterfaceOrientation.portrait
+        return UIInterfaceOrientation.landscapeRight
     }
     
     override var shouldAutorotate: Bool {
