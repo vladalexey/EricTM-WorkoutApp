@@ -90,7 +90,7 @@ class WorkOutTableViewController: UITableViewController {
         // Table view cells are reused and should be dequeued using a cell identifier.
         let cellIdentifier = "WorkOutTableViewCell"
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? WorkOutTableViewCell  else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? WorkOutTableViewCell else {
             fatalError("The dequeued cell is not an instance of WorkOutTableViewCell.")
         }
         
@@ -99,7 +99,8 @@ class WorkOutTableViewController: UITableViewController {
         
         cell.nameLabel.text = workOutVideo.name
         cell.photoImageView.image = workOutVideo.image
-
+        cell.Vignette.image = workOutVideo.background
+        cell.shouldIndentWhileEditing = false
         return cell
     }
     
@@ -107,6 +108,9 @@ class WorkOutTableViewController: UITableViewController {
         cell.backgroundColor = backgroundColor
     }
     
+    override func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+        return false
+    }
     
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -274,21 +278,23 @@ class WorkOutTableViewController: UITableViewController {
     //MARK: Load workout sessions
     private func loadSampleWOV() {
         
+        let background = UIImage(named: "Vignette")
+        
         let photo1 = UIImage(named: "full_body")
         let photo2 = UIImage(named: "full_body")
         let photo3 = UIImage(named: "full_body")
         
         let path = Bundle.main.path(forResource: "Teaser1Final", ofType: "mp4")
         
-        guard let wov1 = WorkOutVideo(name: "FULL BODY", path: path!, image: photo1!) else {
+        guard let wov1 = WorkOutVideo(name: "FULL BODY", path: path!, image: photo1!, background: background!) else {
             fatalError("Error")
         }
         
-        guard let wov2 = WorkOutVideo(name: "UPPER BODY", path: path!, image: photo2!) else {
+        guard let wov2 = WorkOutVideo(name: "UPPER BODY", path: path!, image: photo2!, background: background!) else {
             fatalError("Error")
         }
         
-        guard let wov3 = WorkOutVideo(name: "LOWER BODY", path: path!, image: photo3!) else {
+        guard let wov3 = WorkOutVideo(name: "LOWER BODY", path: path!, image: photo3!, background: background!) else {
             fatalError("Error")
         }
         

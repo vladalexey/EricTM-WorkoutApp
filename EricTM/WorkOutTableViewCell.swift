@@ -12,11 +12,12 @@ class WorkOutTableViewCell: UITableViewCell {
     
     //MARK: Properties
     
-    @IBOutlet weak var Vignette: UIImageView!
+
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var minuteWorkout: UITextView!
     
+    @IBOutlet weak var Vignette: UIImageView!
     
     
     override func awakeFromNib() {

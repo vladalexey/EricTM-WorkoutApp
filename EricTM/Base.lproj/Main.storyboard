@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="WorkOutTableViewCell" rowHeight="300" id="v6V-yt-Ixt" customClass="WorkOutTableViewCell" customModule="EricTM" customModuleProvider="target">
+                            <tableViewCell autoresizesSubviews="NO" clipsSubviews="YES" contentMode="scaleAspectFit" preservesSuperviewLayoutMargins="YES" selectionStyle="default" showsReorderControl="YES" indentationWidth="10" shouldIndentWhileEditing="NO" reuseIdentifier="WorkOutTableViewCell" rowHeight="300" id="v6V-yt-Ixt" customClass="WorkOutTableViewCell" customModule="EricTM" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="300"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="v6V-yt-Ixt" id="tei-q8-YQ0">
@@ -69,7 +69,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="Vignette" destination="Hha-60-uwu" id="k9A-W9-Nyl"/>
+                                    <outlet property="Vignette" destination="Hha-60-uwu" id="dFU-xf-l26"/>
                                     <outlet property="minuteWorkout" destination="ofy-sn-G2g" id="jYD-6g-LgI"/>
                                     <outlet property="nameLabel" destination="4dr-hx-h1G" id="Fdy-Hd-n1U"/>
                                     <outlet property="photoImageView" destination="BCB-cy-KRg" id="drd-kM-pBE"/>
@@ -91,6 +91,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="Ndj-HM-rBr">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <attributedString key="attributedTitle"/>
                     </refreshControl>
@@ -106,10 +107,37 @@
                     <view key="view" multipleTouchEnabled="YES" contentMode="scaleToFill" id="tFa-y3-Pvq">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fAt-kQ-nKX">
+                                <rect key="frame" x="16" y="174" width="343" height="216"/>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </pickerView>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Name Workout" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="jD1-5b-orK">
+                                <rect key="frame" x="40" y="114" width="295" height="30"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="jD1-5b-orK" firstAttribute="top" secondItem="I5m-OT-U4a" secondAttribute="top" constant="50" id="8Mb-ke-WDQ"/>
+                            <constraint firstItem="fAt-kQ-nKX" firstAttribute="centerX" secondItem="I5m-OT-U4a" secondAttribute="centerX" id="AFv-dC-ZSS"/>
+                            <constraint firstItem="I5m-OT-U4a" firstAttribute="trailing" secondItem="jD1-5b-orK" secondAttribute="trailing" constant="40" id="D01-lH-ZDc"/>
+                            <constraint firstItem="I5m-OT-U4a" firstAttribute="trailing" secondItem="fAt-kQ-nKX" secondAttribute="trailing" constant="16" id="Ej3-Dm-jvE"/>
+                            <constraint firstItem="fAt-kQ-nKX" firstAttribute="leading" secondItem="I5m-OT-U4a" secondAttribute="leading" constant="16" id="VcU-wB-IUB"/>
+                            <constraint firstItem="jD1-5b-orK" firstAttribute="centerX" secondItem="I5m-OT-U4a" secondAttribute="centerX" id="fck-za-8DL"/>
+                            <constraint firstItem="fAt-kQ-nKX" firstAttribute="top" secondItem="jD1-5b-orK" secondAttribute="bottom" constant="30" id="qdz-o8-TbF"/>
+                            <constraint firstItem="jD1-5b-orK" firstAttribute="leading" secondItem="I5m-OT-U4a" secondAttribute="leading" constant="40" id="sh9-ex-UKv"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="I5m-OT-U4a"/>
                     </view>
                     <navigationItem key="navigationItem" title="Add Workout" id="HlQ-w1-Xbm"/>
+                    <connections>
+                        <outlet property="lengthWorkoutPicker" destination="fAt-kQ-nKX" id="egf-al-nVF"/>
+                        <outlet property="nameWorkoutInput" destination="jD1-5b-orK" id="Zav-lx-hft"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0nF-cZ-Kea" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
