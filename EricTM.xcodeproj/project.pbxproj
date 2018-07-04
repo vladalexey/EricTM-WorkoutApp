@@ -20,6 +20,7 @@
 		829FBCB720E0E5070052601F /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 829FBCB620E0E5070052601F /* TabBarViewController.swift */; };
 		82A219D120DF40F900F19132 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 82A219D020DF40F900F19132 /* GoogleService-Info.plist */; };
 		82E2E1CE20EB168C00D3CA2D /* Teaser1Final.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 82E2E1CD20EB148000D3CA2D /* Teaser1Final.mp4 */; };
+		82EAC90720EC94B00093386C /* AddWorkoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82EAC90620EC94B00093386C /* AddWorkoutViewController.swift */; };
 		CD5662103D49FA68BDE5AAFD /* Pods_EricTM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04A4D67E757F772902D9E46B /* Pods_EricTM.framework */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +43,7 @@
 		829FBCB620E0E5070052601F /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		82A219D020DF40F900F19132 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		82E2E1CD20EB148000D3CA2D /* Teaser1Final.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = Teaser1Final.mp4; sourceTree = "<group>"; };
+		82EAC90620EC94B00093386C /* AddWorkoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddWorkoutViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +95,7 @@
 				82340FE920DCDBCC003079A2 /* WorkOutTableViewCell.swift */,
 				82340FEB20DCE2D0003079A2 /* WorkOutTableViewController.swift */,
 				82340FED20DCE9C2003079A2 /* WorkOutVideo.swift */,
+				82EAC90620EC94B00093386C /* AddWorkoutViewController.swift */,
 				829FBCB620E0E5070052601F /* TabBarViewController.swift */,
 				828C262C20E34C8F00AFF5D9 /* AppUtility.swift */,
 				82340FDB20DCD6BE003079A2 /* Main.storyboard */,
@@ -233,6 +236,7 @@
 			files = (
 				828C262D20E34C8F00AFF5D9 /* AppUtility.swift in Sources */,
 				8223CDFE20EA2E9500569D3F /* PlayerViewController.swift in Sources */,
+				82EAC90720EC94B00093386C /* AddWorkoutViewController.swift in Sources */,
 				82340FDA20DCD6BE003079A2 /* ViewController.swift in Sources */,
 				82340FD820DCD6BE003079A2 /* AppDelegate.swift in Sources */,
 				82340FEC20DCE2D0003079A2 /* WorkOutTableViewController.swift in Sources */,

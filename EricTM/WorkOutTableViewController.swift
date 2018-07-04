@@ -38,11 +38,7 @@ class WorkOutTableViewController: UITableViewController {
         alpha: 1.0
     )
     
-    @IBAction func cancel(_ sender: UIBarButtonItem) {
-        
-        dismiss(animated: true, completion: nil)
-    }
-    
+
     
     
     override func viewWillAppear(_ animated: Bool) {
