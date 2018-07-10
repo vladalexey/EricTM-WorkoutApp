@@ -16,21 +16,25 @@ class WorkOutVideo {
     //MARK: Properties
 
     var name: String
-    var path: String
-    var image: UIImage?
-    var background: UIImage?
+    var length: String
+//    var path: String
+    var image: UIImage? = UIImage(named: "full_body")
+    var background: UIImage? = UIImage(named: "Vignette")
+    
 
-    init?(name: String, path: String, image: UIImage, background: UIImage) {
+//    var path = String(conBundle.main.path(forResource: "Teaser1Final", ofType: "mp4")
+
+    init?(name: String, length: String) {
         
         // Initialization should fail if there is no name or if the rating is negative.
-        if name.isEmpty || path.isEmpty  {
+        if name.isEmpty {
             return nil
         }
         
         self.name = name
-        self.path = path
-        self.image = image
-        self.background = background
+//        self.path = path
+        self.length = length
+
     }
 }
 

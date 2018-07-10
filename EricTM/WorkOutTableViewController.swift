@@ -13,7 +13,7 @@ import Darwin
 
 import FirebaseStorage
 
-class WorkOutTableViewController: UITableViewController {
+class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     
     //MARK: Properties
     var workOutVideos = [WorkOutVideo]()
@@ -32,9 +32,9 @@ class WorkOutTableViewController: UITableViewController {
     var workoutCode = String()
     
     let backgroundColor = UIColor(
-        red: 0.25,
-        green: 0.25,
-        blue: 0.25,
+        red: 0.20,
+        green: 0.20,
+        blue: 0.20,
         alpha: 1.0
     )
     
@@ -64,9 +64,12 @@ class WorkOutTableViewController: UITableViewController {
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
+        tableView.reloadData()
+        
+        
 //         Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         self.navigationItem.rightBarButtonItem = self.editButtonItem
-    self.editButtonItem.setTitleTextAttributes( [NSAttributedStringKey.foregroundColor: UIColor.white], for: .selected)
+        self.editButtonItem.tintColor = UIColor.white
         
     }
 
@@ -97,9 +100,10 @@ class WorkOutTableViewController: UITableViewController {
         // Fetches the appropriate meal for the data source layout.
         let workOutVideo = workOutVideos[indexPath.row]
         
-        cell.nameLabel.text = workOutVideo.name
+        cell.nameLabel.text = workOutVideo.name.uppercased()
         cell.photoImageView.image = workOutVideo.image
         cell.Vignette.image = workOutVideo.background
+        cell.minuteWorkout.text = workOutVideo.length.uppercased()
         cell.shouldIndentWhileEditing = false
         return cell
     }
@@ -129,7 +133,15 @@ class WorkOutTableViewController: UITableViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if segue.identifier == "VideoPlayer" {
+        if segue.identifier == "addWorkout" {
+            
+            let destVC = segue.destination as? UINavigationController
+
+            let AddWorkoutViewController = destVC?.topViewController as! AddWorkoutViewController
+            AddWorkoutViewController.delegate = self
+            
+        }
+        else if segue.identifier == "VideoPlayer" {
         
             AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.landscapeRight, andRotateTo: UIInterfaceOrientation.landscapeRight)
             
@@ -140,6 +152,8 @@ class WorkOutTableViewController: UITableViewController {
             } else if workoutLabel == "Full" {
                 workoutCode = "F"
             }
+            
+            self.videoCount = 0
 
             
             let random1 = Int(arc4random_uniform(12) + 1)  // get random number
@@ -158,7 +172,12 @@ class WorkOutTableViewController: UITableViewController {
                     let url1: URL = url!
                     let item1 = AVPlayerItem(url: url1)
                     
-                    let random2 = Int(arc4random_uniform(12) + 1)
+                    var random2: Int
+                    
+                    repeat {
+                        random2 = Int(arc4random_uniform(12) + 1)
+                    } while random1 == random2
+                    
                     let videoName2: String = "WO_Ep" + String(random2) + ".mp4"
                     
                     self.videoReference.child(videoName2).downloadURL(completion: { (url, error) in
@@ -171,7 +190,11 @@ class WorkOutTableViewController: UITableViewController {
                             let url2: URL = url!
                             let item2 = AVPlayerItem(url: url2)
                             
-                            let random3 = Int(arc4random_uniform(12) + 1)
+                            var random3: Int
+                            
+                            repeat {
+                                random3 = Int(arc4random_uniform(12) + 1)
+                            } while random3 == random2 && random3 == random1
                             let videoName3: String = "WO_Ep" + String(random3) + ".mp4"
                             
                             self.videoReference.child(videoName3).downloadURL(completion: { (url, error) in
@@ -184,38 +207,16 @@ class WorkOutTableViewController: UITableViewController {
                                     let url3: URL = url!
                                     let item3 = AVPlayerItem(url: url3)
                                     
+                                
+                                
+                                    let destination = segue.destination as! AVPlayerViewController
                                     
+                                    destination.navigationController?.setNavigationBarHidden(true, animated: true)
+                                
+                                    destination.player = AVQueuePlayer(items: [item1, item2, item3])
                                     
-                                        let destination = segue.destination as! AVPlayerViewController
-                                    
-                                    
-                                        destination.player = AVQueuePlayer(items: [item1, item2, item3])
-        //                                destination.navigationController?.isNavigationBarHidden = true
-                                        destination.navigationController?.navigationBar.backgroundColor = UIColor.black
-                                        destination.player?.play()
-                                    
-                                    
-                                        destination.player?.addObserver(self, forKeyPath: "rate", options: NSKeyValueObservingOptions.new, context: nil)
-                                    
-                                    
-                                        func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-                                            
-                                            if keyPath == "rate" {
-                                                if let rate = change?[NSKeyValueChangeKey.newKey] as? Float {
-                                                    if rate == 0.0 {
-                                                        
-                                                        if destination.player?.timeControlStatus == .paused {
-                                                            
-                                                            print("playback stopped")
-                                                            
-        //                                                    destination.navigationController?.navigationBar.backgroundColor = UIColor.black
-                                                            destination.navigationController?.isNavigationBarHidden = false
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        
-                                    }
+//                                    destination.player?.addObserver(self, forKeyPath: "rate", options: NSKeyValueObservingOptions.new, context: nil)
+//                                    destination.player?.play()
                                 }
                             })
                         }
@@ -230,9 +231,10 @@ class WorkOutTableViewController: UITableViewController {
 
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-//        if editingStyle == .delete {
-//            // Delete the row from the data source
-//            tableView.deleteRows(at: [indexPath], with: .fade)
+        if editingStyle == .delete {
+            // Delete the row from the data source
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
         if editingStyle == .insert {
             
             
@@ -274,27 +276,32 @@ class WorkOutTableViewController: UITableViewController {
     
     //MARK: Private Methods
     
+    func userDidEnterData(nameWorkout: String, lengthWorkout: String) {
+        
+        let newWorkout = WorkOutVideo(name: nameWorkout, length: lengthWorkout)
+        let newIndex = IndexPath(row: workOutVideos.count, section: 0)
+        workOutVideos.append(newWorkout!)
+        listWorkOut.append(nameWorkout)
+        tableView.insertRows(at: [newIndex], with: .automatic)
+        
+    }
+
     
     //MARK: Load workout sessions
     private func loadSampleWOV() {
+
         
-        let background = UIImage(named: "Vignette")
+//        let path = Bundle.main.path(forResource: "Teaser1Final", ofType: "mp4")
         
-        let photo1 = UIImage(named: "full_body")
-        let photo2 = UIImage(named: "full_body")
-        let photo3 = UIImage(named: "full_body")
-        
-        let path = Bundle.main.path(forResource: "Teaser1Final", ofType: "mp4")
-        
-        guard let wov1 = WorkOutVideo(name: "FULL BODY", path: path!, image: photo1!, background: background!) else {
+        guard let wov1 = WorkOutVideo(name: "FULL BODY", length: "45 minutes") else {
             fatalError("Error")
         }
         
-        guard let wov2 = WorkOutVideo(name: "UPPER BODY", path: path!, image: photo2!, background: background!) else {
+        guard let wov2 = WorkOutVideo(name: "UPPER BODY", length: "45 minutes") else {
             fatalError("Error")
         }
         
-        guard let wov3 = WorkOutVideo(name: "LOWER BODY", path: path!, image: photo3!, background: background!) else {
+        guard let wov3 = WorkOutVideo(name: "LOWER BODY", length: "45 minutes") else {
             fatalError("Error")
         }
         

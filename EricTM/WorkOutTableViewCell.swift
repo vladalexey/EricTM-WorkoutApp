@@ -16,7 +16,6 @@ class WorkOutTableViewCell: UITableViewCell {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var minuteWorkout: UITextView!
-    
     @IBOutlet weak var Vignette: UIImageView!
     
     

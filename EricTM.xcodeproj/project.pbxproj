@@ -11,11 +11,11 @@
 		82340FD820DCD6BE003079A2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82340FD720DCD6BE003079A2 /* AppDelegate.swift */; };
 		82340FDA20DCD6BE003079A2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82340FD920DCD6BE003079A2 /* ViewController.swift */; };
 		82340FDD20DCD6BE003079A2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 82340FDB20DCD6BE003079A2 /* Main.storyboard */; };
-		82340FDF20DCD6BE003079A2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 82340FDE20DCD6BE003079A2 /* Assets.xcassets */; };
 		82340FE220DCD6BE003079A2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 82340FE020DCD6BE003079A2 /* LaunchScreen.storyboard */; };
 		82340FEA20DCDBCC003079A2 /* WorkOutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82340FE920DCDBCC003079A2 /* WorkOutTableViewCell.swift */; };
 		82340FEC20DCE2D0003079A2 /* WorkOutTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82340FEB20DCE2D0003079A2 /* WorkOutTableViewController.swift */; };
 		82340FEE20DCE9C2003079A2 /* WorkOutVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82340FED20DCE9C2003079A2 /* WorkOutVideo.swift */; };
+		82345A7F20EE0E1300BB91CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 82345A7E20EE0E1300BB91CB /* Assets.xcassets */; };
 		828C262D20E34C8F00AFF5D9 /* AppUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 828C262C20E34C8F00AFF5D9 /* AppUtility.swift */; };
 		829FBCB720E0E5070052601F /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 829FBCB620E0E5070052601F /* TabBarViewController.swift */; };
 		82A219D120DF40F900F19132 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 82A219D020DF40F900F19132 /* GoogleService-Info.plist */; };
@@ -33,12 +33,12 @@
 		82340FD720DCD6BE003079A2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		82340FD920DCD6BE003079A2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		82340FDC20DCD6BE003079A2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		82340FDE20DCD6BE003079A2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		82340FE120DCD6BE003079A2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		82340FE320DCD6BE003079A2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		82340FE920DCDBCC003079A2 /* WorkOutTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkOutTableViewCell.swift; sourceTree = "<group>"; };
 		82340FEB20DCE2D0003079A2 /* WorkOutTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkOutTableViewController.swift; sourceTree = "<group>"; };
 		82340FED20DCE9C2003079A2 /* WorkOutVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkOutVideo.swift; sourceTree = "<group>"; };
+		82345A7E20EE0E1300BB91CB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		828C262C20E34C8F00AFF5D9 /* AppUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUtility.swift; sourceTree = "<group>"; };
 		829FBCB620E0E5070052601F /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		82A219D020DF40F900F19132 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -97,12 +97,12 @@
 				82340FED20DCE9C2003079A2 /* WorkOutVideo.swift */,
 				82EAC90620EC94B00093386C /* AddWorkoutViewController.swift */,
 				829FBCB620E0E5070052601F /* TabBarViewController.swift */,
+				8223CDFD20EA2E9500569D3F /* PlayerViewController.swift */,
 				828C262C20E34C8F00AFF5D9 /* AppUtility.swift */,
-				82340FDE20DCD6BE003079A2 /* Assets.xcassets */,
+				82345A7E20EE0E1300BB91CB /* Assets.xcassets */,
 				82340FDB20DCD6BE003079A2 /* Main.storyboard */,
 				82340FE020DCD6BE003079A2 /* LaunchScreen.storyboard */,
 				82340FE320DCD6BE003079A2 /* Info.plist */,
-				8223CDFD20EA2E9500569D3F /* PlayerViewController.swift */,
 			);
 			path = EricTM;
 			sourceTree = "<group>";
@@ -178,9 +178,9 @@
 			files = (
 				82E2E1CE20EB168C00D3CA2D /* Teaser1Final.mp4 in Resources */,
 				82340FE220DCD6BE003079A2 /* LaunchScreen.storyboard in Resources */,
-				82340FDF20DCD6BE003079A2 /* Assets.xcassets in Resources */,
 				82A219D120DF40F900F19132 /* GoogleService-Info.plist in Resources */,
 				82340FDD20DCD6BE003079A2 /* Main.storyboard in Resources */,
+				82345A7F20EE0E1300BB91CB /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
