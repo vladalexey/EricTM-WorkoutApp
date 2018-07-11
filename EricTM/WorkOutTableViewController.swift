@@ -135,6 +135,8 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         
         if segue.identifier == "addWorkout" {
             
+            AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
+            
             let destVC = segue.destination as? UINavigationController
 
             let AddWorkoutViewController = destVC?.topViewController as! AddWorkoutViewController
@@ -167,7 +169,7 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
                 } else {
                     
                     self.videoCount += 1
-                    print(self.videoCount)
+                    print(videoName1)
                     
                     let url1: URL = url!
                     let item1 = AVPlayerItem(url: url1)
@@ -185,7 +187,7 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
                             print("Error 2" + videoName2)
                         } else {
                             self.videoCount += 1
-                            print(self.videoCount)
+                            print(videoName2)
                             
                             let url2: URL = url!
                             let item2 = AVPlayerItem(url: url2)
@@ -194,7 +196,8 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
                             
                             repeat {
                                 random3 = Int(arc4random_uniform(12) + 1)
-                            } while random3 == random2 && random3 == random1
+                            } while (random3 == random2) || (random3 == random1)
+                            
                             let videoName3: String = "WO_Ep" + String(random3) + ".mp4"
                             
                             self.videoReference.child(videoName3).downloadURL(completion: { (url, error) in
@@ -202,7 +205,7 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
                                     print("Error 3" + videoName3)
                                 } else {
                                     self.videoCount += 1
-                                    print(self.videoCount)
+                                    print(videoName3)
                                     
                                     let url3: URL = url!
                                     let item3 = AVPlayerItem(url: url3)

@@ -34,6 +34,7 @@ class AddWorkoutViewController: UIViewController, UIPickerViewDelegate, UIPicker
     
     
     override func viewWillAppear(_ animated: Bool) {
+        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
     }
 
     override func viewDidLoad() {

@@ -12,9 +12,35 @@ import AVKit
 
 class PlayerViewController: AVPlayerViewController {
     
-    @IBOutlet var doneButtonSubview: UIView!
-    
     var playerPlaying: Bool = true
+    var showPlayDoneButton: Bool = true
+    
+    let controlView: UIImageView = {
+        
+        let controlview = UIImageView(image: UIImage(named: "PLAYER BG"))
+        controlview.translatesAutoresizingMaskIntoConstraints = false
+        controlview.alpha = 0.5
+        
+        controlview.addBlurEffect()
+//
+//        let blur = UIBlurEffect(style: UIBlurEffectStyle.light)
+//        let blurView = UIVisualEffectView(effect: blur)
+//
+//        blurView.alpha = 0.5
+//        blurView.frame = controlview.bounds
+//        blurView.roundedAllCorner()
+
+//        controlview.addSubview(blurView)
+//        controlview.isUserInteractionEnabled = false
+        controlview.roundedAllCorner()
+        return controlview
+    }()
+    
+    let topView: UIView = {
+        let topview = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.height, height: UIScreen.main.bounds.width))
+        topview.backgroundColor = UIColor.clear
+        return topview
+    }()
 
     let activityIndicatorView: UIActivityIndicatorView = {
         let aiv = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
@@ -27,12 +53,10 @@ class PlayerViewController: AVPlayerViewController {
         
         let button = UIButton(type: .system)
         
-//        button.frame = CGRect(x: 40, y: 40, width: 40, height: 40)
         button.setImage(UIImage(named: "X"), for: .normal)
         button.tintColor = UIColor.white
-//        button.setTitle("Done", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(PlayerViewController.doneButtonPressed(sender:)), for: UIControlEvents.touchUpInside)
+        button.addTarget(self, action: #selector(doneButtonPressed(sender:)), for: UIControlEvents.touchUpInside)
         return button
         }()
     
@@ -40,12 +64,10 @@ class PlayerViewController: AVPlayerViewController {
         
         let button = UIButton(type: .system)
         
-//        button.frame = CGRect(x: 40, y: 300, width: 40, height: 40)
         button.setImage(UIImage(named: "PAUSE"), for: .normal)
         button.tintColor = UIColor.white
-//        button.setTitle("Pause", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(PlayerViewController.playButtonPressed(sender:)), for: UIControlEvents.touchUpInside)
+        button.addTarget(self, action: #selector(playButtonPressed(sender:)), for: UIControlEvents.touchUpInside)
         return button
     }()
     
@@ -58,85 +80,121 @@ class PlayerViewController: AVPlayerViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-//        self.player?.addObserver(self, forKeyPath: "rate", options: NSKeyValueObservingOptions.new, context: nil) //TODO: Hide buttons after video begins to play
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch: UITouch? = touches.first
-        
-        if touch?.view == self.view {
-            print("appear")
-            playButton.isHidden = false
-            doneButton.isHidden = false
-        }
-    }
-    
-    @objc func buttonDisappear() {
-        print("disappear")
-        playButton.isHidden = true
-        doneButton.isHidden = true
-    }
-    
-    
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        self.showsPlaybackControls = false
+        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.landscapeRight, andRotateTo: UIInterfaceOrientation.landscapeRight)
         
         
-        self.player?.play()
-//        self.player?.addObserver(self, forKeyPath: "rate", options: NSKeyValueObservingOptions.new, context: nil) //TODO: Hide buttons after video begins to play
-        self.player?.addObserver(self, forKeyPath: "currentItem.loadedTimeRanges", options: NSKeyValueObservingOptions.new, context: nil)
+        self.contentOverlayView?.addSubview(topView)
+        
+        topView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(PlayerViewController.handleTap)))
+        
         
         self.contentOverlayView?.addSubview(activityIndicatorView)
         activityIndicatorView.centerXAnchor.constraint(equalTo: (contentOverlayView?.centerXAnchor)!).isActive = true
         activityIndicatorView.centerYAnchor.constraint(equalTo: (contentOverlayView?.centerYAnchor)!).isActive = true
         
+        
+        self.contentOverlayView?.addSubview(controlView)
+        controlView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        controlView.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 20).isActive = true
+        controlView.centerXAnchor.constraint(equalTo: (contentOverlayView?.centerXAnchor)!).isActive = true
+        
+        
         self.contentOverlayView?.addSubview(playButton)
-        playButton.topAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: 300).isActive = true
-        playButton.centerXAnchor.constraint(equalTo: (contentOverlayView?.centerXAnchor)!).isActive = true
         playButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        playButton.topAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: 310).isActive = true
+        playButton.centerXAnchor.constraint(equalTo: (contentOverlayView?.centerXAnchor)!).isActive = true
+        
         
         self.contentOverlayView?.addSubview(doneButton)
-        doneButton.topAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: 300).isActive = true
-        doneButton.leftAnchor.constraint(equalTo: (contentOverlayView?.leftAnchor)!, constant: 80).isActive = true
         doneButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        doneButton.topAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: 310).isActive = true
+        doneButton.leftAnchor.constraint(equalTo: (contentOverlayView?.leftAnchor)!, constant: 80).isActive = true
         
         
+//        self.player?.addObserver(self, forKeyPath: "rate", options: NSKeyValueObservingOptions.new, context: nil) //TODO: Hide buttons after video begins to play
+    }
+    
+//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        let touch: UITouch? = touches.first
+//
+//        if touch?.view == self.view {
+//            print("appear")
+//            playButton.isHidden = false
+//            doneButton.isHidden = false
+//        }
+//    }
+//
+//    @objc func buttonDisappear() {
+//        print("disappear")
+//        playButton.isHidden = true
+//        doneButton.isHidden = true
+//    }
+    
+    @objc func handleTap() {
+        if showPlayDoneButton == true {
+            
+            showPlayDoneButton = false
+            self.controlView.isHidden = true
+            self.playButton.isHidden = true
+            self.doneButton.isHidden = true
+        } else {
+            showPlayDoneButton = true
+            self.controlView.isHidden = false
+            self.playButton.isHidden = false
+            self.doneButton.isHidden = false
+        }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        player?.play()
+        player?.addObserver(self, forKeyPath: "currentItem.loadedTimeRanges", options: NSKeyValueObservingOptions.new, context: nil)
+        
+        
+        self.showsPlaybackControls = false
 
-
+        self.player?.addObserver(self, forKeyPath: "playerController.status", options: NSKeyValueObservingOptions.new, context: nil) //TODO: Hide buttons after video begins to play
+    
         // Do any additional setup after loading the view.
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
 
-//        if keyPath == "rate" {
-//            if let rate = change?[NSKeyValueChangeKey.newKey] as? Float {
-//
-//                print(change)
-//                    if rate == 0.0 {
-//
-//                    if player?.timeControlStatus == .paused {
-//
-//                        print("playback stopped")
-//
-//                    }
-//                } else if rate == 1.0 {
-//
-//                    if player?.timeControlStatus == .playing {
-//                        print("playback")
-//                    }
-//                }
-//            }
-       if keyPath == "currentItem.loadedTimeRanges" {
-            print(change)
+        if keyPath == "playerController.status" {
+            
+            if player?.timeControlStatus == .paused {
+
+                if playerPlaying {
+                    player?.play()
+                }
+            }
+        
+            if player?.timeControlStatus == .waitingToPlayAtSpecifiedRate {
+                
+//                activityIndicatorView.startAnimating()
+                print("Waiting to get metadata")
+                print(change!)
+            }
+            
+            if player?.status == .readyToPlay {
+                
+                activityIndicatorView.stopAnimating()
+                player?.play()
+                
+            } else if player?.timeControlStatus == .playing {
+                
+                activityIndicatorView.stopAnimating()
+            }
+
+        } else if keyPath == "currentItem.loadedTimeRanges" {
+            print(change!)
         }
     }
     
     @objc func doneButtonPressed(sender: UIButton) {
         print("doneButton")
-        self.navigationController?.popToRootViewController(animated: true)
+        self.navigationController?.popViewController(animated: true)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
@@ -144,17 +202,20 @@ class PlayerViewController: AVPlayerViewController {
         
         if playerPlaying == false {
             self.player?.play()
-//            playButton.setTitle("Pause", for: .normal)
             playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
             playerPlaying = true
             print("playButton")
         } else {
             self.player?.pause()
-//            playButton.setTitle("Play", for: .normal)
             playButton.setImage(UIImage(named: "PLAY"), for: .normal)
             playerPlaying = false
             print("pauseButton")
         }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
     }
 
     override func didReceiveMemoryWarning() {
