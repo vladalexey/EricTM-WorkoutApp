@@ -174,7 +174,7 @@ class PlayerViewController: AVPlayerViewController {
                 
 //                activityIndicatorView.startAnimating()
                 print("Waiting to get metadata")
-                print(change!)
+                print(player?.reasonForWaitingToPlay!)
             }
             
             if player?.status == .readyToPlay {
