@@ -10,10 +10,22 @@ import UIKit
 import Foundation
 import AVKit
 
+import FirebaseStorage
+
 class PlayerViewController: AVPlayerViewController {
+    
+    var videoReference: StorageReference {
+        return Storage.storage().reference()
+    }
     
     var playerPlaying: Bool = true
     var showPlayDoneButton: Bool = true
+    
+    var queuePlayer = AVQueuePlayer()
+    var listVideos = [AVPlayerItem]()
+    
+    var workoutCode = String()
+    var videoCount = Int()
     
     let controlView: UIImageView = {
         
@@ -31,8 +43,9 @@ class PlayerViewController: AVPlayerViewController {
 //        blurView.roundedAllCorner()
 
 //        controlview.addSubview(blurView)
-//        controlview.isUserInteractionEnabled = false
+        
         controlview.roundedAllCorner()
+        
         return controlview
     }()
     
@@ -71,6 +84,54 @@ class PlayerViewController: AVPlayerViewController {
         return button
     }()
     
+    lazy var forward15: UIButton = {
+        
+        let button = UIButton(type: .system)
+        
+        button.setImage(UIImage(named: "15FORWARD"), for: .normal)
+        button.tintColor = UIColor.white
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(forward15(sender:)), for: UIControlEvents.touchUpInside)
+        
+        return button
+    }()
+
+    lazy var backward15: UIButton = {
+        
+        let button = UIButton(type: .system)
+        
+        button.setImage(UIImage(named: "15BACKWARD"), for: .normal)
+        button.tintColor = UIColor.white
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(backward15(sender:)), for: UIControlEvents.touchUpInside)
+        
+        return button
+    }()
+    
+    lazy var forward: UIButton = {
+        
+        let button = UIButton(type: .system)
+        
+        button.setImage(UIImage(named: "FORWARD"), for: .normal)
+        button.tintColor = UIColor.white
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(forward(sender:)), for: UIControlEvents.touchUpInside)
+        
+        return button
+    }()
+    
+    lazy var backward: UIButton = {
+        
+        let button = UIButton(type: .system)
+        
+        button.setImage(UIImage(named: "BACKWARD"), for: .normal)
+        button.tintColor = UIColor.white
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(backward(sender:)), for: UIControlEvents.touchUpInside)
+        
+        return button
+    }()
+    
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
         return UIInterfaceOrientation.landscapeRight
     }
@@ -78,11 +139,10 @@ class PlayerViewController: AVPlayerViewController {
     override var shouldAutorotate: Bool {
         return false
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.landscapeRight, andRotateTo: UIInterfaceOrientation.landscapeRight)
         
         
+    func setupUI() {
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
         self.contentOverlayView?.addSubview(topView)
         
         topView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(PlayerViewController.handleTap)))
@@ -108,53 +168,137 @@ class PlayerViewController: AVPlayerViewController {
         self.contentOverlayView?.addSubview(doneButton)
         doneButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         doneButton.topAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: 310).isActive = true
-        doneButton.leftAnchor.constraint(equalTo: (contentOverlayView?.leftAnchor)!, constant: 80).isActive = true
+        doneButton.leftAnchor.constraint(equalTo: (controlView.leftAnchor), constant: 20).isActive = true
+        
+        self.contentOverlayView?.addSubview(backward15)
+        backward15.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        backward15.topAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: 310).isActive = true
+        backward15.rightAnchor.constraint(equalTo: (playButton.leftAnchor), constant: -50).isActive = true
         
         
-//        self.player?.addObserver(self, forKeyPath: "rate", options: NSKeyValueObservingOptions.new, context: nil) //TODO: Hide buttons after video begins to play
+        self.contentOverlayView?.addSubview(forward15)
+        forward15.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        forward15.topAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: 310).isActive = true
+        forward15.leftAnchor.constraint(equalTo: (playButton.rightAnchor), constant: 50).isActive = true
+        
+        self.contentOverlayView?.addSubview(forward)
+        forward.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        forward.topAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: 310).isActive = true
+        forward.leftAnchor.constraint(equalTo: (playButton.rightAnchor), constant: 120).isActive = true
+        
+        self.contentOverlayView?.addSubview(backward)
+        backward.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        backward.topAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: 310).isActive = true
+        backward.rightAnchor.constraint(equalTo: (playButton.leftAnchor), constant: -120).isActive = true
     }
     
-//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        let touch: UITouch? = touches.first
-//
-//        if touch?.view == self.view {
-//            print("appear")
-//            playButton.isHidden = false
-//            doneButton.isHidden = false
-//        }
-//    }
-//
-//    @objc func buttonDisappear() {
-//        print("disappear")
-//        playButton.isHidden = true
-//        doneButton.isHidden = true
-//    }
+    override func viewWillAppear(_ animated: Bool) {
+        
+        setupUI()
+        
+        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.landscapeRight, andRotateTo: UIInterfaceOrientation.landscapeRight)
+        videoCount = 0
+        
+        let random1 = Int(arc4random_uniform(12) + 1)  // get random number
+        let videoName1: String = "WO_Ep" + String(random1) + ".mp4"  // get random workout label
+    
+        videoReference.child(videoName1).downloadURL(completion: { (url, error) in
+            if error != nil {
+                print("Error" + videoName1)
+            } else {
+                
+                self.videoCount += 1
+                print(videoName1)
+                
+                let url1: URL = url!
+                let item1 = AVPlayerItem(url: url1)
+                
+                var random2: Int
+                
+                repeat {
+                    random2 = Int(arc4random_uniform(12) + 1)
+                } while random1 == random2
+                
+                let videoName2: String = "WO_Ep" + String(random2) + ".mp4"
+                
+                self.videoReference.child(videoName2).downloadURL(completion: { (url, error) in
+                    if error != nil {
+                        print("Error 2" + videoName2)
+                    } else {
+                        self.videoCount += 1
+                        print(videoName2)
+                        
+                        let url2: URL = url!
+                        let item2 = AVPlayerItem(url: url2)
+                        
+                        var random3: Int
+                        
+                        repeat {
+                            random3 = Int(arc4random_uniform(12) + 1)
+                        } while (random3 == random2) || (random3 == random1)
+                        
+                        let videoName3: String = "WO_Ep" + String(random3) + ".mp4"
+                        
+                        self.videoReference.child(videoName3).downloadURL(completion: { (url, error) in
+                            if error != nil {
+                                print("Error 3" + videoName3)
+                            } else {
+                                self.videoCount += 1
+                                print(videoName3)
+                                
+                                let url3: URL = url!
+                                let item3 = AVPlayerItem(url: url3)
+                                
+                                self.queuePlayer = AVQueuePlayer(items: [item1, item2, item3])
+                                self.listVideos = [item1, item2, item3]
+                                print(self.queuePlayer.items().count)
+                                
+                                self.player = self.queuePlayer
+                            }
+                        })
+                    }
+                })
+            }
+        })
+    }
     
     @objc func handleTap() {
         if showPlayDoneButton == true {
             
             showPlayDoneButton = false
-            self.controlView.isHidden = true
-            self.playButton.isHidden = true
-            self.doneButton.isHidden = true
+            toggleHidden()
         } else {
+            
             showPlayDoneButton = true
-            self.controlView.isHidden = false
-            self.playButton.isHidden = false
-            self.doneButton.isHidden = false
+            toggleHidden()
         }
+    }
+    
+    func toggleHidden() {
+        
+        self.controlView.isHidden = !self.controlView.isHidden
+        self.playButton.isHidden = !self.playButton.isHidden
+        self.doneButton.isHidden = !self.doneButton.isHidden
+        self.forward15.isHidden = !self.forward15.isHidden
+        self.backward15.isHidden = !self.backward15.isHidden
+        self.forward.isHidden = !self.forward.isHidden
+        self.backward.isHidden = !self.backward.isHidden
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    
+        print(listVideos.count)
         
-        player?.play()
-        player?.addObserver(self, forKeyPath: "currentItem.loadedTimeRanges", options: NSKeyValueObservingOptions.new, context: nil)
+        self.player?.play()
         
+//        self.addObserver(self, forKeyPath: "currentItem.loadedTimeRanges", options: NSKeyValueObservingOptions.new, context: nil)
+        self.player?.addObserver(self, forKeyPath: "playerController.status", options: NSKeyValueObservingOptions.new, context: nil) //TODO: Hide buttons after video begins to play
+
         
         self.showsPlaybackControls = false
 
-        self.player?.addObserver(self, forKeyPath: "playerController.status", options: NSKeyValueObservingOptions.new, context: nil) //TODO: Hide buttons after video begins to play
+//        self.addObserver(self, forKeyPath: "currentItem.loadedTimeRanges", options: NSKeyValueObservingOptions.new, context: nil)
     
         // Do any additional setup after loading the view.
     }
@@ -172,9 +316,13 @@ class PlayerViewController: AVPlayerViewController {
         
             if player?.timeControlStatus == .waitingToPlayAtSpecifiedRate {
                 
-//                activityIndicatorView.startAnimating()
+                activityIndicatorView.startAnimating()
                 print("Waiting to get metadata")
                 print(player?.reasonForWaitingToPlay!)
+                
+            } else if player?.timeControlStatus != .waitingToPlayAtSpecifiedRate {
+                
+                activityIndicatorView.stopAnimating()
             }
             
             if player?.status == .readyToPlay {
@@ -182,7 +330,12 @@ class PlayerViewController: AVPlayerViewController {
                 activityIndicatorView.stopAnimating()
                 player?.play()
                 
-            } else if player?.timeControlStatus == .playing {
+            } else if player?.status != .readyToPlay {
+                
+                activityIndicatorView.startAnimating()
+            }
+            
+            if player?.timeControlStatus == .playing {
                 
                 activityIndicatorView.stopAnimating()
             }
@@ -192,12 +345,14 @@ class PlayerViewController: AVPlayerViewController {
         }
     }
     
+    //MARK: Done button
     @objc func doneButtonPressed(sender: UIButton) {
         print("doneButton")
         self.navigationController?.popViewController(animated: true)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
+    //MARK: Play button
     @objc func playButtonPressed(sender: UIButton) {
         
         if playerPlaying == false {
@@ -210,6 +365,84 @@ class PlayerViewController: AVPlayerViewController {
             playButton.setImage(UIImage(named: "PLAY"), for: .normal)
             playerPlaying = false
             print("pauseButton")
+        }
+    }
+    
+    //MARK: Forward 15 seconds selected
+    @objc func forward15(sender: UIButton) {
+        
+        self.player?.pause()
+        
+        let seekDuration = CMTimeMake(15, 1)
+        let currentTime: CMTime = (self.player?.currentTime())!
+        let newTime = seekDuration + currentTime
+        self.player?.seek(to: newTime)
+        
+        self.player?.play()
+    }
+    
+    //MARK: Backward 15 seconds selected
+    @objc func backward15(sender: UIButton) {
+        
+        self.player?.pause()
+        
+        let seekDuration = CMTimeMake(15, 1)
+        let currentTime: CMTime = (self.player?.currentTime())!
+        if currentTime - seekDuration < kCMTimeZero {                   // check if seek duration is less than 15 seconds
+            
+            let newTime = currentTime - seekDuration
+            self.player?.seek(to: newTime)
+            
+        } else {
+            
+            self.player?.seek(to: kCMTimeZero)
+        }
+        
+        self.player?.play()
+    }
+    
+    //MARK: Forward selected
+    @objc func forward(sender: UIButton) {
+        
+        self.player?.pause()
+        
+        self.queuePlayer.advanceToNextItem()
+        
+        self.player?.play()
+    }
+    
+    //MARK: Backward selected
+    @objc func backward(sender: UIButton) {
+        
+        for item in listVideos {                    // get and insert previous video into queue
+            
+            if item == self.player?.currentItem {
+                
+                let currentIndex = listVideos.index(of: item)
+                print(currentIndex!)
+                
+                if currentIndex! >= 1 {
+                    
+                    self.player?.pause()
+                    
+                    let moveBackIndex = currentIndex! - 1
+                
+                    let currentItem = self.player?.currentItem
+                    let newItem = listVideos[moveBackIndex]
+                    
+                    self.queuePlayer.replaceCurrentItem(with: newItem)
+                    print("replace video successfully")
+                    
+                    self.player?.pause()
+                    
+                    self.queuePlayer.insert(currentItem!, after: newItem)
+                    print("inserted video")
+
+                    self.player?.seek(to: kCMTimeZero)
+                    
+                    self.player?.play()
+                }
+            }
         }
     }
     

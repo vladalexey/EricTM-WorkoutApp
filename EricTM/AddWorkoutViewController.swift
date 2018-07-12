@@ -115,7 +115,7 @@ class AddWorkoutViewController: UIViewController, UIPickerViewDelegate, UIPicker
     @objc func saveWorkoutDone() {
         
         if delegate != nil {
-            print("non nil")
+            print("custom workout non nil")
             if nameWorkoutInput != nil && lengthWorkoutPicker != nil {
                 print("name not nil")
                 delegate?.userDidEnterData(nameWorkout: nameWorkoutInput.text!, lengthWorkout: pickerData[lengthWorkoutPicker.selectedRow(inComponent: 0)])

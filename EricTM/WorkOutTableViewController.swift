@@ -16,10 +16,12 @@ import FirebaseStorage
 class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     
     //MARK: Properties
+    
     var workOutVideos = [WorkOutVideo]()
     
     var playerController = AVPlayerViewController()
     var player:AVPlayer?
+    var queuePlayer = AVQueuePlayer()
     
     var videoReference: StorageReference {
         return Storage.storage().reference()
@@ -147,86 +149,21 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         
             AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.landscapeRight, andRotateTo: UIInterfaceOrientation.landscapeRight)
             
+            let destVC = segue.destination as? PlayerViewController
+            
             if workoutLabel == "Upper" {
                 workoutCode = "U"
+                destVC?.workoutCode = self.workoutCode
+                
             } else if workoutLabel == "Lower" {
                 workoutCode = "L"
+                destVC?.workoutCode = self.workoutCode
+                
             } else if workoutLabel == "Full" {
                 workoutCode = "F"
+                destVC?.workoutCode = self.workoutCode
             }
-            
-            self.videoCount = 0
 
-            
-            let random1 = Int(arc4random_uniform(12) + 1)  // get random number
-
-            let videoName1: String = "WO_Ep" + String(random1) + ".mp4"  // get random workout label
-            
-
-            videoReference.child(videoName1).downloadURL(completion: { (url, error) in
-                if error != nil {
-                    print("Error" + videoName1)
-                } else {
-                    
-                    self.videoCount += 1
-                    print(videoName1)
-                    
-                    let url1: URL = url!
-                    let item1 = AVPlayerItem(url: url1)
-                    
-                    var random2: Int
-                    
-                    repeat {
-                        random2 = Int(arc4random_uniform(12) + 1)
-                    } while random1 == random2
-                    
-                    let videoName2: String = "WO_Ep" + String(random2) + ".mp4"
-                    
-                    self.videoReference.child(videoName2).downloadURL(completion: { (url, error) in
-                        if error != nil {
-                            print("Error 2" + videoName2)
-                        } else {
-                            self.videoCount += 1
-                            print(videoName2)
-                            
-                            let url2: URL = url!
-                            let item2 = AVPlayerItem(url: url2)
-                            
-                            var random3: Int
-                            
-                            repeat {
-                                random3 = Int(arc4random_uniform(12) + 1)
-                            } while (random3 == random2) || (random3 == random1)
-                            
-                            let videoName3: String = "WO_Ep" + String(random3) + ".mp4"
-                            
-                            self.videoReference.child(videoName3).downloadURL(completion: { (url, error) in
-                                if error != nil {
-                                    print("Error 3" + videoName3)
-                                } else {
-                                    self.videoCount += 1
-                                    print(videoName3)
-                                    
-                                    let url3: URL = url!
-                                    let item3 = AVPlayerItem(url: url3)
-                                    
-                                
-                                
-                                    let destination = segue.destination as! AVPlayerViewController
-                                    
-                                    destination.navigationController?.setNavigationBarHidden(true, animated: true)
-                                
-                                    destination.player = AVQueuePlayer(items: [item1, item2, item3])
-                                    
-//                                    destination.player?.addObserver(self, forKeyPath: "rate", options: NSKeyValueObservingOptions.new, context: nil)
-//                                    destination.player?.play()
-                                }
-                            })
-                        }
-                    })
-                
-                }
-            })
         }
     }
 
@@ -279,7 +216,7 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     
     //MARK: Private Methods
     
-    func userDidEnterData(nameWorkout: String, lengthWorkout: String) {
+    func userDidEnterData(nameWorkout: String, lengthWorkout: String) {    //delegate function for add custom workout
         
         let newWorkout = WorkOutVideo(name: nameWorkout, length: lengthWorkout)
         let newIndex = IndexPath(row: workOutVideos.count, section: 0)
