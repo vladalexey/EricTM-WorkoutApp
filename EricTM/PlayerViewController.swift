@@ -139,13 +139,31 @@ class PlayerViewController: AVPlayerViewController {
     override var shouldAutorotate: Bool {
         return false
     }
-        
-        
+    
+//    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+//
+//
+//        if let firstTouch = touches.first {
+//
+//            let hitView = self.contentOverlayView?.hitTest(firstTouch.location(in: self.contentOverlayView), with: event)
+//
+//            if hitView === topView {
+//                print("tap on topView")
+//                handleTap()
+//            }
+//        }
+//    }
+    
     func setupUI() {
+        
+        self.view.isMultipleTouchEnabled = true
+        
         self.navigationController?.setNavigationBarHidden(true, animated: true)
+        
         self.contentOverlayView?.addSubview(topView)
         
-        topView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(PlayerViewController.handleTap)))
+        let tapOnTopView = UITapGestureRecognizer(target: self, action: #selector(PlayerViewController.handleTap))
+        topView.addGestureRecognizer(tapOnTopView)
         
         
         self.contentOverlayView?.addSubview(activityIndicatorView)
@@ -153,40 +171,41 @@ class PlayerViewController: AVPlayerViewController {
         activityIndicatorView.centerYAnchor.constraint(equalTo: (contentOverlayView?.centerYAnchor)!).isActive = true
         
         
-        self.contentOverlayView?.addSubview(controlView)
+        self.contentOverlayView?.insertSubview(controlView, aboveSubview: topView)
+//        controlView.isUserInteractionEnabled = false
         controlView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         controlView.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 20).isActive = true
         controlView.centerXAnchor.constraint(equalTo: (contentOverlayView?.centerXAnchor)!).isActive = true
         
         
-        self.contentOverlayView?.addSubview(playButton)
+        self.contentOverlayView?.insertSubview(playButton, aboveSubview: controlView)
         playButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         playButton.topAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: 310).isActive = true
         playButton.centerXAnchor.constraint(equalTo: (contentOverlayView?.centerXAnchor)!).isActive = true
         
         
-        self.contentOverlayView?.addSubview(doneButton)
+        self.contentOverlayView?.insertSubview(doneButton, aboveSubview: controlView)
         doneButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         doneButton.topAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: 310).isActive = true
         doneButton.leftAnchor.constraint(equalTo: (controlView.leftAnchor), constant: 20).isActive = true
         
-        self.contentOverlayView?.addSubview(backward15)
+        self.contentOverlayView?.insertSubview(backward15, aboveSubview: controlView)
         backward15.heightAnchor.constraint(equalToConstant: 40).isActive = true
         backward15.topAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: 310).isActive = true
         backward15.rightAnchor.constraint(equalTo: (playButton.leftAnchor), constant: -50).isActive = true
         
         
-        self.contentOverlayView?.addSubview(forward15)
+        self.contentOverlayView?.insertSubview(forward15, aboveSubview: controlView)
         forward15.heightAnchor.constraint(equalToConstant: 40).isActive = true
         forward15.topAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: 310).isActive = true
         forward15.leftAnchor.constraint(equalTo: (playButton.rightAnchor), constant: 50).isActive = true
         
-        self.contentOverlayView?.addSubview(forward)
+        self.contentOverlayView?.insertSubview(forward, aboveSubview: controlView)
         forward.heightAnchor.constraint(equalToConstant: 40).isActive = true
         forward.topAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: 310).isActive = true
         forward.leftAnchor.constraint(equalTo: (playButton.rightAnchor), constant: 120).isActive = true
         
-        self.contentOverlayView?.addSubview(backward)
+        self.contentOverlayView?.insertSubview(backward, aboveSubview: controlView)
         backward.heightAnchor.constraint(equalToConstant: 40).isActive = true
         backward.topAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: 310).isActive = true
         backward.rightAnchor.constraint(equalTo: (playButton.leftAnchor), constant: -120).isActive = true
@@ -262,15 +281,27 @@ class PlayerViewController: AVPlayerViewController {
         })
     }
     
-    @objc func handleTap() {
-        if showPlayDoneButton == true {
+    @objc func handleTap(tap: UIGestureRecognizer) {
+        
+        if tap.state == UIGestureRecognizerState.ended {
             
-            showPlayDoneButton = false
-            toggleHidden()
-        } else {
+            let point = tap.location(in: self.view)
             
-            showPlayDoneButton = true
-            toggleHidden()
+            let pointInTopView = self.topView.convert(point, from: self.view)
+            let pointInCtrlView = self.controlView.convert(point, from: self.view)
+            if (self.topView.bounds.contains(pointInTopView)) && !(self.controlView.bounds.contains(pointInCtrlView)) {
+                print("[handleTap] Tap is inside regionView")
+        
+                if showPlayDoneButton == true {
+                    
+                    showPlayDoneButton = false
+                    toggleHidden()
+                } else {
+                    
+                    showPlayDoneButton = true
+                    toggleHidden()
+                }
+            }
         }
     }
     
