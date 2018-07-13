@@ -32,17 +32,15 @@ class PlayerViewController: AVPlayerViewController {
         let controlview = UIImageView(image: UIImage(named: "PLAYER BG"))
         controlview.translatesAutoresizingMaskIntoConstraints = false
         controlview.alpha = 0.5
-        
-        controlview.addBlurEffect()
-//
-//        let blur = UIBlurEffect(style: UIBlurEffectStyle.light)
-//        let blurView = UIVisualEffectView(effect: blur)
-//
-//        blurView.alpha = 0.5
-//        blurView.frame = controlview.bounds
-//        blurView.roundedAllCorner()
 
-//        controlview.addSubview(blurView)
+//        controlview.addBlurEffect()
+
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.regular)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = controlview.bounds
+        
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight] // for supporting device rotation
+        controlview.sendSubview(toBack: blurEffectView)
         
         controlview.roundedAllCorner()
         
@@ -132,6 +130,18 @@ class PlayerViewController: AVPlayerViewController {
         return button
     }()
     
+    lazy var airplay: UIButton = {
+        
+        let button = UIButton(type: .system)
+        
+        button.setImage(UIImage(named: "AIRPLAY"), for: .normal)
+        button.tintColor = UIColor.white
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(airplayButton(sender:)), for: UIControlEvents.touchUpInside)  //TODO: Airplay function
+        
+        return button
+    }()
+    
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
         return UIInterfaceOrientation.landscapeRight
     }
@@ -172,7 +182,7 @@ class PlayerViewController: AVPlayerViewController {
         
         
         self.contentOverlayView?.insertSubview(controlView, aboveSubview: topView)
-//        controlView.isUserInteractionEnabled = false
+        controlView.alpha = 0.5
         controlView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         controlView.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 20).isActive = true
         controlView.centerXAnchor.constraint(equalTo: (contentOverlayView?.centerXAnchor)!).isActive = true
@@ -209,6 +219,11 @@ class PlayerViewController: AVPlayerViewController {
         backward.heightAnchor.constraint(equalToConstant: 40).isActive = true
         backward.topAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: 310).isActive = true
         backward.rightAnchor.constraint(equalTo: (playButton.leftAnchor), constant: -120).isActive = true
+        
+        self.contentOverlayView?.insertSubview(airplay, aboveSubview: controlView)
+        airplay.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        airplay.topAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: 310).isActive = true
+        airplay.rightAnchor.constraint(equalTo: (controlView.rightAnchor), constant: -20).isActive = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -261,6 +276,8 @@ class PlayerViewController: AVPlayerViewController {
                         self.videoReference.child(videoName3).downloadURL(completion: { (url, error) in
                             if error != nil {
                                 print("Error 3" + videoName3)
+                                
+                                
                             } else {
                                 self.videoCount += 1
                                 print(videoName3)
@@ -289,47 +306,72 @@ class PlayerViewController: AVPlayerViewController {
             
             let pointInTopView = self.topView.convert(point, from: self.view)
             let pointInCtrlView = self.controlView.convert(point, from: self.view)
-            if (self.topView.bounds.contains(pointInTopView)) && !(self.controlView.bounds.contains(pointInCtrlView)) {
+            
+            if (self.topView.bounds.contains(pointInTopView)) && !(self.controlView.bounds.contains(pointInCtrlView)) && self.showPlayDoneButton {
+                
                 print("[handleTap] Tap is inside regionView")
-        
-                if showPlayDoneButton == true {
+                
+                let disappearAnimationControll = UIViewPropertyAnimator(duration: 0.3, curve: .easeInOut) {
                     
-                    showPlayDoneButton = false
-                    toggleHidden()
-                } else {
-                    
-                    showPlayDoneButton = true
-                    toggleHidden()
+                    self.toggleHidden()
+    
                 }
+                
+                disappearAnimationControll.startAnimation()
+                
+            } else if (self.topView.bounds.contains(pointInTopView)) && self.showPlayDoneButton != true {
+                
+                let disappearAnimationControll = UIViewPropertyAnimator(duration: 0.3, curve: .easeInOut) {
+                    
+                    self.toggleHidden()
+                }
+                
+                disappearAnimationControll.startAnimation()
+                
             }
         }
     }
     
     func toggleHidden() {
         
-        self.controlView.isHidden = !self.controlView.isHidden
-        self.playButton.isHidden = !self.playButton.isHidden
-        self.doneButton.isHidden = !self.doneButton.isHidden
-        self.forward15.isHidden = !self.forward15.isHidden
-        self.backward15.isHidden = !self.backward15.isHidden
-        self.forward.isHidden = !self.forward.isHidden
-        self.backward.isHidden = !self.backward.isHidden
+        if showPlayDoneButton == true {
+            
+            self.showPlayDoneButton = false
+            
+            self.controlView.alpha = 0.0
+            self.playButton.alpha = 0.0
+            self.doneButton.alpha = 0.0
+            self.forward15.alpha = 0.0
+            self.backward15.alpha = 0.0
+            self.forward.alpha = 0.0
+            self.backward.alpha = 0.0
+            self.airplay.alpha = 0.0
+
+        } else {
+            
+            self.showPlayDoneButton = true
+            
+            self.controlView.alpha = 0.5
+            self.playButton.alpha = 1.0
+            self.doneButton.alpha = 1.0
+            self.forward15.alpha = 1.0
+            self.backward15.alpha = 1.0
+            self.forward.alpha = 1.0
+            self.backward.alpha = 1.0
+            self.airplay.alpha = 1.0
+        }
+
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
-        print(listVideos.count)
         
         self.player?.play()
         
 //        self.addObserver(self, forKeyPath: "currentItem.loadedTimeRanges", options: NSKeyValueObservingOptions.new, context: nil)
         self.player?.addObserver(self, forKeyPath: "playerController.status", options: NSKeyValueObservingOptions.new, context: nil) //TODO: Hide buttons after video begins to play
 
-        
         self.showsPlaybackControls = false
-
-//        self.addObserver(self, forKeyPath: "currentItem.loadedTimeRanges", options: NSKeyValueObservingOptions.new, context: nil)
     
         // Do any additional setup after loading the view.
     }
@@ -344,7 +386,7 @@ class PlayerViewController: AVPlayerViewController {
                     player?.play()
                 }
             }
-        
+
             if player?.timeControlStatus == .waitingToPlayAtSpecifiedRate {
                 
                 activityIndicatorView.startAnimating()
@@ -378,7 +420,8 @@ class PlayerViewController: AVPlayerViewController {
     
     //MARK: Done button
     @objc func doneButtonPressed(sender: UIButton) {
-        print("doneButton")
+        
+        print("doneButtonPressed")
         self.navigationController?.popViewController(animated: true)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
@@ -390,12 +433,12 @@ class PlayerViewController: AVPlayerViewController {
             self.player?.play()
             playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
             playerPlaying = true
-            print("playButton")
+            print("playButtonPressed")
         } else {
             self.player?.pause()
             playButton.setImage(UIImage(named: "PLAY"), for: .normal)
             playerPlaying = false
-            print("pauseButton")
+            print("pauseButtonPressed")
         }
     }
     
@@ -408,6 +451,8 @@ class PlayerViewController: AVPlayerViewController {
         let currentTime: CMTime = (self.player?.currentTime())!
         let newTime = seekDuration + currentTime
         self.player?.seek(to: newTime)
+        
+        print("forward15ButtonPressed")
         
         self.player?.play()
     }
@@ -429,6 +474,8 @@ class PlayerViewController: AVPlayerViewController {
             self.player?.seek(to: kCMTimeZero)
         }
         
+        print("backward15ButtonPressed")
+        
         self.player?.play()
     }
     
@@ -438,6 +485,8 @@ class PlayerViewController: AVPlayerViewController {
         self.player?.pause()
         
         self.queuePlayer.advanceToNextItem()
+        
+        print("forwardButtonPressed")
         
         self.player?.play()
     }
@@ -467,9 +516,11 @@ class PlayerViewController: AVPlayerViewController {
                     self.player?.pause()
                     
                     self.queuePlayer.insert(currentItem!, after: newItem)
-                    print("inserted video")
+                    print("inserted curent video")
 
                     self.player?.seek(to: kCMTimeZero)
+                    
+                    print("backwardButtonPressed")
                     
                     self.player?.play()
                 }
@@ -477,8 +528,14 @@ class PlayerViewController: AVPlayerViewController {
         }
     }
     
+    @objc func airplayButton() {
+        
+        print("airplayButtonPressed")
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
+        
         AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
     }
 
