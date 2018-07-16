@@ -149,20 +149,7 @@ class PlayerViewController: AVPlayerViewController {
     override var shouldAutorotate: Bool {
         return false
     }
-    
-//    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-//
-//
-//        if let firstTouch = touches.first {
-//
-//            let hitView = self.contentOverlayView?.hitTest(firstTouch.location(in: self.contentOverlayView), with: event)
-//
-//            if hitView === topView {
-//                print("tap on topView")
-//                handleTap()
-//            }
-//        }
-//    }
+
     
     func setupUI() {
         
@@ -190,39 +177,39 @@ class PlayerViewController: AVPlayerViewController {
         
         self.contentOverlayView?.insertSubview(playButton, aboveSubview: controlView)
         playButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        playButton.topAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: 310).isActive = true
+        playButton.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         playButton.centerXAnchor.constraint(equalTo: (contentOverlayView?.centerXAnchor)!).isActive = true
         
         
         self.contentOverlayView?.insertSubview(doneButton, aboveSubview: controlView)
         doneButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        doneButton.topAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: 310).isActive = true
+        doneButton.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         doneButton.leftAnchor.constraint(equalTo: (controlView.leftAnchor), constant: 20).isActive = true
         
         self.contentOverlayView?.insertSubview(backward15, aboveSubview: controlView)
         backward15.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        backward15.topAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: 310).isActive = true
+        backward15.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         backward15.rightAnchor.constraint(equalTo: (playButton.leftAnchor), constant: -50).isActive = true
         
         
         self.contentOverlayView?.insertSubview(forward15, aboveSubview: controlView)
         forward15.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        forward15.topAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: 310).isActive = true
+        forward15.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         forward15.leftAnchor.constraint(equalTo: (playButton.rightAnchor), constant: 50).isActive = true
         
         self.contentOverlayView?.insertSubview(forward, aboveSubview: controlView)
         forward.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        forward.topAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: 310).isActive = true
+        forward.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         forward.leftAnchor.constraint(equalTo: (playButton.rightAnchor), constant: 120).isActive = true
         
         self.contentOverlayView?.insertSubview(backward, aboveSubview: controlView)
         backward.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        backward.topAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: 310).isActive = true
+        backward.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         backward.rightAnchor.constraint(equalTo: (playButton.leftAnchor), constant: -120).isActive = true
         
         self.contentOverlayView?.insertSubview(airplay, aboveSubview: controlView)
         airplay.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        airplay.topAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: 310).isActive = true
+        airplay.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         airplay.rightAnchor.constraint(equalTo: (controlView.rightAnchor), constant: -20).isActive = true
     }
     
@@ -239,6 +226,8 @@ class PlayerViewController: AVPlayerViewController {
         videoReference.child(videoName1).downloadURL(completion: { (url, error) in
             if error != nil {
                 print("Error" + videoName1)
+                self.exitVideoPlayer()
+                
             } else {
                 
                 self.videoCount += 1
@@ -246,6 +235,12 @@ class PlayerViewController: AVPlayerViewController {
                 
                 let url1: URL = url!
                 let item1 = AVPlayerItem(url: url1)
+                
+                item1.addObserver(self, forKeyPath: "loadedTimeRanges", options: NSKeyValueObservingOptions.new, context: nil)
+                item1.addObserver(self, forKeyPath: "playbackBufferEmpty", options: NSKeyValueObservingOptions.new, context: nil)
+                item1.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: NSKeyValueObservingOptions.new, context: nil)
+                item1.addObserver(self, forKeyPath: "playbackBufferFull", options: NSKeyValueObservingOptions.new, context: nil)
+                item1.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions.new, context: nil)
                 
                 var random2: Int
                 
@@ -258,12 +253,20 @@ class PlayerViewController: AVPlayerViewController {
                 self.videoReference.child(videoName2).downloadURL(completion: { (url, error) in
                     if error != nil {
                         print("Error 2" + videoName2)
+                        self.exitVideoPlayer()
+                        
                     } else {
                         self.videoCount += 1
                         print(videoName2)
                         
                         let url2: URL = url!
                         let item2 = AVPlayerItem(url: url2)
+                        
+                        item2.addObserver(self, forKeyPath: "loadedTimeRanges", options: NSKeyValueObservingOptions.new, context: nil)
+                        item2.addObserver(self, forKeyPath: "playbackBufferEmpty", options: NSKeyValueObservingOptions.new, context: nil)
+                        item2.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: NSKeyValueObservingOptions.new, context: nil)
+                        item2.addObserver(self, forKeyPath: "playbackBufferFull", options: NSKeyValueObservingOptions.new, context: nil)
+                        item2.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions.new, context: nil)
                         
                         var random3: Int
                         
@@ -276,7 +279,7 @@ class PlayerViewController: AVPlayerViewController {
                         self.videoReference.child(videoName3).downloadURL(completion: { (url, error) in
                             if error != nil {
                                 print("Error 3" + videoName3)
-                                
+                                self.exitVideoPlayer()
                                 
                             } else {
                                 self.videoCount += 1
@@ -284,6 +287,12 @@ class PlayerViewController: AVPlayerViewController {
                                 
                                 let url3: URL = url!
                                 let item3 = AVPlayerItem(url: url3)
+                                
+                                item3.addObserver(self, forKeyPath: "loadedTimeRanges", options: NSKeyValueObservingOptions.new, context: nil)
+                                item3.addObserver(self, forKeyPath: "playbackBufferEmpty", options: NSKeyValueObservingOptions.new, context: nil)
+                                item3.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: NSKeyValueObservingOptions.new, context: nil)
+                                item3.addObserver(self, forKeyPath: "playbackBufferFull", options: NSKeyValueObservingOptions.new, context: nil)
+                                item3.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions.new, context: nil)
                                 
                                 self.queuePlayer = AVQueuePlayer(items: [item1, item2, item3])
                                 self.listVideos = [item1, item2, item3]
@@ -309,7 +318,7 @@ class PlayerViewController: AVPlayerViewController {
             
             if (self.topView.bounds.contains(pointInTopView)) && !(self.controlView.bounds.contains(pointInCtrlView)) && self.showPlayDoneButton {
                 
-                print("[handleTap] Tap is inside regionView")
+                print("[handleTap] Tap is inside topView -> Disappear")
                 
                 let disappearAnimationControll = UIViewPropertyAnimator(duration: 0.3, curve: .easeInOut) {
                     
@@ -321,15 +330,76 @@ class PlayerViewController: AVPlayerViewController {
                 
             } else if (self.topView.bounds.contains(pointInTopView)) && self.showPlayDoneButton != true {
                 
+                print("[handleTap] Tap is inside topView -> Reappear")
+                
                 let disappearAnimationControll = UIViewPropertyAnimator(duration: 0.3, curve: .easeInOut) {
                     
                     self.toggleHidden()
+                    
+                    
                 }
                 
                 disappearAnimationControll.startAnimation()
                 
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                
+                    
+                    let disappearAnimationControll = UIViewPropertyAnimator(duration: 0.3, curve: .easeInOut) {
+                        
+                        if self.showPlayDoneButton == true {
+                            
+                            self.showPlayDoneButton = false
+                            
+                            self.controlView.alpha = 0.0
+                            self.playButton.alpha = 0.0
+                            self.doneButton.alpha = 0.0
+                            self.forward15.alpha = 0.0
+                            self.backward15.alpha = 0.0
+                            self.forward.alpha = 0.0
+                            self.backward.alpha = 0.0
+                            self.airplay.alpha = 0.0
+                            
+                        }
+
+                    }
+                    
+                    disappearAnimationControll.startAnimation()
+                    
+                }
+                
             }
         }
+    }
+    
+    @objc func toggleHiddenAuto() {
+        
+        if showPlayDoneButton == true {
+            
+            self.showPlayDoneButton = false
+            
+            self.controlView.alpha = 0.0
+            self.playButton.alpha = 0.0
+            self.doneButton.alpha = 0.0
+            self.forward15.alpha = 0.0
+            self.backward15.alpha = 0.0
+            self.forward.alpha = 0.0
+            self.backward.alpha = 0.0
+            self.airplay.alpha = 0.0
+            
+        } else {
+            
+            self.showPlayDoneButton = true
+            
+            self.controlView.alpha = 0.5
+            self.playButton.alpha = 1.0
+            self.doneButton.alpha = 1.0
+            self.forward15.alpha = 1.0
+            self.backward15.alpha = 1.0
+            self.forward.alpha = 1.0
+            self.backward.alpha = 1.0
+            self.airplay.alpha = 1.0
+        }
+        
     }
     
     func toggleHidden() {
@@ -365,57 +435,78 @@ class PlayerViewController: AVPlayerViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.player?.play()
-        
-//        self.addObserver(self, forKeyPath: "currentItem.loadedTimeRanges", options: NSKeyValueObservingOptions.new, context: nil)
-        self.player?.addObserver(self, forKeyPath: "playerController.status", options: NSKeyValueObservingOptions.new, context: nil) //TODO: Hide buttons after video begins to play
 
+        self.player?.play()
         self.showsPlaybackControls = false
-    
-        // Do any additional setup after loading the view.
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            
+            
+            let disappearAnimationControll = UIViewPropertyAnimator(duration: 0.3, curve: .easeInOut) {
+                
+                if self.showPlayDoneButton == true {
+                    
+                    self.showPlayDoneButton = false
+                    
+                    self.controlView.alpha = 0.0
+                    self.playButton.alpha = 0.0
+                    self.doneButton.alpha = 0.0
+                    self.forward15.alpha = 0.0
+                    self.backward15.alpha = 0.0
+                    self.forward.alpha = 0.0
+                    self.backward.alpha = 0.0
+                    self.airplay.alpha = 0.0
+                    
+                }
+                
+            }
+            
+            disappearAnimationControll.startAnimation()
+            
+        }
+
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-
-        if keyPath == "playerController.status" {
+        
+        switch keyPath {
             
-            if player?.timeControlStatus == .paused {
-
-                if playerPlaying {
-                    player?.play()
-                }
-            }
-
-            if player?.timeControlStatus == .waitingToPlayAtSpecifiedRate {
-                
-                activityIndicatorView.startAnimating()
-                print("Waiting to get metadata")
-                print(player?.reasonForWaitingToPlay!)
-                
-            } else if player?.timeControlStatus != .waitingToPlayAtSpecifiedRate {
-                
-                activityIndicatorView.stopAnimating()
-            }
-            
+        case "status":
             if player?.status == .readyToPlay {
                 
                 activityIndicatorView.stopAnimating()
+                print("ready to play")
+                
                 player?.play()
-                
-            } else if player?.status != .readyToPlay {
-                
-                activityIndicatorView.startAnimating()
             }
             
-            if player?.timeControlStatus == .playing {
-                
-                activityIndicatorView.stopAnimating()
-            }
+        case "loadedTimeRanges":
+            activityIndicatorView.stopAnimating()
+            print("loadedTimeRanges")
 
-        } else if keyPath == "currentItem.loadedTimeRanges" {
+        case "playbackBufferEmpty":
+            activityIndicatorView.startAnimating()
+            print("playbackBufferEmpty")
+
+        case "playbackLikelyToKeepUp":
+            activityIndicatorView.stopAnimating()
+            print("playbackLikelyToKeepUp")
+
+        case "playbackBufferFull":
+            activityIndicatorView.stopAnimating()
+            print("playbackBufferFull")
+  
+        default:
             print(change!)
         }
+    }
+    
+    //MARK: Exit video
+    func exitVideoPlayer() {
+        
+        print("exit video player")
+        self.navigationController?.popViewController(animated: true)
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
     //MARK: Done button
@@ -464,7 +555,7 @@ class PlayerViewController: AVPlayerViewController {
         
         let seekDuration = CMTimeMake(15, 1)
         let currentTime: CMTime = (self.player?.currentTime())!
-        if currentTime - seekDuration < kCMTimeZero {                   // check if seek duration is less than 15 seconds
+        if currentTime - seekDuration > kCMTimeZero {                   // check if seek duration is less than 15 seconds
             
             let newTime = currentTime - seekDuration
             self.player?.seek(to: newTime)
@@ -485,6 +576,7 @@ class PlayerViewController: AVPlayerViewController {
         self.player?.pause()
         
         self.queuePlayer.advanceToNextItem()
+        self.player?.seek(to: kCMTimeZero)
         
         print("forwardButtonPressed")
         
@@ -528,7 +620,7 @@ class PlayerViewController: AVPlayerViewController {
         }
     }
     
-    @objc func airplayButton() {
+    @objc func airplayButton(sender: UIButton) {
         
         print("airplayButtonPressed")
     }
