@@ -44,7 +44,10 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     
     
     override func viewWillAppear(_ animated: Bool) {
+        
         AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
+        
+        UIApplication.shared.endIgnoringInteractionEvents()
     }
 
     
@@ -130,6 +133,8 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         
         myIndex = indexPath.row
         workoutLabel = listWorkOut[myIndex]
+        
+        
         
     }
     
@@ -255,7 +260,6 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         self.view.backgroundColor = backgroundColor
         navigationController?.navigationBar.barTintColor = backgroundColor // color top bar black
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]  // color top bar text white
-//        tabBarController?.tabBar.tintColor = UIColor.white // color tab bar white
         
         //MARK: Setting logo on NavBar
         
@@ -267,6 +271,11 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         imageView.image = image
         logoContainer.addSubview(imageView)
         navigationItem.titleView = logoContainer
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        
+        UIApplication.shared.beginIgnoringInteractionEvents()
     }
     
 }

@@ -73,6 +73,7 @@ class PlayerViewController: AVPlayerViewController {
         return aiv
     }()
     
+    //MARK: Done button init
     lazy var doneButton: UIButton = {
         
         let button = UIButton(type: .system)
@@ -84,6 +85,7 @@ class PlayerViewController: AVPlayerViewController {
         return button
         }()
     
+    //MARK: Play button init
     lazy var playButton: UIButton = {
         
         let button = UIButton(type: .system)
@@ -95,6 +97,7 @@ class PlayerViewController: AVPlayerViewController {
         return button
     }()
     
+    //MARK: Forward15 button init
     lazy var forward15: UIButton = {
         
         let button = UIButton(type: .system)
@@ -107,6 +110,7 @@ class PlayerViewController: AVPlayerViewController {
         return button
     }()
 
+    //MARK: Backward15 button init
     lazy var backward15: UIButton = {
         
         let button = UIButton(type: .system)
@@ -119,6 +123,7 @@ class PlayerViewController: AVPlayerViewController {
         return button
     }()
     
+    //MARK: Forward button init
     lazy var forward: UIButton = {
         
         let button = UIButton(type: .system)
@@ -131,6 +136,7 @@ class PlayerViewController: AVPlayerViewController {
         return button
     }()
     
+    //MARK: Backward button init
     lazy var backward: UIButton = {
         
         let button = UIButton(type: .system)
@@ -143,6 +149,7 @@ class PlayerViewController: AVPlayerViewController {
         return button
     }()
     
+    //MARK: Airplay button init
     lazy var airplay: UIButton = {
         
         let button = UIButton(type: .system)
@@ -457,6 +464,8 @@ class PlayerViewController: AVPlayerViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        UIApplication.shared.endIgnoringInteractionEvents()
 
         self.player?.play()
         self.showsPlaybackControls = false
@@ -488,6 +497,7 @@ class PlayerViewController: AVPlayerViewController {
         }
     }
     
+    //MARK: Observe changes in AVPlayer
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         
         switch keyPath {
@@ -503,6 +513,7 @@ class PlayerViewController: AVPlayerViewController {
                 if playerPlaying {
                     
                     player?.play()
+//                    UIApplication.shared.endIgnoringInteractionEvents()
                 }
             }
             
@@ -537,6 +548,10 @@ class PlayerViewController: AVPlayerViewController {
         let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) {
             (result : UIAlertAction) -> Void in
             
+            self.queuePlayer.removeAllItems()
+            
+            NotificationCenter.default.removeObserver(self)
+            
             self.navigationController?.popViewController(animated: true)
             self.navigationController?.setNavigationBarHidden(false, animated: true)
 
@@ -553,6 +568,11 @@ class PlayerViewController: AVPlayerViewController {
     @objc func doneButtonPressed(sender: UIButton) {
         
         print("doneButtonPressed")
+        
+        queuePlayer.removeAllItems()
+        
+        NotificationCenter.default.removeObserver(self)
+        
         self.navigationController?.popViewController(animated: true)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
@@ -674,6 +694,12 @@ class PlayerViewController: AVPlayerViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
+        
+        queuePlayer.removeAllItems()
+        
+        UIApplication.shared.beginIgnoringInteractionEvents()
+        
+        NotificationCenter.default.removeObserver(self)
         
         AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
     }
