@@ -27,6 +27,16 @@ class PlayerViewController: AVPlayerViewController {
     var workoutCode = String()
     var videoCount = Int()
     
+    let routePickerView: AVRoutePickerView = {
+        
+        let routepickerview = AVRoutePickerView(frame: CGRect(x: UIScreen.main.bounds.height - 130, y: UIScreen.main.bounds.width - 65, width: 40, height: 40))
+        
+        routepickerview.tintColor = UIColor.white
+        routepickerview.backgroundColor = UIColor.clear
+        
+        return routepickerview
+    }()
+    
     let controlView: UIImageView = {
         
         let controlview = UIImageView(image: UIImage(named: "PLAYER BG"))
@@ -153,7 +163,7 @@ class PlayerViewController: AVPlayerViewController {
     
     func setupUI() {
         
-        self.view.isMultipleTouchEnabled = true
+//        self.view.isMultipleTouchEnabled = true
         
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         
@@ -207,10 +217,15 @@ class PlayerViewController: AVPlayerViewController {
         backward.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         backward.rightAnchor.constraint(equalTo: (playButton.leftAnchor), constant: -120).isActive = true
         
-        self.contentOverlayView?.insertSubview(airplay, aboveSubview: controlView)
-        airplay.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        airplay.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
-        airplay.rightAnchor.constraint(equalTo: (controlView.rightAnchor), constant: -20).isActive = true
+//        self.contentOverlayView?.insertSubview(airplay, aboveSubview: controlView)
+//        airplay.heightAnchor.constraint(equalToConstant: 40).isActive = true
+//        airplay.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
+//        airplay.rightAnchor.constraint(equalTo: (controlView.rightAnchor), constant: -20).isActive = true
+        
+        self.contentOverlayView?.addSubview(routePickerView)
+        //        self.contentOverlayView?.bringSubview(toFront: routePickerView)
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -358,15 +373,14 @@ class PlayerViewController: AVPlayerViewController {
                             self.forward.alpha = 0.0
                             self.backward.alpha = 0.0
                             self.airplay.alpha = 0.0
+                            self.routePickerView.alpha = 0.0
                             
                         }
-
                     }
                     
                     disappearAnimationControll.startAnimation()
                     
                 }
-                
             }
         }
     }
@@ -385,6 +399,7 @@ class PlayerViewController: AVPlayerViewController {
             self.forward.alpha = 0.0
             self.backward.alpha = 0.0
             self.airplay.alpha = 0.0
+            self.routePickerView.alpha = 0.0
             
         } else {
             
@@ -398,6 +413,7 @@ class PlayerViewController: AVPlayerViewController {
             self.forward.alpha = 1.0
             self.backward.alpha = 1.0
             self.airplay.alpha = 1.0
+            self.routePickerView.alpha = 1.0
         }
         
     }
@@ -416,6 +432,7 @@ class PlayerViewController: AVPlayerViewController {
             self.forward.alpha = 0.0
             self.backward.alpha = 0.0
             self.airplay.alpha = 0.0
+            self.routePickerView.alpha = 0.0
 
         } else {
             
@@ -429,6 +446,7 @@ class PlayerViewController: AVPlayerViewController {
             self.forward.alpha = 1.0
             self.backward.alpha = 1.0
             self.airplay.alpha = 1.0
+            self.routePickerView.alpha = 1.0
         }
 
     }
@@ -456,15 +474,14 @@ class PlayerViewController: AVPlayerViewController {
                     self.forward.alpha = 0.0
                     self.backward.alpha = 0.0
                     self.airplay.alpha = 0.0
+                    self.routePickerView.alpha = 0.0
                     
                 }
-                
             }
             
             disappearAnimationControll.startAnimation()
             
         }
-
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -623,6 +640,13 @@ class PlayerViewController: AVPlayerViewController {
     @objc func airplayButton(sender: UIButton) {
         
         print("airplayButtonPressed")
+        
+        self.contentOverlayView?.addSubview(routePickerView)
+//        self.contentOverlayView?.bringSubview(toFront: routePickerView)
+        routePickerView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        routePickerView.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
+        routePickerView.rightAnchor.constraint(equalTo: (controlView.rightAnchor), constant: -20).isActive = true
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
