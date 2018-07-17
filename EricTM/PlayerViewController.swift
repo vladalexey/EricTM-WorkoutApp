@@ -29,8 +29,11 @@ class PlayerViewController: AVPlayerViewController {
     
     let routePickerView: AVRoutePickerView = {
         
-        let routepickerview = AVRoutePickerView(frame: CGRect(x: UIScreen.main.bounds.height - 130, y: UIScreen.main.bounds.width - 65, width: 40, height: 40))
+//        let routepickerview = AVRoutePickerView(frame: CGRect(x: UIScreen.main.bounds.height/2 - 20, y: UIScreen.main.bounds.width - 65, width: 40, height: 40))
         
+        let routepickerview = AVRoutePickerView()
+        
+        routepickerview.translatesAutoresizingMaskIntoConstraints = false
         routepickerview.tintColor = UIColor.white
         routepickerview.backgroundColor = UIColor.clear
         
@@ -223,8 +226,9 @@ class PlayerViewController: AVPlayerViewController {
 //        airplay.rightAnchor.constraint(equalTo: (controlView.rightAnchor), constant: -20).isActive = true
         
         self.contentOverlayView?.addSubview(routePickerView)
-        //        self.contentOverlayView?.bringSubview(toFront: routePickerView)
-        
+        routePickerView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        routePickerView.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
+        routePickerView.rightAnchor.constraint(equalTo: controlView.rightAnchor, constant: -20).isActive = true
         
     }
     
