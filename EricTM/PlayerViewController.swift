@@ -493,12 +493,17 @@ class PlayerViewController: AVPlayerViewController {
         switch keyPath {
             
         case "status":
+            
+            
             if player?.status == .readyToPlay {
                 
                 activityIndicatorView.stopAnimating()
                 print("ready to play")
                 
-                player?.play()
+                if playerPlaying {
+                    
+                    player?.play()
+                }
             }
             
         case "loadedTimeRanges":
@@ -526,8 +531,22 @@ class PlayerViewController: AVPlayerViewController {
     func exitVideoPlayer() {
         
         print("exit video player")
-        self.navigationController?.popViewController(animated: true)
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        
+        let alertView = UIAlertController(title: "Error", message: "Cannot load videos. Retry?", preferredStyle: UIAlertControllerStyle.alert)
+        
+        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) {
+            (result : UIAlertAction) -> Void in
+            
+            self.navigationController?.popViewController(animated: true)
+            self.navigationController?.setNavigationBarHidden(false, animated: true)
+
+
+            print("OK")
+        }
+        
+        alertView.addAction(okAction)
+        
+        self.present(alertView, animated: true, completion: nil)
     }
     
     //MARK: Done button
