@@ -154,6 +154,8 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         
             AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.landscapeRight, andRotateTo: UIInterfaceOrientation.landscapeRight)
             
+            UIApplication.shared.beginIgnoringInteractionEvents()
+            
             let destVC = segue.destination as? PlayerViewController
             
             if workoutLabel == "Upper" {
@@ -274,8 +276,7 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        
-        UIApplication.shared.beginIgnoringInteractionEvents()
+
     }
     
 }
