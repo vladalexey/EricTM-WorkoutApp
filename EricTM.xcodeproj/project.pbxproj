@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		821127E620FEE4F700BF39ED /* DownloadWorkoutVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 821127E520FEE4F700BF39ED /* DownloadWorkoutVideo.swift */; };
 		8223CDFE20EA2E9500569D3F /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8223CDFD20EA2E9500569D3F /* PlayerViewController.swift */; };
 		82340FD820DCD6BE003079A2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82340FD720DCD6BE003079A2 /* AppDelegate.swift */; };
 		82340FDA20DCD6BE003079A2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82340FD920DCD6BE003079A2 /* ViewController.swift */; };
@@ -22,7 +21,6 @@
 		82E2E1CE20EB168C00D3CA2D /* Teaser1Final.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 82E2E1CD20EB148000D3CA2D /* Teaser1Final.mp4 */; };
 		82EAC90720EC94B00093386C /* AddWorkoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82EAC90620EC94B00093386C /* AddWorkoutViewController.swift */; };
 		82EF187C21007ED400685FC4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 82EF187B21007ED400685FC4 /* Assets.xcassets */; };
-		82F7430F20FF8E7500B3ED82 /* DownloadLocal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F7430E20FF8E7500B3ED82 /* DownloadLocal.swift */; };
 		CD5662103D49FA68BDE5AAFD /* Pods_EricTM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04A4D67E757F772902D9E46B /* Pods_EricTM.framework */; };
 /* End PBXBuildFile section */
 
@@ -30,7 +28,6 @@
 		04A4D67E757F772902D9E46B /* Pods_EricTM.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EricTM.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		20F9D56DC0FCA7593D6DE152 /* Pods-EricTM.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EricTM.release.xcconfig"; path = "Pods/Target Support Files/Pods-EricTM/Pods-EricTM.release.xcconfig"; sourceTree = "<group>"; };
 		247DE3C76EB8E08143B09F16 /* Pods-EricTM.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EricTM.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EricTM/Pods-EricTM.debug.xcconfig"; sourceTree = "<group>"; };
-		821127E520FEE4F700BF39ED /* DownloadWorkoutVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadWorkoutVideo.swift; sourceTree = "<group>"; };
 		8223CDFD20EA2E9500569D3F /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
 		82340FD420DCD6BE003079A2 /* EricTM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EricTM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		82340FD720DCD6BE003079A2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -47,7 +44,6 @@
 		82E2E1CD20EB148000D3CA2D /* Teaser1Final.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = Teaser1Final.mp4; sourceTree = "<group>"; };
 		82EAC90620EC94B00093386C /* AddWorkoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddWorkoutViewController.swift; sourceTree = "<group>"; };
 		82EF187B21007ED400685FC4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		82F7430E20FF8E7500B3ED82 /* DownloadLocal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadLocal.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,8 +71,6 @@
 			isa = PBXGroup;
 			children = (
 				82340FED20DCE9C2003079A2 /* WorkOutVideo.swift */,
-				821127E520FEE4F700BF39ED /* DownloadWorkoutVideo.swift */,
-				82F7430E20FF8E7500B3ED82 /* DownloadLocal.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -267,12 +261,10 @@
 				828C262D20E34C8F00AFF5D9 /* AppUtility.swift in Sources */,
 				8223CDFE20EA2E9500569D3F /* PlayerViewController.swift in Sources */,
 				82EAC90720EC94B00093386C /* AddWorkoutViewController.swift in Sources */,
-				82F7430F20FF8E7500B3ED82 /* DownloadLocal.swift in Sources */,
 				82340FDA20DCD6BE003079A2 /* ViewController.swift in Sources */,
 				82340FD820DCD6BE003079A2 /* AppDelegate.swift in Sources */,
 				82340FEC20DCE2D0003079A2 /* WorkOutTableViewController.swift in Sources */,
 				82340FEE20DCE9C2003079A2 /* WorkOutVideo.swift in Sources */,
-				821127E620FEE4F700BF39ED /* DownloadWorkoutVideo.swift in Sources */,
 				829FBCB720E0E5070052601F /* TabBarViewController.swift in Sources */,
 				82340FEA20DCDBCC003079A2 /* WorkOutTableViewCell.swift in Sources */,
 			);
