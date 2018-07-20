@@ -40,8 +40,6 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         alpha: 1.0
     )
     
-
-    
     
     override func viewWillAppear(_ animated: Bool) {
         
@@ -58,9 +56,16 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     override var shouldAutorotate: Bool {
         return false
     }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+    
+        tableView.estimatedRowHeight = 250
+        tableView.rowHeight = UITableViewAutomaticDimension
         
         setupBackground()
         loadSampleWOV()
@@ -180,7 +185,7 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
+//            tableView.deleteRows(at: [indexPath], with: .fade)
         }
         if editingStyle == .insert {
             

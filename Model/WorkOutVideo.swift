@@ -10,17 +10,19 @@ import UIKit
 import AVKit
 import AVFoundation
 
+import Darwin
+
 class WorkOutVideo {
     
 
     //MARK: Properties
 
+    var listThumbnails = [UIImage]()
     var name: String
     var length: String
 //    var path: String
-    var image: UIImage? = UIImage(named: "full_body")
+    var image: UIImage?
     var background: UIImage? = UIImage(named: "Vignette")
-    
 
 //    var path = String(conBundle.main.path(forResource: "Teaser1Final", ofType: "mp4")
 
@@ -30,6 +32,15 @@ class WorkOutVideo {
         if name.isEmpty {
             return nil
         }
+        
+        for i in 1...15 {
+            
+            listThumbnails.append(UIImage(named: String(i))!)
+        }
+        
+        let random = Int(arc4random_uniform(UInt32(listThumbnails.count)))
+        
+        image = listThumbnails[random]
         
         self.name = name
 //        self.path = path

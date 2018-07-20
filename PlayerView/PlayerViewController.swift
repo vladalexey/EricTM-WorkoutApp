@@ -12,10 +12,33 @@ import AVKit
 
 import FirebaseStorage
 
+class Global {
+    
+    var videoName1: String = ""
+    var videoName2: String = ""
+    var videoName3: String = ""
+}
+
+let global = Global()
+
 class PlayerViewController: AVPlayerViewController {
+    
+    var timerTest = Timer()
     
     var videoReference: StorageReference {
         return Storage.storage().reference()
+    }
+    
+    var downloadTask1: StorageReference {
+        return Storage.storage().reference().child(global.videoName1)
+    }
+    
+    var downloadTask2: StorageReference {
+        return Storage.storage().reference().child(global.videoName2)
+    }
+    
+    var downloadTask3: StorageReference {
+        return Storage.storage().reference().child(global.videoName3)
     }
     
     var playerPlaying: Bool = true
@@ -23,13 +46,12 @@ class PlayerViewController: AVPlayerViewController {
     
     var queuePlayer = AVQueuePlayer()
     var listVideos = [AVPlayerItem]()
+    var listDownloadVideos = [DownloadedWorkoutVideo]()
     
     var workoutCode = String()
     var videoCount = Int()
     
     let routePickerView: AVRoutePickerView = {
-        
-//        let routepickerview = AVRoutePickerView(frame: CGRect(x: UIScreen.main.bounds.height/2 - 20, y: UIScreen.main.bounds.width - 65, width: 40, height: 40))
         
         let routepickerview = AVRoutePickerView()
         
@@ -78,6 +100,8 @@ class PlayerViewController: AVPlayerViewController {
         
         let button = UIButton(type: .system)
         
+        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        
         button.setImage(UIImage(named: "X"), for: .normal)
         button.tintColor = UIColor.white
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -90,6 +114,8 @@ class PlayerViewController: AVPlayerViewController {
         
         let button = UIButton(type: .system)
         
+        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        
         button.setImage(UIImage(named: "PAUSE"), for: .normal)
         button.tintColor = UIColor.white
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -101,6 +127,8 @@ class PlayerViewController: AVPlayerViewController {
     lazy var forward15: UIButton = {
         
         let button = UIButton(type: .system)
+        
+        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         
         button.setImage(UIImage(named: "15FORWARD"), for: .normal)
         button.tintColor = UIColor.white
@@ -115,6 +143,8 @@ class PlayerViewController: AVPlayerViewController {
         
         let button = UIButton(type: .system)
         
+        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        
         button.setImage(UIImage(named: "15BACKWARD"), for: .normal)
         button.tintColor = UIColor.white
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -127,6 +157,8 @@ class PlayerViewController: AVPlayerViewController {
     lazy var forward: UIButton = {
         
         let button = UIButton(type: .system)
+        
+        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         
         button.setImage(UIImage(named: "FORWARD"), for: .normal)
         button.tintColor = UIColor.white
@@ -141,6 +173,8 @@ class PlayerViewController: AVPlayerViewController {
         
         let button = UIButton(type: .system)
         
+        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        
         button.setImage(UIImage(named: "BACKWARD"), for: .normal)
         button.tintColor = UIColor.white
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -153,6 +187,8 @@ class PlayerViewController: AVPlayerViewController {
     lazy var airplay: UIButton = {
         
         let button = UIButton(type: .system)
+        
+        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         
         button.setImage(UIImage(named: "AIRPLAY"), for: .normal)
         button.tintColor = UIColor.white
@@ -239,6 +275,68 @@ class PlayerViewController: AVPlayerViewController {
         
     }
     
+    func exitDueToForward() {
+        
+        self.queuePlayer.removeAllItems()
+        
+        NotificationCenter.default.removeObserver(self)
+        
+        self.navigationController?.popViewController(animated: true)
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+    
+    //MARK: Exit video due to Error
+    func exitVideoPlayer() {
+        
+        print("exit video player")
+        
+        self.player?.pause()
+        
+        let alertView = UIAlertController(title: "Error", message: "Cannot load videos", preferredStyle: UIAlertControllerStyle.alert)
+        
+        let okAction = UIAlertAction(title: "Try again", style: UIAlertActionStyle.default) {
+            (result : UIAlertAction) -> Void in
+            
+            self.queuePlayer.removeAllItems()
+            
+            NotificationCenter.default.removeObserver(self)
+            
+            self.navigationController?.popViewController(animated: true)
+            self.navigationController?.setNavigationBarHidden(false, animated: true)
+            
+            
+            print("OK")
+        }
+        
+        alertView.addAction(okAction)
+        
+        self.present(alertView, animated: true, completion: nil)
+    }
+    
+    func checkFileAvailableLocal(nameFileToCheck: String) -> Bool {
+        
+        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
+        let url = NSURL(fileURLWithPath: path)
+        if let pathComponent = url.appendingPathComponent(nameFileToCheck) {
+            
+            let filePath = pathComponent.path
+            let fileManager = FileManager.default
+            if fileManager.fileExists(atPath: filePath) {
+                
+                print("FILE AVAILABLE")
+                return true
+                
+            } else {
+                print("FILE NOT AVAILABLE")
+                return false
+                
+            }
+        } else {
+            print("FILE PATH NOT AVAILABLE")
+            return false
+        }
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         
         setupUI()
@@ -246,154 +344,307 @@ class PlayerViewController: AVPlayerViewController {
         AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.landscapeRight, andRotateTo: UIInterfaceOrientation.landscapeRight)
         videoCount = 0
         
+        
+        //MARK: Get list of local videos
+        let fileManager = FileManager.default
+        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        do {
+            let fileURLs = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil)
+            // process files
+
+        } catch {
+            print("Error while enumerating files \(documentsURL.path): \(error.localizedDescription)")
+        }
+
         let random1 = Int(arc4random_uniform(12) + 1)  // get random number
-        let videoName1: String = "WO_Ep" + String(random1) + ".mp4"  // get random workout label
-    
-        videoReference.child(videoName1).downloadURL(completion: { (url, error) in
-            if error != nil {
-                print("Error" + videoName1)
-                self.exitVideoPlayer()
-                
-            } else {
-                
-                self.videoCount += 1
-                print(videoName1)
-                
-                let url1: URL = url!
-                let item1 = AVPlayerItem(url: url1)
-                
-                item1.addObserver(self, forKeyPath: "loadedTimeRanges", options: NSKeyValueObservingOptions.new, context: nil)
-                item1.addObserver(self, forKeyPath: "playbackBufferEmpty", options: NSKeyValueObservingOptions.new, context: nil)
-                item1.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: NSKeyValueObservingOptions.new, context: nil)
-                item1.addObserver(self, forKeyPath: "playbackBufferFull", options: NSKeyValueObservingOptions.new, context: nil)
-                item1.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions.new, context: nil)
-                
-                var random2: Int
-                
-                repeat {
-                    random2 = Int(arc4random_uniform(12) + 1)
-                } while random1 == random2
-                
-                let videoName2: String = "WO_Ep" + String(random2) + ".mp4"
-                
-                self.videoReference.child(videoName2).downloadURL(completion: { (url, error) in
-                    if error != nil {
-                        print("Error 2" + videoName2)
-                        self.exitVideoPlayer()
-                        
-                    } else {
-                        self.videoCount += 1
-                        print(videoName2)
-                        
-                        let url2: URL = url!
-                        let item2 = AVPlayerItem(url: url2)
-                        
-                        item2.addObserver(self, forKeyPath: "loadedTimeRanges", options: NSKeyValueObservingOptions.new, context: nil)
-                        item2.addObserver(self, forKeyPath: "playbackBufferEmpty", options: NSKeyValueObservingOptions.new, context: nil)
-                        item2.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: NSKeyValueObservingOptions.new, context: nil)
-                        item2.addObserver(self, forKeyPath: "playbackBufferFull", options: NSKeyValueObservingOptions.new, context: nil)
-                        item2.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions.new, context: nil)
-                        
-                        var random3: Int
-                        
-                        repeat {
-                            random3 = Int(arc4random_uniform(12) + 1)
-                        } while (random3 == random2) || (random3 == random1)
-                        
-                        let videoName3: String = "WO_Ep" + String(random3) + ".mp4"
-                        
-                        self.videoReference.child(videoName3).downloadURL(completion: { (url, error) in
-                            if error != nil {
-                                print("Error 3" + videoName3)
-                                self.exitVideoPlayer()
-                                
-                            } else {
-                                self.videoCount += 1
-                                print(videoName3)
-                                
-                                let url3: URL = url!
-                                let item3 = AVPlayerItem(url: url3)
-                                
-                                item3.addObserver(self, forKeyPath: "loadedTimeRanges", options: NSKeyValueObservingOptions.new, context: nil)
-                                item3.addObserver(self, forKeyPath: "playbackBufferEmpty", options: NSKeyValueObservingOptions.new, context: nil)
-                                item3.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: NSKeyValueObservingOptions.new, context: nil)
-                                item3.addObserver(self, forKeyPath: "playbackBufferFull", options: NSKeyValueObservingOptions.new, context: nil)
-                                item3.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions.new, context: nil)
-                                
-                                self.queuePlayer = AVQueuePlayer(items: [item1, item2, item3])
-                                self.listVideos = [item1, item2, item3]
-                                print(self.queuePlayer.items().count)
-                                
-                                self.player = self.queuePlayer
-                            }
-                        })
-                    }
-                })
+        global.videoName1 = "WO_Ep" + String(random1) + ".mp4"  // get random workout label
+        
+//        let downloadTask1 = videoReference.child(global.videoName1)
+
+        if checkFileAvailableLocal(nameFileToCheck: global.videoName1) == false {
+
+            videoReference.child(global.videoName1).downloadURL(completion: { (url, error) in
+                if error != nil {
+                    print("Error " + global.videoName1)
+                    self.exitVideoPlayer()
+
+                } else {
+
+                    self.videoCount += 1
+                    print(global.videoName1)
+
+                    let url1: URL = url!
+                    let item1 = AVPlayerItem(url: url1)
+
+                    item1.addObserver(self, forKeyPath: "loadedTimeRanges", options: NSKeyValueObservingOptions.new, context: nil)
+                    item1.addObserver(self, forKeyPath: "playbackBufferEmpty", options: NSKeyValueObservingOptions.new, context: nil)
+                    item1.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: NSKeyValueObservingOptions.new, context: nil)
+                    item1.addObserver(self, forKeyPath: "playbackBufferFull", options: NSKeyValueObservingOptions.new, context: nil)
+                    item1.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions.new, context: nil)
+                    
+                    self.queuePlayer.insert(item1, after: nil)
+                    self.listVideos.append(item1)
+                }
+            })
+            
+            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+            
+            let localURL = documentsURL.appendingPathComponent(global.videoName1)
+
+            // Download to the local filesystem
+            downloadTask1.write(toFile: localURL) { url, error in
+                if let error = error {
+                    
+                    self.exitVideoPlayer()
+                    print("Uh-oh, an error occurred!")
+                } else {
+                    
+                    print("sucessfully downloaded video 1")
+                }
             }
-        })
+            
+//            downloadTask.observe(.progress) { snapshot in
+//                // Download reported progress
+//                let percentComplete = 100.0 * Double(snapshot.progress!.completedUnitCount)/Double(snapshot.progress!.totalUnitCount)
+//
+//                print("video 1 " + String(percentComplete))
+//            }
+            
+        //MARK: check available true video 1
+        } else {
+            
+            print(global.videoName1)
+
+            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+
+            let localURL = documentsURL.appendingPathComponent(global.videoName1)
+
+            let item1 = AVPlayerItem(url: localURL)
+            
+            item1.addObserver(self, forKeyPath: "loadedTimeRanges", options: NSKeyValueObservingOptions.new, context: nil)
+            item1.addObserver(self, forKeyPath: "playbackBufferEmpty", options: NSKeyValueObservingOptions.new, context: nil)
+            item1.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: NSKeyValueObservingOptions.new, context: nil)
+            item1.addObserver(self, forKeyPath: "playbackBufferFull", options: NSKeyValueObservingOptions.new, context: nil)
+            item1.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions.new, context: nil)
+            
+            self.queuePlayer.insert(item1, after: nil)
+            self.listVideos.append(item1)
+        }
+        
+
+        var random2: Int
+
+        repeat {
+            random2 = Int(arc4random_uniform(12) + 1)
+        } while random1 == random2
+
+        global.videoName2 = "WO_Ep" + String(random2) + ".mp4"
+        
+        let downloadTask2 = videoReference.child(global.videoName2)
+
+        if self.checkFileAvailableLocal(nameFileToCheck: global.videoName2) == false {
+
+            self.videoReference.child(global.videoName2).downloadURL(completion: { (url, error) in
+                if error != nil {
+                    print("Error 2" + global.videoName2)
+                    self.exitVideoPlayer()
+
+                } else {
+
+                    self.videoCount += 1
+                    print(global.videoName2)
+
+                    let url2: URL = url!
+                    let item2 = AVPlayerItem(url: url2)
+
+                    item2.addObserver(self, forKeyPath: "loadedTimeRanges", options: NSKeyValueObservingOptions.new, context: nil)
+                    item2.addObserver(self, forKeyPath: "playbackBufferEmpty", options: NSKeyValueObservingOptions.new, context: nil)
+                    item2.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: NSKeyValueObservingOptions.new, context: nil)
+                    item2.addObserver(self, forKeyPath: "playbackBufferFull", options: NSKeyValueObservingOptions.new, context: nil)
+                    item2.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions.new, context: nil)
+                    
+                    self.queuePlayer.insert(item2, after: nil)
+                    self.listVideos.append(item2)
+                }
+            })
+            
+            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+            
+            let localURL = documentsURL.appendingPathComponent(global.videoName2)
+            
+            // Download to the local filesystem
+            downloadTask2.write(toFile: localURL) { url, error in
+                if let error = error {
+                    
+                    self.exitVideoPlayer()
+                    print("Uh-oh, an error occurred!")
+                } else {
+                    
+                    print("sucessfully downloaded video 2")
+                }
+            }
+            
+//            downloadTask2.observe(.progress) { snapshot in
+//                // Download reported progress
+//                let percentComplete = 100.0 * Double(snapshot.progress!.completedUnitCount)/Double(snapshot.progress!.totalUnitCount)
+//
+//                print("video 2 " + String(percentComplete))
+//            }
+            
+        //MARK: check available true video 2
+        } else {
+            
+            print(global.videoName2)
+
+            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+
+            let localURL = documentsURL.appendingPathComponent(global.videoName2)
+
+            let item2 = AVPlayerItem(url: localURL)
+
+            self.queuePlayer.insert(item2, after: nil)
+            self.listVideos.append(item2)
+        }
+    
+
+        var random3: Int
+
+        repeat {
+            random3 = Int(arc4random_uniform(12) + 1)
+        } while (random3 == random2) || (random3 == random1)
+
+        global.videoName3 = "WO_Ep" + String(random3) + ".mp4"
+        
+        let downloadTask3 = videoReference.child(global.videoName3)
+
+        if self.checkFileAvailableLocal(nameFileToCheck: global.videoName3) == false {
+
+            self.videoReference.child(global.videoName3).downloadURL(completion: { (url, error) in
+                if error != nil {
+                    print("Error 3" + global.videoName3)
+                    self.exitVideoPlayer()
+
+                } else {
+
+                    self.videoCount += 1
+                    print(global.videoName3)
+
+                    let url3: URL = url!
+                    let item3 = AVPlayerItem(url: url3)
+
+                    item3.addObserver(self, forKeyPath: "loadedTimeRanges", options: NSKeyValueObservingOptions.new, context: nil)
+                    item3.addObserver(self, forKeyPath: "playbackBufferEmpty", options: NSKeyValueObservingOptions.new, context: nil)
+                    item3.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: NSKeyValueObservingOptions.new, context: nil)
+                    item3.addObserver(self, forKeyPath: "playbackBufferFull", options: NSKeyValueObservingOptions.new, context: nil)
+                    item3.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions.new, context: nil)
+
+                    self.queuePlayer.insert(item3, after: nil)
+                    self.listVideos.append(item3)
+                    
+                    print(self.queuePlayer.items().count)
+
+                    self.player = self.queuePlayer
+
+                }
+            })
+            
+            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+            
+            let localURL = documentsURL.appendingPathComponent(global.videoName3)
+            
+            // Download to the local filesystem
+            downloadTask3.write(toFile: localURL) { url, error in
+                if let error = error {
+                    
+                    self.exitVideoPlayer()
+                    print("Uh-oh, an error occurred!")
+                } else {
+                    
+                    print("sucessfully downloaded video 3")
+                }
+            }
+            
+//            downloadTask3.observe(.progress) { snapshot in
+//                // Download reported progress
+//                let percentComplete = 100.0 * Double(snapshot.progress!.completedUnitCount)/Double(snapshot.progress!.totalUnitCount)
+//
+//                print("video 3 " + String(percentComplete))
+//            }
+            
+            //MARK: check available true video 3
+        } else {
+            
+            print(global.videoName3)
+
+            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+
+            let localURL = documentsURL.appendingPathComponent(global.videoName3)
+
+            let item3 = AVPlayerItem(url: localURL)
+
+            item3.addObserver(self, forKeyPath: "loadedTimeRanges", options: NSKeyValueObservingOptions.new, context: nil)
+            item3.addObserver(self, forKeyPath: "playbackBufferEmpty", options: NSKeyValueObservingOptions.new, context: nil)
+            item3.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: NSKeyValueObservingOptions.new, context: nil)
+            item3.addObserver(self, forKeyPath: "playbackBufferFull", options: NSKeyValueObservingOptions.new, context: nil)
+            item3.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions.new, context: nil)
+            
+            self.queuePlayer.insert(item3, after: nil)
+            self.listVideos.append(item3)
+            
+            print(queuePlayer.items())
+            print(listVideos)
+        }
     }
     
     @objc func handleTap(tap: UIGestureRecognizer) {
         
         if tap.state == UIGestureRecognizerState.ended {
-            
+          
+            let disappearAnimationControll = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) {
+
+                self.toggleHidden()
+
+            }
+
             let point = tap.location(in: self.view)
-            
+
             let pointInTopView = self.topView.convert(point, from: self.view)
             let pointInCtrlView = self.controlView.convert(point, from: self.view)
-            
+
             if (self.topView.bounds.contains(pointInTopView)) && !(self.controlView.bounds.contains(pointInCtrlView)) && self.showPlayDoneButton {
-                
+
                 print("[handleTap] Tap is inside topView -> Disappear")
                 
-                let disappearAnimationControll = UIViewPropertyAnimator(duration: 0.3, curve: .easeInOut) {
-                    
-                    self.toggleHidden()
-    
-                }
-                
                 disappearAnimationControll.startAnimation()
-                
+
+                timerTest.invalidate()
+
             } else if (self.topView.bounds.contains(pointInTopView)) && self.showPlayDoneButton != true {
-                
+
                 print("[handleTap] Tap is inside topView -> Reappear")
-                
-                let disappearAnimationControll = UIViewPropertyAnimator(duration: 0.3, curve: .easeInOut) {
-                    
-                    self.toggleHidden()
-                    
-                    
-                }
-                
+            
                 disappearAnimationControll.startAnimation()
                 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                
-                    
-                    let disappearAnimationControll = UIViewPropertyAnimator(duration: 0.3, curve: .easeInOut) {
-                        
-                        if self.showPlayDoneButton == true {
-                            
-                            self.showPlayDoneButton = false
-                            
-                            self.controlView.alpha = 0.0
-                            self.playButton.alpha = 0.0
-                            self.doneButton.alpha = 0.0
-                            self.forward15.alpha = 0.0
-                            self.backward15.alpha = 0.0
-                            self.forward.alpha = 0.0
-                            self.backward.alpha = 0.0
-                            self.airplay.alpha = 0.0
-                            self.routePickerView.alpha = 0.0
-                            
-                        }
-                    }
-                    
-                    disappearAnimationControll.startAnimation()
-                    
-                }
+                timerTest =  Timer.scheduledTimer(
+                    timeInterval: TimeInterval(3),
+                    target      : self,
+                    selector    : #selector(initHiddenAuto),
+                    userInfo    : nil,
+                    repeats     : false)
+
             }
         }
+    }
+    
+    @objc func initHiddenAuto() {
+        
+        let disappearAnimationControll = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) {
+            
+            self.toggleHidden()
+            
+        }
+        
+        disappearAnimationControll.startAnimation()
     }
     
     @objc func toggleHiddenAuto() {
@@ -462,39 +713,34 @@ class PlayerViewController: AVPlayerViewController {
 
     }
     
+    @objc func playerDidPlayToEnd() {
+        
+        if player?.currentItem == listVideos[2] {
+            
+            exitDueToForward()
+            
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.player = self.queuePlayer
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
         
         UIApplication.shared.endIgnoringInteractionEvents()
 
         self.player?.play()
         self.showsPlaybackControls = false
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-            
-            
-            let disappearAnimationControll = UIViewPropertyAnimator(duration: 0.3, curve: .easeInOut) {
-                
-                if self.showPlayDoneButton == true {
-                    
-                    self.showPlayDoneButton = false
-                    
-                    self.controlView.alpha = 0.0
-                    self.playButton.alpha = 0.0
-                    self.doneButton.alpha = 0.0
-                    self.forward15.alpha = 0.0
-                    self.backward15.alpha = 0.0
-                    self.forward.alpha = 0.0
-                    self.backward.alpha = 0.0
-                    self.airplay.alpha = 0.0
-                    self.routePickerView.alpha = 0.0
-                    
-                }
-            }
-            
-            disappearAnimationControll.startAnimation()
-            
-        }
+        timerTest =  Timer.scheduledTimer(
+            timeInterval: TimeInterval(3),
+            target      : self,
+            selector    : #selector(initHiddenAuto),
+            userInfo    : nil,
+            repeats     : false)
+        
     }
     
     //MARK: Observe changes in AVPlayer
@@ -504,10 +750,9 @@ class PlayerViewController: AVPlayerViewController {
             
         case "status":
             
-            
             if player?.status == .readyToPlay {
                 
-                activityIndicatorView.stopAnimating()
+//                activityIndicatorView.stopAnimating()
                 print("ready to play")
                 
                 if playerPlaying {
@@ -517,12 +762,15 @@ class PlayerViewController: AVPlayerViewController {
                 }
             }
             
-        case "loadedTimeRanges":
-            activityIndicatorView.stopAnimating()
-            print("loadedTimeRanges")
+//        case "loadedTimeRanges":
+//            activityIndicatorView.stopAnimating()
+//            print("loadedTimeRanges")
 
         case "playbackBufferEmpty":
             activityIndicatorView.startAnimating()
+            
+            self.player?.pause()
+            self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
             print("playbackBufferEmpty")
 
         case "playbackLikelyToKeepUp":
@@ -534,34 +782,8 @@ class PlayerViewController: AVPlayerViewController {
             print("playbackBufferFull")
   
         default:
-            print(change!)
+            return
         }
-    }
-    
-    //MARK: Exit video
-    func exitVideoPlayer() {
-        
-        print("exit video player")
-        
-        let alertView = UIAlertController(title: "Error", message: "Cannot load videos. Retry?", preferredStyle: UIAlertControllerStyle.alert)
-        
-        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) {
-            (result : UIAlertAction) -> Void in
-            
-            self.queuePlayer.removeAllItems()
-            
-            NotificationCenter.default.removeObserver(self)
-            
-            self.navigationController?.popViewController(animated: true)
-            self.navigationController?.setNavigationBarHidden(false, animated: true)
-
-
-            print("OK")
-        }
-        
-        alertView.addAction(okAction)
-        
-        self.present(alertView, animated: true, completion: nil)
     }
     
     //MARK: Done button
@@ -572,6 +794,8 @@ class PlayerViewController: AVPlayerViewController {
         queuePlayer.removeAllItems()
         
         NotificationCenter.default.removeObserver(self)
+        
+        self.toggleHidden()
         
         self.navigationController?.popViewController(animated: true)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
@@ -597,6 +821,8 @@ class PlayerViewController: AVPlayerViewController {
     @objc func forward15(sender: UIButton) {
         
         self.player?.pause()
+        playButton.setImage(UIImage(named: "PLAY"), for: .normal)
+        playerPlaying = false
         
         let seekDuration = CMTimeMake(15, 1)
         let currentTime: CMTime = (self.player?.currentTime())!
@@ -606,12 +832,16 @@ class PlayerViewController: AVPlayerViewController {
         print("forward15ButtonPressed")
         
         self.player?.play()
+        playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
+        playerPlaying = true
     }
     
     //MARK: Backward 15 seconds selected
     @objc func backward15(sender: UIButton) {
         
         self.player?.pause()
+        playButton.setImage(UIImage(named: "PLAY"), for: .normal)
+        playerPlaying = false
         
         let seekDuration = CMTimeMake(15, 1)
         let currentTime: CMTime = (self.player?.currentTime())!
@@ -628,6 +858,8 @@ class PlayerViewController: AVPlayerViewController {
         print("backward15ButtonPressed")
         
         self.player?.play()
+        playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
+        playerPlaying = true
     }
     
     //MARK: Forward selected
@@ -635,8 +867,30 @@ class PlayerViewController: AVPlayerViewController {
         
         self.player?.pause()
         
-        self.queuePlayer.advanceToNextItem()
-        self.player?.seek(to: kCMTimeZero)
+        for item in listVideos {                    // get and insert previous video into queue
+            
+            if item == self.player?.currentItem {
+                
+                let currentIndex = listVideos.index(of: item)
+                print(currentIndex!)
+                
+                if currentIndex! < 2 {
+                    
+                    self.queuePlayer.advanceToNextItem()
+                    self.player?.seek(to: kCMTimeZero)
+                    
+                    print("forwardButtonPressed")
+                    
+                    self.player?.play()
+                    
+                    return
+                    
+                } else if currentIndex == 2 {
+                    
+                    exitDueToForward()
+                }
+            }
+        }
         
         print("forwardButtonPressed")
         
@@ -653,7 +907,7 @@ class PlayerViewController: AVPlayerViewController {
                 let currentIndex = listVideos.index(of: item)
                 print(currentIndex!)
                 
-                if currentIndex! >= 1 {
+                if currentIndex! > 0 {
                     
                     self.player?.pause()
                     
@@ -673,6 +927,14 @@ class PlayerViewController: AVPlayerViewController {
                     self.player?.seek(to: kCMTimeZero)
                     
                     print("backwardButtonPressed")
+                    
+                    self.player?.play()
+                    
+                } else if currentIndex == 0 {
+                    
+                    self.player?.pause()
+                    
+                    self.player?.seek(to: kCMTimeZero)
                     
                     self.player?.play()
                 }
@@ -708,9 +970,10 @@ class PlayerViewController: AVPlayerViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
 
     /*
+     
+     
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
