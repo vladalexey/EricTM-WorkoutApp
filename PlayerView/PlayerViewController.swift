@@ -46,7 +46,6 @@ class PlayerViewController: AVPlayerViewController {
     
     var queuePlayer = AVQueuePlayer()
     var listVideos = [AVPlayerItem]()
-    var listDownloadVideos = [DownloadedWorkoutVideo]()
     
     var workoutCode = String()
     var videoCount = Int()
