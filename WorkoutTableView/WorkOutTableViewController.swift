@@ -119,7 +119,7 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         cell.photoImageView.image = workOutVideo.image
         cell.Vignette.image = workOutVideo.background
         cell.minuteWorkout.text = workOutVideo.length.uppercased()
-        cell.shouldIndentWhileEditing = false
+//        cell.shouldIndentWhileEditing = false
         return cell
     }
     
@@ -246,10 +246,7 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     
     //MARK: Load workout sessions
     private func loadSampleWOV() {
-
-        
-//        let path = Bundle.main.path(forResource: "Teaser1Final", ofType: "mp4")
-        
+      
         guard let wov1 = WorkOutVideo(name: "FULL BODY", length: "45 minutes") else {
             fatalError("Error")
         }
@@ -265,7 +262,6 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         workOutVideos += [wov1, wov2, wov3]
     }
 
-    
     //MARK: Setup background interface
     func setupBackground() {
         

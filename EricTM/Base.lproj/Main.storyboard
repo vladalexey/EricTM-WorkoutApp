@@ -35,29 +35,31 @@
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Vignette" translatesAutoresizingMaskIntoConstraints="NO" id="Hha-60-uwu">
                                             <rect key="frame" x="15" y="15" width="345" height="219.5"/>
                                         </imageView>
-                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Pup-x5-mGE">
-                                            <rect key="frame" x="108" y="99.5" width="158.5" height="50.5"/>
+                                        <stackView opaque="NO" contentMode="scaleAspectFit" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Pup-x5-mGE">
+                                            <rect key="frame" x="87.5" y="84" width="200" height="80"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="FULL BODY" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" minimumScaleFactor="0.69999999999999996" translatesAutoresizingMaskIntoConstraints="NO" id="4dr-hx-h1G" userLabel="Label Exercise">
-                                                    <rect key="frame" x="0.0" y="0.0" width="158.5" height="30.5"/>
+                                                <label autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" text="FULL BODY" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" minimumScaleFactor="0.40000000000000002" translatesAutoresizingMaskIntoConstraints="NO" id="4dr-hx-h1G" userLabel="Label Exercise">
+                                                    <rect key="frame" x="0.0" y="0.0" width="200" height="50"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="30" id="IIs-7J-Rf8"/>
+                                                        <constraint firstAttribute="width" constant="200" id="9qd-IU-t7S"/>
+                                                        <constraint firstAttribute="height" constant="50" id="IIs-7J-Rf8"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="35"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="27"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" scrollEnabled="NO" editable="NO" text="45 MINUTES" textAlignment="center" adjustsFontForContentSizeCategory="YES" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ofy-sn-G2g">
-                                                    <rect key="frame" x="0.0" y="30.5" width="158.5" height="20"/>
+                                                <textView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" contentInsetAdjustmentBehavior="never" indicatorStyle="black" delaysContentTouches="NO" canCancelContentTouches="NO" editable="NO" text="45 MINUTES" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ofy-sn-G2g">
+                                                    <rect key="frame" x="0.0" y="50" width="200" height="30"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <accessibility key="accessibilityConfiguration">
                                                         <accessibilityTraits key="traits" notEnabled="YES"/>
                                                         <bool key="isElement" value="NO"/>
                                                     </accessibility>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="20" id="hxL-Sc-foG"/>
+                                                        <constraint firstAttribute="width" constant="200" id="Qnr-O1-uu9"/>
+                                                        <constraint firstAttribute="height" constant="30" id="hxL-Sc-foG"/>
                                                     </constraints>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <fontDescription key="fontDescription" type="system" weight="light" pointSize="11"/>
@@ -65,21 +67,23 @@
                                                 </textView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="ofy-sn-G2g" firstAttribute="top" secondItem="4dr-hx-h1G" secondAttribute="bottom" constant="-5" id="iHl-pt-0DB"/>
+                                                <constraint firstItem="ofy-sn-G2g" firstAttribute="top" secondItem="4dr-hx-h1G" secondAttribute="bottom" constant="-15" id="iHl-pt-0DB"/>
                                             </constraints>
                                         </stackView>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstItem="Pup-x5-mGE" firstAttribute="top" secondItem="tei-q8-YQ0" secondAttribute="topMargin" constant="73" id="3VB-zy-TAE"/>
                                         <constraint firstAttribute="bottom" secondItem="BCB-cy-KRg" secondAttribute="bottom" constant="15" id="42g-QT-R39"/>
-                                        <constraint firstItem="Pup-x5-mGE" firstAttribute="leading" secondItem="tei-q8-YQ0" secondAttribute="leadingMargin" constant="92" id="4lN-EY-87e"/>
                                         <constraint firstAttribute="trailing" secondItem="Hha-60-uwu" secondAttribute="trailing" constant="15" id="9yh-IG-Fns"/>
+                                        <constraint firstItem="Pup-x5-mGE" firstAttribute="centerY" secondItem="tei-q8-YQ0" secondAttribute="centerY" id="AzL-UY-ein"/>
                                         <constraint firstItem="BCB-cy-KRg" firstAttribute="top" secondItem="tei-q8-YQ0" secondAttribute="top" constant="15" id="Bud-xs-dwr"/>
+                                        <constraint firstItem="Pup-x5-mGE" firstAttribute="leading" secondItem="tei-q8-YQ0" secondAttribute="leadingMargin" constant="71.5" id="Gia-EA-uAg"/>
                                         <constraint firstItem="Hha-60-uwu" firstAttribute="top" secondItem="tei-q8-YQ0" secondAttribute="top" constant="15" id="LG8-5G-lMr"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="Pup-x5-mGE" secondAttribute="trailing" constant="92.5" id="P8l-Pd-eta"/>
                                         <constraint firstAttribute="trailing" secondItem="BCB-cy-KRg" secondAttribute="trailing" constant="15" id="PW0-hX-XQG"/>
                                         <constraint firstAttribute="bottom" secondItem="Hha-60-uwu" secondAttribute="bottom" constant="15" id="QN0-cB-wcp"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="Pup-x5-mGE" secondAttribute="bottom" constant="89" id="dJV-Tl-iz8"/>
-                                        <constraint firstItem="Pup-x5-mGE" firstAttribute="top" secondItem="tei-q8-YQ0" secondAttribute="topMargin" constant="88.5" id="iLn-WU-Qyf"/>
+                                        <constraint firstItem="Pup-x5-mGE" firstAttribute="centerX" secondItem="tei-q8-YQ0" secondAttribute="centerX" id="Tsm-pt-h2m"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="Pup-x5-mGE" secondAttribute="bottom" constant="75" id="czq-gb-1vC"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="Pup-x5-mGE" secondAttribute="trailing" constant="71.5" id="jMu-AS-FOA"/>
                                         <constraint firstItem="Hha-60-uwu" firstAttribute="leading" secondItem="tei-q8-YQ0" secondAttribute="leading" constant="15" id="vWD-W0-opF"/>
                                         <constraint firstItem="BCB-cy-KRg" firstAttribute="leading" secondItem="tei-q8-YQ0" secondAttribute="leading" constant="15" id="yrO-jx-gNN"/>
                                     </constraints>
@@ -209,7 +213,7 @@
         <scene sceneID="mhd-YJ-eIx">
             <objects>
                 <tabBarController id="97A-TD-XhJ" customClass="TabBarViewController" customModule="EricTM" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBar key="tabBar" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" barStyle="black" shadowImage="12" itemPositioning="centered" id="4Jv-EN-DxD">
+                    <tabBar key="tabBar" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" barStyle="black" shadowImage="12" id="4Jv-EN-DxD">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" red="0.15686274509803921" green="0.15686274509803921" blue="0.15686274509803921" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

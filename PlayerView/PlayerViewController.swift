@@ -23,6 +23,8 @@ let global = Global()
 
 class PlayerViewController: AVPlayerViewController {
     
+    var playerViewController: AVPlayerViewController = AVPlayerViewController()
+    
     var timerTest = Timer()
     
     var videoReference: StorageReference {
@@ -49,6 +51,14 @@ class PlayerViewController: AVPlayerViewController {
     
     var workoutCode = String()
     var videoCount = Int()
+    
+    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return UIInterfaceOrientation.landscapeRight
+    }
+    
+    override var shouldAutorotate: Bool {
+        return false
+    }
     
     let routePickerView: AVRoutePickerView = {
         
@@ -99,7 +109,7 @@ class PlayerViewController: AVPlayerViewController {
         
         let button = UIButton(type: .system)
         
-        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        button.contentEdgeInsets = UIEdgeInsets(top: 9, left: 9, bottom: 9, right: 9)
         
         button.setImage(UIImage(named: "X"), for: .normal)
         button.tintColor = UIColor.white
@@ -113,7 +123,7 @@ class PlayerViewController: AVPlayerViewController {
         
         let button = UIButton(type: .system)
         
-        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        button.contentEdgeInsets = UIEdgeInsets(top: 9, left: 9, bottom: 9, right: 9)
         
         button.setImage(UIImage(named: "PAUSE"), for: .normal)
         button.tintColor = UIColor.white
@@ -127,7 +137,7 @@ class PlayerViewController: AVPlayerViewController {
         
         let button = UIButton(type: .system)
         
-        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        button.contentEdgeInsets = UIEdgeInsets(top: 9, left: 9, bottom: 9, right: 9)
         
         button.setImage(UIImage(named: "15FORWARD"), for: .normal)
         button.tintColor = UIColor.white
@@ -142,7 +152,7 @@ class PlayerViewController: AVPlayerViewController {
         
         let button = UIButton(type: .system)
         
-        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        button.contentEdgeInsets = UIEdgeInsets(top: 9, left: 9, bottom: 9, right: 9)
         
         button.setImage(UIImage(named: "15BACKWARD"), for: .normal)
         button.tintColor = UIColor.white
@@ -157,7 +167,7 @@ class PlayerViewController: AVPlayerViewController {
         
         let button = UIButton(type: .system)
         
-        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        button.contentEdgeInsets = UIEdgeInsets(top: 9, left: 9, bottom: 9, right: 9)
         
         button.setImage(UIImage(named: "FORWARD"), for: .normal)
         button.tintColor = UIColor.white
@@ -172,7 +182,7 @@ class PlayerViewController: AVPlayerViewController {
         
         let button = UIButton(type: .system)
         
-        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        button.contentEdgeInsets = UIEdgeInsets(top: 9, left: 9, bottom: 9, right: 9)
         
         button.setImage(UIImage(named: "BACKWARD"), for: .normal)
         button.tintColor = UIColor.white
@@ -187,7 +197,7 @@ class PlayerViewController: AVPlayerViewController {
         
         let button = UIButton(type: .system)
         
-        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        button.contentEdgeInsets = UIEdgeInsets(top: 9, left: 9, bottom: 9, right: 9)
         
         button.setImage(UIImage(named: "AIRPLAY"), for: .normal)
         button.tintColor = UIColor.white
@@ -196,15 +206,6 @@ class PlayerViewController: AVPlayerViewController {
         
         return button
     }()
-    
-    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-        return UIInterfaceOrientation.landscapeRight
-    }
-    
-    override var shouldAutorotate: Bool {
-        return false
-    }
-
     
     func setupUI() {
         
@@ -244,13 +245,13 @@ class PlayerViewController: AVPlayerViewController {
         self.contentOverlayView?.insertSubview(backward15, aboveSubview: controlView)
         backward15.heightAnchor.constraint(equalToConstant: 40).isActive = true
         backward15.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
-        backward15.rightAnchor.constraint(equalTo: (playButton.leftAnchor), constant: -50).isActive = true
+        backward15.rightAnchor.constraint(equalTo: (playButton.centerXAnchor), constant: -60).isActive = true
         
         
         self.contentOverlayView?.insertSubview(forward15, aboveSubview: controlView)
         forward15.heightAnchor.constraint(equalToConstant: 40).isActive = true
         forward15.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
-        forward15.leftAnchor.constraint(equalTo: (playButton.rightAnchor), constant: 50).isActive = true
+        forward15.leftAnchor.constraint(equalTo: (playButton.centerXAnchor), constant: 60).isActive = true
         
         self.contentOverlayView?.insertSubview(forward, aboveSubview: controlView)
         forward.heightAnchor.constraint(equalToConstant: 40).isActive = true
@@ -336,7 +337,34 @@ class PlayerViewController: AVPlayerViewController {
         }
     }
     
+    @objc func didEnterBackground() {
+        
+        self.player = nil
+        self.player?.pause()
+        
+        playButton.setImage(UIImage(named: "PLAY"), for: .normal)
+        playerPlaying = false
+        
+    }
+    
+    @objc func willEnterForeground() {
+        
+        self.player = queuePlayer
+        self.player?.play()
+        
+        playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
+        playerPlaying = true
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+      
+        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
         
         setupUI()
         
@@ -619,7 +647,7 @@ class PlayerViewController: AVPlayerViewController {
                 timerTest.invalidate()
 
             } else if (self.topView.bounds.contains(pointInTopView)) && self.showPlayDoneButton != true {
-
+ 
                 print("[handleTap] Tap is inside topView -> Reappear")
             
                 disappearAnimationControll.startAnimation()
@@ -630,7 +658,16 @@ class PlayerViewController: AVPlayerViewController {
                     selector    : #selector(initHiddenAuto),
                     userInfo    : nil,
                     repeats     : false)
-
+            } else if (self.controlView.bounds.contains(pointInCtrlView)) && self.showPlayDoneButton == true {
+                
+                timerTest.invalidate()
+                
+                timerTest =  Timer.scheduledTimer(
+                    timeInterval: TimeInterval(3),
+                    target      : self,
+                    selector    : #selector(initHiddenAuto),
+                    userInfo    : nil,
+                    repeats     : false)
             }
         }
     }
@@ -724,6 +761,19 @@ class PlayerViewController: AVPlayerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+            print("AVAudioSession Category Playback OK")
+            do {
+                try AVAudioSession.sharedInstance().setActive(true)
+                print("AVAudioSession is Active")
+            } catch let error as NSError {
+                print(error.localizedDescription)
+            }
+        } catch let error as NSError {
+            print(error.localizedDescription)
+        }
+        
         self.player = self.queuePlayer
         
         NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
@@ -803,6 +853,8 @@ class PlayerViewController: AVPlayerViewController {
     //MARK: Play button
     @objc func playButtonPressed(sender: UIButton) {
         
+        timerTest.invalidate()
+        
         if playerPlaying == false {
             self.player?.play()
             playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
@@ -814,10 +866,19 @@ class PlayerViewController: AVPlayerViewController {
             playerPlaying = false
             print("pauseButtonPressed")
         }
+        
+        timerTest =  Timer.scheduledTimer(
+            timeInterval: TimeInterval(3),
+            target      : self,
+            selector    : #selector(initHiddenAuto),
+            userInfo    : nil,
+            repeats     : false)
     }
     
     //MARK: Forward 15 seconds selected
     @objc func forward15(sender: UIButton) {
+        
+        timerTest.invalidate()
         
         self.player?.pause()
         playButton.setImage(UIImage(named: "PLAY"), for: .normal)
@@ -825,18 +886,38 @@ class PlayerViewController: AVPlayerViewController {
         
         let seekDuration = CMTimeMake(15, 1)
         let currentTime: CMTime = (self.player?.currentTime())!
-        let newTime = seekDuration + currentTime
-        self.player?.seek(to: newTime)
+        
+        if currentTime + seekDuration > (self.player?.currentItem?.duration)! {
+            
+            self.player?.pause()
+            self.queuePlayer.advanceToNextItem()
+            self.player?.play()
+            
+            return
+            
+        }
+        
+        self.player?.seek(to: currentTime + seekDuration)
         
         print("forward15ButtonPressed")
         
         self.player?.play()
         playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
         playerPlaying = true
+        
+        timerTest =  Timer.scheduledTimer(
+            timeInterval: TimeInterval(3),
+            target      : self,
+            selector    : #selector(initHiddenAuto),
+            userInfo    : nil,
+            repeats     : false)
+        
     }
     
     //MARK: Backward 15 seconds selected
     @objc func backward15(sender: UIButton) {
+        
+        timerTest.invalidate()
         
         self.player?.pause()
         playButton.setImage(UIImage(named: "PLAY"), for: .normal)
@@ -859,10 +940,19 @@ class PlayerViewController: AVPlayerViewController {
         self.player?.play()
         playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
         playerPlaying = true
+        
+        timerTest =  Timer.scheduledTimer(
+            timeInterval: TimeInterval(3),
+            target      : self,
+            selector    : #selector(initHiddenAuto),
+            userInfo    : nil,
+            repeats     : false)
     }
     
     //MARK: Forward selected
     @objc func forward(sender: UIButton) {
+        
+        timerTest.invalidate()
         
         self.player?.pause()
         
@@ -894,10 +984,19 @@ class PlayerViewController: AVPlayerViewController {
         print("forwardButtonPressed")
         
         self.player?.play()
+        
+        timerTest =  Timer.scheduledTimer(
+            timeInterval: TimeInterval(3),
+            target      : self,
+            selector    : #selector(initHiddenAuto),
+            userInfo    : nil,
+            repeats     : false)
     }
     
     //MARK: Backward selected
     @objc func backward(sender: UIButton) {
+        
+        timerTest.invalidate()
         
         for item in listVideos {                    // get and insert previous video into queue
             
@@ -939,6 +1038,13 @@ class PlayerViewController: AVPlayerViewController {
                 }
             }
         }
+        
+        timerTest =  Timer.scheduledTimer(
+            timeInterval: TimeInterval(3),
+            target      : self,
+            selector    : #selector(initHiddenAuto),
+            userInfo    : nil,
+            repeats     : false)
     }
     
     @objc func airplayButton(sender: UIButton) {

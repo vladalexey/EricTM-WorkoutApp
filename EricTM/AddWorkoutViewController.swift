@@ -96,7 +96,7 @@ class AddWorkoutViewController: UIViewController, UIPickerViewDelegate, UIPicker
         
         let logoContainer = UIView(frame: CGRect(x: 0, y: 0, width: 270, height: 30))
         
-        let imageView = UIImageView(frame: CGRect(x: 10, y: 5, width: 200, height: 20))
+        let imageView = UIImageView(frame: CGRect(x: 15, y: 5, width: 200, height: 20))
         imageView.contentMode = .scaleAspectFit
         let image = UIImage(named: "logo")
         imageView.image = image
