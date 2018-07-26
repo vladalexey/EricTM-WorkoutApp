@@ -24,13 +24,17 @@ class NutritionViewController: UIViewController {
         
         //MARK: Setting logo on NavBar
         
-        let logoContainer = UIView(frame: CGRect(x: 0, y: 0, width: 270, height: 30))
+        let logoContainer = UIView(frame: CGRect(x: 0, y: 0, width: (navigationController?.navigationBar.bounds.width)!, height: 30))
         
-        let imageView = UIImageView(frame: CGRect(x: 40, y: 5, width: 200, height: 20))
+        let imageView = UIImageView(frame: CGRect(x: 25, y: 5, width: 200, height: 20))
         imageView.contentMode = .scaleAspectFit
+        
         let image = UIImage(named: "logo")
         imageView.image = image
         logoContainer.addSubview(imageView)
+        imageView.centerXAnchor.constraint(equalTo: logoContainer.centerXAnchor).isActive = true
+        imageView.centerYAnchor.constraint(equalTo: logoContainer.centerYAnchor).isActive = true
+        
         navigationItem.titleView = logoContainer
     }
 
