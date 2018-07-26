@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="97A-TD-XhJ">
-    <device id="retina4_7" orientation="portrait">
+    <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -15,31 +15,31 @@
             <objects>
                 <tableViewController extendedLayoutIncludesOpaqueBars="YES" id="wr2-0j-NN9" customClass="WorkOutTableViewController" customModule="EricTM" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleAspectFit" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="ygC-xK-B4V">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="672"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleAspectFit" selectionStyle="none" showsReorderControl="YES" indentationWidth="10" shouldIndentWhileEditing="NO" reuseIdentifier="WorkOutTableViewCell" rowHeight="250" id="v6V-yt-Ixt" customClass="WorkOutTableViewCell" customModule="EricTM" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="375" height="250"/>
+                                <rect key="frame" x="0.0" y="28" width="414" height="250"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="v6V-yt-Ixt" id="tei-q8-YQ0">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="249.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="249.66666666666666"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" image="Thumbnail" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BCB-cy-KRg">
-                                            <rect key="frame" x="15" y="15" width="345" height="219.5"/>
+                                            <rect key="frame" x="15" y="10" width="384" height="229.66666666666666"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="0.0"/>
                                         </imageView>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Vignette" translatesAutoresizingMaskIntoConstraints="NO" id="Hha-60-uwu">
-                                            <rect key="frame" x="15" y="15" width="345" height="219.5"/>
+                                            <rect key="frame" x="15" y="10" width="384" height="229.66666666666666"/>
                                         </imageView>
                                         <stackView opaque="NO" contentMode="scaleAspectFit" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Pup-x5-mGE">
-                                            <rect key="frame" x="87.5" y="84" width="200" height="80"/>
+                                            <rect key="frame" x="91.666666666666686" y="84" width="231" height="80"/>
                                             <subviews>
                                                 <label autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" text="FULL BODY" textAlignment="center" lineBreakMode="headTruncation" numberOfLines="0" minimumScaleFactor="0.40000000000000002" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4dr-hx-h1G" userLabel="Label Exercise">
-                                                    <rect key="frame" x="0.0" y="0.0" width="200" height="50"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="231" height="50"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
@@ -51,7 +51,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" contentInsetAdjustmentBehavior="never" indicatorStyle="black" delaysContentTouches="NO" canCancelContentTouches="NO" editable="NO" text="45 MINUTES" textAlignment="center" adjustsFontForContentSizeCategory="YES" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ofy-sn-G2g">
-                                                    <rect key="frame" x="0.0" y="50" width="200" height="30"/>
+                                                    <rect key="frame" x="0.0" y="50" width="231" height="30"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <accessibility key="accessibilityConfiguration">
                                                         <accessibilityTraits key="traits" notEnabled="YES"/>
@@ -73,14 +73,14 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="Pup-x5-mGE" firstAttribute="top" secondItem="tei-q8-YQ0" secondAttribute="topMargin" constant="73" id="3VB-zy-TAE"/>
-                                        <constraint firstAttribute="bottom" secondItem="BCB-cy-KRg" secondAttribute="bottom" constant="15" id="42g-QT-R39"/>
+                                        <constraint firstAttribute="bottom" secondItem="BCB-cy-KRg" secondAttribute="bottom" constant="10" id="42g-QT-R39"/>
                                         <constraint firstAttribute="trailing" secondItem="Hha-60-uwu" secondAttribute="trailing" constant="15" id="9yh-IG-Fns"/>
                                         <constraint firstItem="Pup-x5-mGE" firstAttribute="centerY" secondItem="tei-q8-YQ0" secondAttribute="centerY" id="AzL-UY-ein"/>
-                                        <constraint firstItem="BCB-cy-KRg" firstAttribute="top" secondItem="tei-q8-YQ0" secondAttribute="top" constant="15" id="Bud-xs-dwr"/>
+                                        <constraint firstItem="BCB-cy-KRg" firstAttribute="top" secondItem="tei-q8-YQ0" secondAttribute="top" constant="10" id="Bud-xs-dwr"/>
                                         <constraint firstItem="Pup-x5-mGE" firstAttribute="leading" secondItem="tei-q8-YQ0" secondAttribute="leadingMargin" constant="71.5" id="Gia-EA-uAg"/>
-                                        <constraint firstItem="Hha-60-uwu" firstAttribute="top" secondItem="tei-q8-YQ0" secondAttribute="top" constant="15" id="LG8-5G-lMr"/>
+                                        <constraint firstItem="Hha-60-uwu" firstAttribute="top" secondItem="tei-q8-YQ0" secondAttribute="top" constant="10" id="LG8-5G-lMr"/>
                                         <constraint firstAttribute="trailing" secondItem="BCB-cy-KRg" secondAttribute="trailing" constant="15" id="PW0-hX-XQG"/>
-                                        <constraint firstAttribute="bottom" secondItem="Hha-60-uwu" secondAttribute="bottom" constant="15" id="QN0-cB-wcp"/>
+                                        <constraint firstAttribute="bottom" secondItem="Hha-60-uwu" secondAttribute="bottom" constant="10" id="QN0-cB-wcp"/>
                                         <constraint firstItem="Pup-x5-mGE" firstAttribute="centerX" secondItem="tei-q8-YQ0" secondAttribute="centerX" id="Tsm-pt-h2m"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="Pup-x5-mGE" secondAttribute="bottom" constant="75" id="czq-gb-1vC"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="Pup-x5-mGE" secondAttribute="trailing" constant="71.5" id="jMu-AS-FOA"/>
@@ -122,22 +122,22 @@
             <objects>
                 <viewController id="CYC-qr-6uz" customClass="AddWorkoutViewController" customModule="EricTM" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" multipleTouchEnabled="YES" contentMode="scaleToFill" id="tFa-y3-Pvq">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fAt-kQ-nKX">
-                                <rect key="frame" x="16" y="174" width="343" height="216"/>
+                                <rect key="frame" x="16" y="174" width="382" height="216"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </pickerView>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Name Workout" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="jD1-5b-orK">
-                                <rect key="frame" x="16" y="114" width="343" height="30"/>
+                                <rect key="frame" x="16" y="114" width="382" height="30"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fKY-kF-Lbr">
-                                <rect key="frame" x="16" y="85" width="343" height="21"/>
+                                <rect key="frame" x="16" y="85" width="382" height="21"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="highlightedColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -182,7 +182,7 @@
             <objects>
                 <viewController id="IXm-20-kWN" customClass="NutritionViewController" customModule="EricTM" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="gMu-11-9Oy">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="CXV-DA-jpo"/>
@@ -198,7 +198,7 @@
             <objects>
                 <viewController id="jPu-Dk-ZQG" customClass="PersonalizeViewController" customModule="EricTM" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="q1q-Nk-YYB">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="Eg6-TZ-wTJ"/>
@@ -237,7 +237,7 @@
                     <tabBarItem key="tabBarItem" title="Workouts" image="Dumbell" id="JKI-A4-til"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="sGn-5E-TO7">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -256,7 +256,7 @@
                     <tabBarItem key="tabBarItem" title="Personalize" image="Human" landscapeImage="1" id="cF3-H6-6ou"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ao9-Ur-rEW">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -275,7 +275,7 @@
                     <tabBarItem key="tabBarItem" title="Nutrition" image="Culinary" id="8Pr-g0-T03"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="j11-5f-ogk">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -293,7 +293,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="sTX-M2-nwG" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="DUw-5R-f6U">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -310,7 +310,7 @@
         <image name="1" width="1920" height="1080"/>
         <image name="12" width="1920" height="1080"/>
         <image name="Culinary" width="18" height="29"/>
-        <image name="Dumbell" width="36" height="21"/>
+        <image name="Dumbell" width="36" height="20"/>
         <image name="Human" width="18" height="28"/>
         <image name="Thumbnail" width="384" height="216"/>
         <image name="Vignette" width="384" height="216"/>
