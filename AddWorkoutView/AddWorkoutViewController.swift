@@ -9,7 +9,7 @@
 import UIKit
 
 protocol DataSentDelegate {
-    func userDidEnterData(nameWorkout: String, lengthWorkout: String)
+    func userDidEnterData(nameWorkout: String, lengthWorkout: String, workoutLabel: String)
 }
 
 class AddWorkoutViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
@@ -17,6 +17,8 @@ class AddWorkoutViewController: UIViewController, UIPickerViewDelegate, UIPicker
     //MARK: Properties
     
     var delegate: DataSentDelegate? = nil
+    
+    let workoutLabels = ["Full", "Upper", "Lower", "Abs", "Pull", "Push"]
     
     @IBOutlet weak var nameWorkoutInput: UITextField!
     @IBOutlet weak var lengthWorkoutPicker: UIPickerView!
@@ -88,6 +90,11 @@ class AddWorkoutViewController: UIViewController, UIPickerViewDelegate, UIPicker
     //MARK: Setup background interface
     func setupBackground() {
         
+        self.navigationController?.navigationBar.layer.shadowColor = UIColor.black.cgColor
+        self.navigationController?.navigationBar.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)
+        self.navigationController?.navigationBar.layer.shadowRadius = 4.0
+        self.navigationController?.navigationBar.layer.shadowOpacity = 1.0
+        
         self.view.backgroundColor = backgroundColor
         navigationController?.navigationBar.barTintColor = backgroundColor // color top bar black
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]  // color top bar text white
@@ -96,8 +103,9 @@ class AddWorkoutViewController: UIViewController, UIPickerViewDelegate, UIPicker
         
         let logoContainer = UIView(frame: CGRect(x: 0, y: 0, width: 270, height: 30))
         
-        let imageView = UIImageView(frame: CGRect(x: 15, y: 5, width: 200, height: 20))
+        let imageView = UIImageView(frame: CGRect(x: 25, y: 5, width: 200, height: 20))
         imageView.contentMode = .scaleAspectFit
+        
         let image = UIImage(named: "logo")
         imageView.image = image
         logoContainer.addSubview(imageView)
@@ -118,7 +126,7 @@ class AddWorkoutViewController: UIViewController, UIPickerViewDelegate, UIPicker
             print("custom workout non nil")
             if nameWorkoutInput != nil && lengthWorkoutPicker != nil {
                 print("name not nil")
-                delegate?.userDidEnterData(nameWorkout: nameWorkoutInput.text!, lengthWorkout: pickerData[lengthWorkoutPicker.selectedRow(inComponent: 0)])
+                delegate?.userDidEnterData(nameWorkout: nameWorkoutInput.text!, lengthWorkout: pickerData[lengthWorkoutPicker.selectedRow(inComponent: 0)], workoutLabel: workoutLabels[0])
                 print(lengthWorkoutPicker.selectedRow(inComponent: 0))
                 dismiss(animated: true, completion: nil)
             }

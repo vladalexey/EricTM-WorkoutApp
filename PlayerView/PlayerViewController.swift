@@ -304,7 +304,6 @@ class PlayerViewController: AVPlayerViewController {
             self.navigationController?.popViewController(animated: true)
             self.navigationController?.setNavigationBarHidden(false, animated: true)
             
-            
             print("OK")
         }
         
@@ -345,6 +344,7 @@ class PlayerViewController: AVPlayerViewController {
         playButton.setImage(UIImage(named: "PLAY"), for: .normal)
         playerPlaying = false
         
+        return
     }
     
     @objc func willEnterForeground() {
@@ -354,6 +354,8 @@ class PlayerViewController: AVPlayerViewController {
         
         playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
         playerPlaying = true
+        
+        return
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -392,9 +394,11 @@ class PlayerViewController: AVPlayerViewController {
 
             videoReference.child(global.videoName1).downloadURL(completion: { (url, error) in
                 if error != nil {
+                    
                     print("Error " + global.videoName1)
                     self.exitVideoPlayer()
-
+                    return
+                    
                 } else {
 
                     self.videoCount += 1
@@ -424,6 +428,8 @@ class PlayerViewController: AVPlayerViewController {
                     
                     self.exitVideoPlayer()
                     print("Uh-oh, an error occurred!")
+                    return
+                    
                 } else {
                     
                     print("sucessfully downloaded video 1")
@@ -473,8 +479,10 @@ class PlayerViewController: AVPlayerViewController {
 
             self.videoReference.child(global.videoName2).downloadURL(completion: { (url, error) in
                 if error != nil {
+                    
                     print("Error 2" + global.videoName2)
                     self.exitVideoPlayer()
+                    return
 
                 } else {
 
@@ -505,6 +513,8 @@ class PlayerViewController: AVPlayerViewController {
                     
                     self.exitVideoPlayer()
                     print("Uh-oh, an error occurred!")
+                    return
+                    
                 } else {
                     
                     print("sucessfully downloaded video 2")
@@ -548,8 +558,10 @@ class PlayerViewController: AVPlayerViewController {
 
             self.videoReference.child(global.videoName3).downloadURL(completion: { (url, error) in
                 if error != nil {
+                    
                     print("Error 3" + global.videoName3)
                     self.exitVideoPlayer()
+                    return
 
                 } else {
 
@@ -585,6 +597,8 @@ class PlayerViewController: AVPlayerViewController {
                     
                     self.exitVideoPlayer()
                     print("Uh-oh, an error occurred!")
+                    return
+                    
                 } else {
                     
                     print("sucessfully downloaded video 3")
@@ -681,6 +695,7 @@ class PlayerViewController: AVPlayerViewController {
         }
         
         disappearAnimationControll.startAnimation()
+
     }
     
     @objc func toggleHiddenAuto() {
@@ -714,6 +729,7 @@ class PlayerViewController: AVPlayerViewController {
             self.routePickerView.alpha = 1.0
         }
         
+        return
     }
     
     func toggleHidden() {
@@ -747,6 +763,7 @@ class PlayerViewController: AVPlayerViewController {
             self.routePickerView.alpha = 1.0
         }
 
+        return
     }
     
     @objc func playerDidPlayToEnd() {
@@ -755,12 +772,14 @@ class PlayerViewController: AVPlayerViewController {
             
             exitDueToForward()
             
+            return
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //MARK: Implement background video's audio when user exit app
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
             print("AVAudioSession Category Playback OK")
@@ -789,7 +808,7 @@ class PlayerViewController: AVPlayerViewController {
             selector    : #selector(initHiddenAuto),
             userInfo    : nil,
             repeats     : false)
-        
+
     }
     
     //MARK: Observe changes in AVPlayer
@@ -848,6 +867,8 @@ class PlayerViewController: AVPlayerViewController {
         
         self.navigationController?.popViewController(animated: true)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
+        
+        return
     }
     
     //MARK: Play button
@@ -873,6 +894,8 @@ class PlayerViewController: AVPlayerViewController {
             selector    : #selector(initHiddenAuto),
             userInfo    : nil,
             repeats     : false)
+        
+        return
     }
     
     //MARK: Forward 15 seconds selected
@@ -912,6 +935,8 @@ class PlayerViewController: AVPlayerViewController {
             userInfo    : nil,
             repeats     : false)
         
+        return
+        
     }
     
     //MARK: Backward 15 seconds selected
@@ -947,6 +972,8 @@ class PlayerViewController: AVPlayerViewController {
             selector    : #selector(initHiddenAuto),
             userInfo    : nil,
             repeats     : false)
+        
+        return
     }
     
     //MARK: Forward selected
@@ -977,6 +1004,7 @@ class PlayerViewController: AVPlayerViewController {
                 } else if currentIndex == 2 {
                     
                     exitDueToForward()
+                    return
                 }
             }
         }
@@ -991,6 +1019,8 @@ class PlayerViewController: AVPlayerViewController {
             selector    : #selector(initHiddenAuto),
             userInfo    : nil,
             repeats     : false)
+        
+        return
     }
     
     //MARK: Backward selected
@@ -1045,6 +1075,8 @@ class PlayerViewController: AVPlayerViewController {
             selector    : #selector(initHiddenAuto),
             userInfo    : nil,
             repeats     : false)
+        
+        return
     }
     
     @objc func airplayButton(sender: UIButton) {
@@ -1052,7 +1084,7 @@ class PlayerViewController: AVPlayerViewController {
         print("airplayButtonPressed")
         
         self.contentOverlayView?.addSubview(routePickerView)
-//        self.contentOverlayView?.bringSubview(toFront: routePickerView)
+        
         routePickerView.heightAnchor.constraint(equalToConstant: 40).isActive = true
         routePickerView.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         routePickerView.rightAnchor.constraint(equalTo: (controlView.rightAnchor), constant: -20).isActive = true
@@ -1069,6 +1101,8 @@ class PlayerViewController: AVPlayerViewController {
         NotificationCenter.default.removeObserver(self)
         
         AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
+        
+        return
     }
 
     override func didReceiveMemoryWarning() {

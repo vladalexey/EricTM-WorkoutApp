@@ -214,6 +214,16 @@ extension UIImageView
     }
 }
 
+extension UIColor
+{
+    static let backgroundColor = UIColor(
+        red: 0.20,
+        green: 0.20,
+        blue: 0.20,
+        alpha: 1.0
+    )
+}
+
 
 
 

@@ -18,15 +18,15 @@ class WorkOutVideo {
     //MARK: Properties
 
     var listThumbnails = [UIImage]()
+    
     var name: String
     var length: String
-//    var path: String
     var image: UIImage?
+    var workoutLabel: String
     var background: UIImage? = UIImage(named: "Vignette")
 
-//    var path = String(conBundle.main.path(forResource: "Teaser1Final", ofType: "mp4")
 
-    init?(name: String, length: String) {
+    init?(name: String, length: String, workoutLabel: String) {
         
         // Initialization should fail if there is no name or if the rating is negative.
         if name.isEmpty {
@@ -43,7 +43,7 @@ class WorkOutVideo {
         image = listThumbnails[random]
         
         self.name = name
-//        self.path = path
+        self.workoutLabel = workoutLabel
         self.length = length
 
     }

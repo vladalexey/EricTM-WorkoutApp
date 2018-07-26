@@ -46,11 +46,6 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
         
         UIApplication.shared.endIgnoringInteractionEvents()
-    
-        self.navigationController?.navigationBar.layer.shadowColor = UIColor.black.cgColor
-        self.navigationController?.navigationBar.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)
-        self.navigationController?.navigationBar.layer.shadowRadius = 4.0
-        self.navigationController?.navigationBar.layer.shadowOpacity = 1.0
     }
 
     
@@ -119,7 +114,6 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         cell.photoImageView.image = workOutVideo.image
         cell.Vignette.image = workOutVideo.background
         cell.minuteWorkout.text = workOutVideo.length.uppercased()
-//        cell.shouldIndentWhileEditing = false
         return cell
     }
     
@@ -142,10 +136,51 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         // initialization code
         
         myIndex = indexPath.row
-        workoutLabel = listWorkOut[myIndex]
+        workoutLabel = workOutVideos[indexPath.row].workoutLabel
+    }
+    
+    func alertOnDefaultWorkouts() {
         
+        let alertView = UIAlertController(title: "Error", message: "Cannot delete default", preferredStyle: UIAlertControllerStyle.alert)
         
+        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) {
+            (result : UIAlertAction) -> Void in
+            
+            alertView.dismiss(animated: true, completion: nil)
+            print("OK")
+        }
         
+        alertView.addAction(okAction)
+        
+        self.present(alertView, animated: true, completion: nil)
+    }
+    
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        let edit = UITableViewRowAction(style: .normal, title: "Edit") { action, index in
+            print("Edit content")
+        }
+        edit.backgroundColor = .lightGray
+        
+        let remove = UITableViewRowAction(style: .normal, title: "Remove") { action, index in
+            print("remove button tapped")
+            
+            if (self.workOutVideos[indexPath.row].name != "FULL BODY") && (self.workOutVideos[indexPath.row].name != "UPPER BODY") && (self.workOutVideos[indexPath.row].name != "LOWER BODY") {
+                
+                print(self.workOutVideos[indexPath.row].name + " deleted")
+                
+                self.workOutVideos.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+                tableView.reloadData()
+                
+            } else {
+                
+                self.alertOnDefaultWorkouts()
+            }
+        }
+        remove.backgroundColor = .red
+        
+        return [remove, edit]
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -184,19 +219,19 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         }
     }
 
-
-
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        
         if editingStyle == .delete {
+            
             // Delete the row from the data source
-//            tableView.deleteRows(at: [indexPath], with: .fade)
+            self.workOutVideos.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            tableView.reloadData()
         }
         if editingStyle == .insert {
-            
-            
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+        }
     }
 
 
@@ -233,9 +268,9 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     
     //MARK: Private Methods
     
-    func userDidEnterData(nameWorkout: String, lengthWorkout: String) {    //delegate function for add custom workout
+    func userDidEnterData(nameWorkout: String, lengthWorkout: String, workoutLabel: String) {    //delegate function for add custom workout
         
-        let newWorkout = WorkOutVideo(name: nameWorkout, length: lengthWorkout)
+        let newWorkout = WorkOutVideo(name: nameWorkout, length: lengthWorkout, workoutLabel: workoutLabel)
         let newIndex = IndexPath(row: workOutVideos.count, section: 0)
         workOutVideos.append(newWorkout!)
         listWorkOut.append(nameWorkout)
@@ -247,15 +282,15 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     //MARK: Load workout sessions
     private func loadSampleWOV() {
       
-        guard let wov1 = WorkOutVideo(name: "FULL BODY", length: "45 minutes") else {
+        guard let wov1 = WorkOutVideo(name: "FULL BODY", length: "45 minutes", workoutLabel: "Full") else {
             fatalError("Error")
         }
         
-        guard let wov2 = WorkOutVideo(name: "UPPER BODY", length: "45 minutes") else {
+        guard let wov2 = WorkOutVideo(name: "UPPER BODY", length: "45 minutes", workoutLabel: "Upper") else {
             fatalError("Error")
         }
         
-        guard let wov3 = WorkOutVideo(name: "LOWER BODY", length: "45 minutes") else {
+        guard let wov3 = WorkOutVideo(name: "LOWER BODY", length: "45 minutes", workoutLabel: "Lower") else {
             fatalError("Error")
         }
         
@@ -264,6 +299,12 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
 
     //MARK: Setup background interface
     func setupBackground() {
+        
+        
+        self.navigationController?.navigationBar.layer.shadowColor = UIColor.black.cgColor
+        self.navigationController?.navigationBar.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)
+        self.navigationController?.navigationBar.layer.shadowRadius = 4.0
+        self.navigationController?.navigationBar.layer.shadowOpacity = 1.0
         
         self.view.backgroundColor = backgroundColor
         navigationController?.navigationBar.barTintColor = backgroundColor // color top bar black

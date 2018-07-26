@@ -15,13 +15,14 @@
 		82340FEA20DCDBCC003079A2 /* WorkOutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82340FE920DCDBCC003079A2 /* WorkOutTableViewCell.swift */; };
 		82340FEC20DCE2D0003079A2 /* WorkOutTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82340FEB20DCE2D0003079A2 /* WorkOutTableViewController.swift */; };
 		82340FEE20DCE9C2003079A2 /* WorkOutVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82340FED20DCE9C2003079A2 /* WorkOutVideo.swift */; };
+		823876C221099CDC002A8E62 /* PersonalizeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 823876C121099CDC002A8E62 /* PersonalizeViewController.swift */; };
 		8256A46B210829C0004F3CF9 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8256A46A210829C0004F3CF9 /* AudioToolbox.framework */; };
-		828C262D20E34C8F00AFF5D9 /* AppUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 828C262C20E34C8F00AFF5D9 /* AppUtility.swift */; };
 		829FBCB720E0E5070052601F /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 829FBCB620E0E5070052601F /* TabBarViewController.swift */; };
 		82A219D120DF40F900F19132 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 82A219D020DF40F900F19132 /* GoogleService-Info.plist */; };
 		82E2E1CE20EB168C00D3CA2D /* Teaser1Final.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 82E2E1CD20EB148000D3CA2D /* Teaser1Final.mp4 */; };
 		82EAC90720EC94B00093386C /* AddWorkoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82EAC90620EC94B00093386C /* AddWorkoutViewController.swift */; };
 		82EF187C21007ED400685FC4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 82EF187B21007ED400685FC4 /* Assets.xcassets */; };
+		82F947182109A2AD00947FEB /* NutritionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F947172109A2AD00947FEB /* NutritionViewController.swift */; };
 		CD5662103D49FA68BDE5AAFD /* Pods_EricTM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04A4D67E757F772902D9E46B /* Pods_EricTM.framework */; };
 /* End PBXBuildFile section */
 
@@ -39,14 +40,15 @@
 		82340FE920DCDBCC003079A2 /* WorkOutTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkOutTableViewCell.swift; sourceTree = "<group>"; };
 		82340FEB20DCE2D0003079A2 /* WorkOutTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkOutTableViewController.swift; sourceTree = "<group>"; };
 		82340FED20DCE9C2003079A2 /* WorkOutVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkOutVideo.swift; sourceTree = "<group>"; };
+		823876C121099CDC002A8E62 /* PersonalizeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalizeViewController.swift; sourceTree = "<group>"; };
 		8256A469210829C0004F3CF9 /* EricTM.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EricTM.entitlements; sourceTree = "<group>"; };
 		8256A46A210829C0004F3CF9 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
-		828C262C20E34C8F00AFF5D9 /* AppUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUtility.swift; sourceTree = "<group>"; };
 		829FBCB620E0E5070052601F /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		82A219D020DF40F900F19132 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		82E2E1CD20EB148000D3CA2D /* Teaser1Final.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = Teaser1Final.mp4; sourceTree = "<group>"; };
 		82EAC90620EC94B00093386C /* AddWorkoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddWorkoutViewController.swift; sourceTree = "<group>"; };
 		82EF187B21007ED400685FC4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		82F947172109A2AD00947FEB /* NutritionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,9 @@
 		82340FCB20DCD6BE003079A2 = {
 			isa = PBXGroup;
 			children = (
+				82F947162109A29300947FEB /* NutritionView */,
+				823876C021099C9D002A8E62 /* Personalize */,
+				823876BF21099C8F002A8E62 /* AddWorkoutView */,
 				82CDE7522101DBA500433D15 /* WorkoutTableView */,
 				82CDE7512101DB9000433D15 /* PlayerView */,
 				821127E720FEE51700BF39ED /* Model */,
@@ -108,15 +113,29 @@
 				82A219D020DF40F900F19132 /* GoogleService-Info.plist */,
 				82340FD720DCD6BE003079A2 /* AppDelegate.swift */,
 				82340FD920DCD6BE003079A2 /* ViewController.swift */,
-				82EAC90620EC94B00093386C /* AddWorkoutViewController.swift */,
 				829FBCB620E0E5070052601F /* TabBarViewController.swift */,
-				828C262C20E34C8F00AFF5D9 /* AppUtility.swift */,
 				82EF187B21007ED400685FC4 /* Assets.xcassets */,
 				82340FDB20DCD6BE003079A2 /* Main.storyboard */,
 				82340FE020DCD6BE003079A2 /* LaunchScreen.storyboard */,
 				82340FE320DCD6BE003079A2 /* Info.plist */,
 			);
 			path = EricTM;
+			sourceTree = "<group>";
+		};
+		823876BF21099C8F002A8E62 /* AddWorkoutView */ = {
+			isa = PBXGroup;
+			children = (
+				82EAC90620EC94B00093386C /* AddWorkoutViewController.swift */,
+			);
+			path = AddWorkoutView;
+			sourceTree = "<group>";
+		};
+		823876C021099C9D002A8E62 /* Personalize */ = {
+			isa = PBXGroup;
+			children = (
+				823876C121099CDC002A8E62 /* PersonalizeViewController.swift */,
+			);
+			path = Personalize;
 			sourceTree = "<group>";
 		};
 		82CDE7512101DB9000433D15 /* PlayerView */ = {
@@ -134,6 +153,14 @@
 				82340FEB20DCE2D0003079A2 /* WorkOutTableViewController.swift */,
 			);
 			path = WorkoutTableView;
+			sourceTree = "<group>";
+		};
+		82F947162109A29300947FEB /* NutritionView */ = {
+			isa = PBXGroup;
+			children = (
+				82F947172109A2AD00947FEB /* NutritionViewController.swift */,
+			);
+			path = NutritionView;
 			sourceTree = "<group>";
 		};
 		BC9616DE737CF277F7ECF073 /* Frameworks */ = {
@@ -272,10 +299,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				828C262D20E34C8F00AFF5D9 /* AppUtility.swift in Sources */,
 				8223CDFE20EA2E9500569D3F /* PlayerViewController.swift in Sources */,
+				82F947182109A2AD00947FEB /* NutritionViewController.swift in Sources */,
 				82EAC90720EC94B00093386C /* AddWorkoutViewController.swift in Sources */,
 				82340FDA20DCD6BE003079A2 /* ViewController.swift in Sources */,
+				823876C221099CDC002A8E62 /* PersonalizeViewController.swift in Sources */,
 				82340FD820DCD6BE003079A2 /* AppDelegate.swift in Sources */,
 				82340FEC20DCE2D0003079A2 /* WorkOutTableViewController.swift in Sources */,
 				82340FEE20DCE9C2003079A2 /* WorkOutVideo.swift in Sources */,
