@@ -641,7 +641,7 @@ class PlayerViewController: AVPlayerViewController {
         
         if tap.state == UIGestureRecognizerState.ended {
           
-            let disappearAnimationControll = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) {
+            let disappearAnimationControl = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) {
 
                 self.toggleHidden()
 
@@ -656,7 +656,7 @@ class PlayerViewController: AVPlayerViewController {
 
                 print("[handleTap] Tap is inside topView -> Disappear")
                 
-                disappearAnimationControll.startAnimation()
+                disappearAnimationControl.startAnimation()
 
                 timerTest.invalidate()
 
@@ -664,7 +664,7 @@ class PlayerViewController: AVPlayerViewController {
  
                 print("[handleTap] Tap is inside topView -> Reappear")
             
-                disappearAnimationControll.startAnimation()
+                disappearAnimationControl.startAnimation()
                 
                 setTimer()
             } else if (self.controlView.bounds.contains(pointInCtrlView)) && self.showPlayDoneButton == true {
@@ -678,13 +678,13 @@ class PlayerViewController: AVPlayerViewController {
     
     @objc func initHiddenAuto() {
         
-        let disappearAnimationControll = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) {
+        let disappearAnimationControl = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) {
             
             self.toggleHidden()
             
         }
         
-        disappearAnimationControll.startAnimation()
+        disappearAnimationControl.startAnimation()
 
     }
     
@@ -724,7 +724,7 @@ class PlayerViewController: AVPlayerViewController {
     
     func toggleHidden() {
         
-        // Added extra timerTest.isValid check on July 27q
+        // Added extra timerTest.isValid check on July 27
         if showPlayDoneButton == true && timerTest.isValid == true {
             
             self.showPlayDoneButton = false
