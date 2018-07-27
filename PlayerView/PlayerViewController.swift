@@ -904,6 +904,7 @@ class PlayerViewController: AVPlayerViewController {
         
         if currentTime + seekDuration > (self.player?.currentItem?.duration)! && !(self.player?.currentItem === listVideos[2]) {
             
+            
             self.player?.pause()
             self.queuePlayer.advanceToNextItem()
             self.player?.play()
