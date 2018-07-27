@@ -490,48 +490,28 @@ class PlayerViewController: AVPlayerViewController {
                 disappearAnimationControl.startAnimation()
 
                 timerTest.invalidate()
-<<<<<<< HEAD
-//                timerForInteract.invalidate()
-=======
->>>>>>> 56ce54b05b97da26c740e96a04b0324e0c1e7061
 
             } else if (self.topView.bounds.contains(pointInTopView)) && self.showPlayDoneButton != true {
                 
                 timerTest.invalidate()
-<<<<<<< HEAD
-//                timerForInteract.invalidate()
-=======
->>>>>>> 56ce54b05b97da26c740e96a04b0324e0c1e7061
+
  
                 print("[handleTap] Tap is inside topView -> Reappear")
             
                 reappearAnimationControl.startAnimation()
                 
                 setTimer()
-<<<<<<< HEAD
-//                setTimerInteract()
-=======
->>>>>>> 56ce54b05b97da26c740e96a04b0324e0c1e7061
                 
             } else if (self.controlView.bounds.contains(pointInCtrlView)) && self.showPlayDoneButton == true {
                 
                 timerTest.invalidate()
-<<<<<<< HEAD
-                self.view.isUserInteractionEnabled = false
-//                timerForInteract.invalidate()
-=======
->>>>>>> 56ce54b05b97da26c740e96a04b0324e0c1e7061
+
                 print("invalidate in ctrl view")
                 
 //                enableInteract()
                 
                 setTimer()
-<<<<<<< HEAD
-//                setTimerInteract()
-            } else {
-                self.view.isUserInteractionEnabled = true
-=======
->>>>>>> 56ce54b05b97da26c740e96a04b0324e0c1e7061
+
             }
         }
     }
