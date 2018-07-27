@@ -449,7 +449,7 @@
 				CODE_SIGN_ENTITLEMENTS = EricTM/EricTM.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = SWLV38BYCS;
+				DEVELOPMENT_TEAM = U3ZJ8A8P68;
 				INFOPLIST_FILE = EricTM/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.EricTM;
@@ -468,7 +468,7 @@
 				CODE_SIGN_ENTITLEMENTS = EricTM/EricTM.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = SWLV38BYCS;
+				DEVELOPMENT_TEAM = U3ZJ8A8P68;
 				INFOPLIST_FILE = EricTM/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.EricTM;
