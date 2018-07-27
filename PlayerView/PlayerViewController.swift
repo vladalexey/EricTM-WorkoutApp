@@ -490,33 +490,48 @@ class PlayerViewController: AVPlayerViewController {
                 disappearAnimationControl.startAnimation()
 
                 timerTest.invalidate()
+<<<<<<< HEAD
 //                timerForInteract.invalidate()
+=======
+>>>>>>> 56ce54b05b97da26c740e96a04b0324e0c1e7061
 
             } else if (self.topView.bounds.contains(pointInTopView)) && self.showPlayDoneButton != true {
                 
                 timerTest.invalidate()
+<<<<<<< HEAD
 //                timerForInteract.invalidate()
+=======
+>>>>>>> 56ce54b05b97da26c740e96a04b0324e0c1e7061
  
                 print("[handleTap] Tap is inside topView -> Reappear")
             
                 reappearAnimationControl.startAnimation()
                 
                 setTimer()
+<<<<<<< HEAD
 //                setTimerInteract()
+=======
+>>>>>>> 56ce54b05b97da26c740e96a04b0324e0c1e7061
                 
             } else if (self.controlView.bounds.contains(pointInCtrlView)) && self.showPlayDoneButton == true {
                 
                 timerTest.invalidate()
+<<<<<<< HEAD
                 self.view.isUserInteractionEnabled = false
 //                timerForInteract.invalidate()
+=======
+>>>>>>> 56ce54b05b97da26c740e96a04b0324e0c1e7061
                 print("invalidate in ctrl view")
                 
-                enableInteract()
+//                enableInteract()
                 
                 setTimer()
+<<<<<<< HEAD
 //                setTimerInteract()
             } else {
                 self.view.isUserInteractionEnabled = true
+=======
+>>>>>>> 56ce54b05b97da26c740e96a04b0324e0c1e7061
             }
         }
     }
@@ -549,13 +564,7 @@ class PlayerViewController: AVPlayerViewController {
     
     @objc func initHiddenAuto() {
         
-        self.doneButton.isUserInteractionEnabled = false
-        self.playButton.isUserInteractionEnabled = false
-        self.backward15.isUserInteractionEnabled = false
-        self.backward.isUserInteractionEnabled = false
-        self.forward15.isUserInteractionEnabled = false
-        self.forward.isUserInteractionEnabled = false
-        self.routePickerView.isUserInteractionEnabled = false
+       disableInteract()
         
         
         let disappearAnimationControl = UIViewPropertyAnimator(duration: 0.5, curve: .easeInOut) {
@@ -592,13 +601,7 @@ class PlayerViewController: AVPlayerViewController {
     
         if showPlayDoneButton == false {
             
-            self.doneButton.isUserInteractionEnabled = true
-            self.playButton.isUserInteractionEnabled = true
-            self.backward15.isUserInteractionEnabled = true
-            self.backward.isUserInteractionEnabled = true
-            self.forward15.isUserInteractionEnabled = true
-            self.forward.isUserInteractionEnabled = true
-            self.routePickerView.isUserInteractionEnabled = true
+            enableInteract()
             
             self.showPlayDoneButton = true
             
