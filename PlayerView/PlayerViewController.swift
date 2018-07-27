@@ -209,7 +209,7 @@ class PlayerViewController: AVPlayerViewController {
     
     func setupUI() {
         
-//        self.view.isMultipleTouchEnabled = true
+        self.view.isMultipleTouchEnabled = false
         
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         
@@ -644,7 +644,11 @@ class PlayerViewController: AVPlayerViewController {
             let disappearAnimationControll = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) {
 
                 self.toggleHidden()
-
+            }
+            
+            let reappearAnimationControl = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) {
+                
+                self.toggleAppear()
             }
 
             let point = tap.location(in: self.view)
@@ -661,34 +665,48 @@ class PlayerViewController: AVPlayerViewController {
                 timerTest.invalidate()
 
             } else if (self.topView.bounds.contains(pointInTopView)) && self.showPlayDoneButton != true {
+                
+                timerTest.invalidate()
  
                 print("[handleTap] Tap is inside topView -> Reappear")
             
-                disappearAnimationControll.startAnimation()
+                reappearAnimationControl.startAnimation()
                 
                 setTimer()
             } else if (self.controlView.bounds.contains(pointInCtrlView)) && self.showPlayDoneButton == true {
                 
                 timerTest.invalidate()
                 
-               setTimer()
+                setTimer()
             }
         }
     }
     
     @objc func initHiddenAuto() {
         
+        UIApplication.shared.beginIgnoringInteractionEvents()
+        
+        self.playButton.isUserInteractionEnabled = false
+        self.doneButton.isUserInteractionEnabled = false
+        self.forward.isUserInteractionEnabled = false
+        self.forward15.isUserInteractionEnabled = false
+        self.backward.isUserInteractionEnabled = false
+        self.backward15.isUserInteractionEnabled = false
+        self.routePickerView.isUserInteractionEnabled = false
+        
         let disappearAnimationControll = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) {
             
             self.toggleHidden()
-            
         }
         
         disappearAnimationControll.startAnimation()
 
+        UIApplication.shared.endIgnoringInteractionEvents()
     }
     
-    @objc func toggleHiddenAuto() {
+    func toggleHidden() {
+        
+        // Added extra timerTest.isValid check on July 27
         
         if showPlayDoneButton == true {
             
@@ -703,43 +721,24 @@ class PlayerViewController: AVPlayerViewController {
             self.backward.alpha = 0.0
             self.airplay.alpha = 0.0
             self.routePickerView.alpha = 0.0
-            
-        } else {
-            
-            self.showPlayDoneButton = true
-            
-            self.controlView.alpha = 0.5
-            self.playButton.alpha = 1.0
-            self.doneButton.alpha = 1.0
-            self.forward15.alpha = 1.0
-            self.backward15.alpha = 1.0
-            self.forward.alpha = 1.0
-            self.backward.alpha = 1.0
-            self.airplay.alpha = 1.0
-            self.routePickerView.alpha = 1.0
+
         }
         
         return
+        
     }
     
-    func toggleHidden() {
+    func toggleAppear() {
         
-        // Added extra timerTest.isValid check on July 27q
-        if showPlayDoneButton == true && timerTest.isValid == true {
+        if showPlayDoneButton == false {
             
-            self.showPlayDoneButton = false
-            
-            self.controlView.alpha = 0.0
-            self.playButton.alpha = 0.0
-            self.doneButton.alpha = 0.0
-            self.forward15.alpha = 0.0
-            self.backward15.alpha = 0.0
-            self.forward.alpha = 0.0
-            self.backward.alpha = 0.0
-            self.airplay.alpha = 0.0
-            self.routePickerView.alpha = 0.0
-
-        } else {
+            self.playButton.isUserInteractionEnabled = true
+            self.doneButton.isUserInteractionEnabled = true
+            self.forward.isUserInteractionEnabled = true
+            self.forward15.isUserInteractionEnabled = true
+            self.backward.isUserInteractionEnabled = true
+            self.backward15.isUserInteractionEnabled = true
+            self.routePickerView.isUserInteractionEnabled = true
             
             self.showPlayDoneButton = true
             
@@ -801,6 +800,7 @@ class PlayerViewController: AVPlayerViewController {
         UIApplication.shared.endIgnoringInteractionEvents()
 
         self.player?.play()
+        self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
         self.showsPlaybackControls = false
         
         setTimer()
@@ -822,6 +822,7 @@ class PlayerViewController: AVPlayerViewController {
                 if playerPlaying {
                     
                     player?.play()
+                    self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
 //                    UIApplication.shared.endIgnoringInteractionEvents()
                 }
             }
@@ -901,11 +902,12 @@ class PlayerViewController: AVPlayerViewController {
         let seekDuration = CMTimeMake(15, 1)
         let currentTime: CMTime = (self.player?.currentTime())!
         
-        if currentTime + seekDuration > (self.player?.currentItem?.duration)! {
+        if currentTime + seekDuration > (self.player?.currentItem?.duration)! && !(self.player?.currentItem === listVideos[2]) {
             
             self.player?.pause()
             self.queuePlayer.advanceToNextItem()
             self.player?.play()
+            self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
             
             return
             
@@ -979,6 +981,7 @@ class PlayerViewController: AVPlayerViewController {
                     print("forwardButtonPressed")
                     
                     self.player?.play()
+                    self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
                     
                     return
                     
@@ -993,6 +996,7 @@ class PlayerViewController: AVPlayerViewController {
         print("forwardButtonPressed")
         
         self.player?.play()
+        self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
         
         setTimer()
         
@@ -1033,6 +1037,7 @@ class PlayerViewController: AVPlayerViewController {
                     print("backwardButtonPressed")
                     
                     self.player?.play()
+                    self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
                     
                 } else if currentIndex == 0 {
                     
@@ -1041,6 +1046,7 @@ class PlayerViewController: AVPlayerViewController {
                     self.player?.seek(to: kCMTimeZero)
                     
                     self.player?.play()
+                    self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
                 }
             }
         }

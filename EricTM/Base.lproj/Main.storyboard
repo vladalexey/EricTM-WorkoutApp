@@ -172,7 +172,7 @@
         <!--AV Player View Controller-->
         <scene sceneID="5S3-Zt-M3E">
             <objects>
-                <avPlayerViewController wantsFullScreenLayout="YES" extendedLayoutIncludesOpaqueBars="YES" hidesBottomBarWhenPushed="YES" videoGravity="AVLayerVideoGravityResizeAspect" id="ayv-sC-yyC" customClass="PlayerViewController" customModule="EricTM" customModuleProvider="target" sceneMemberID="viewController"/>
+                <avPlayerViewController wantsFullScreenLayout="YES" extendedLayoutIncludesOpaqueBars="YES" hidesBottomBarWhenPushed="YES" showsPlaybackControls="NO" videoGravity="AVLayerVideoGravityResizeAspect" id="ayv-sC-yyC" customClass="PlayerViewController" customModule="EricTM" customModuleProvider="target" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PEG-eS-rTn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2092" y="-74"/>
