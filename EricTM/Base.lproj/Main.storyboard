@@ -5,7 +5,7 @@
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -19,73 +19,73 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleAspectFit" selectionStyle="none" showsReorderControl="YES" indentationWidth="10" shouldIndentWhileEditing="NO" reuseIdentifier="WorkOutTableViewCell" rowHeight="250" id="v6V-yt-Ixt" customClass="WorkOutTableViewCell" customModule="EricTM" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="320" height="250"/>
+                            <tableViewCell autoresizesSubviews="NO" clipsSubviews="YES" contentMode="scaleAspectFit" selectionStyle="none" showsReorderControl="YES" indentationWidth="10" shouldIndentWhileEditing="NO" reuseIdentifier="WorkOutTableViewCell" id="v6V-yt-Ixt" customClass="WorkOutTableViewCell" customModule="EricTM" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="v6V-yt-Ixt" id="tei-q8-YQ0">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="249.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" image="Thumbnail" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BCB-cy-KRg">
-                                            <rect key="frame" x="15" y="10" width="290" height="229.5"/>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" image="Thumbnail" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BCB-cy-KRg">
+                                            <rect key="frame" x="15" y="15" width="24" height="13.5"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="0.0"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" secondItem="BCB-cy-KRg" secondAttribute="height" multiplier="16:9" id="nwa-1v-00V"/>
+                                            </constraints>
                                         </imageView>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Vignette" translatesAutoresizingMaskIntoConstraints="NO" id="Hha-60-uwu">
-                                            <rect key="frame" x="15" y="10" width="290" height="229.5"/>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Vignette" translatesAutoresizingMaskIntoConstraints="NO" id="Hha-60-uwu">
+                                            <rect key="frame" x="15" y="15" width="24" height="13.5"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" secondItem="Hha-60-uwu" secondAttribute="height" multiplier="16:9" id="6mI-zV-yv6"/>
+                                            </constraints>
                                         </imageView>
-                                        <stackView opaque="NO" contentMode="scaleAspectFit" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Pup-x5-mGE">
-                                            <rect key="frame" x="87.5" y="84" width="145" height="80"/>
+                                        <stackView opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Pup-x5-mGE">
+                                            <rect key="frame" x="-47" y="-10" width="148" height="62.5"/>
                                             <subviews>
-                                                <label autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" text="FULL BODY" textAlignment="center" lineBreakMode="headTruncation" numberOfLines="0" minimumScaleFactor="0.40000000000000002" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4dr-hx-h1G" userLabel="Label Exercise">
-                                                    <rect key="frame" x="0.0" y="0.0" width="145" height="50"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" text="FULL BODY" textAlignment="center" lineBreakMode="headTruncation" numberOfLines="0" minimumScaleFactor="0.40000000000000002" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4dr-hx-h1G" userLabel="Label Exercise">
+                                                    <rect key="frame" x="0.0" y="0.0" width="148" height="33"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="200" id="9qd-IU-t7S"/>
-                                                        <constraint firstAttribute="height" constant="50" id="IIs-7J-Rf8"/>
-                                                    </constraints>
                                                     <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="27"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" contentInsetAdjustmentBehavior="never" indicatorStyle="black" delaysContentTouches="NO" canCancelContentTouches="NO" editable="NO" text="45 MINUTES" textAlignment="center" adjustsFontForContentSizeCategory="YES" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ofy-sn-G2g">
-                                                    <rect key="frame" x="0.0" y="50" width="145" height="30"/>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" contentInsetAdjustmentBehavior="never" indicatorStyle="black" delaysContentTouches="NO" canCancelContentTouches="NO" editable="NO" text="45 MINUTES" textAlignment="center" adjustsFontForContentSizeCategory="YES" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ofy-sn-G2g">
+                                                    <rect key="frame" x="0.0" y="33" width="148" height="29.5"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <accessibility key="accessibilityConfiguration">
                                                         <accessibilityTraits key="traits" notEnabled="YES"/>
                                                         <bool key="isElement" value="NO"/>
                                                     </accessibility>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="200" id="Qnr-O1-uu9"/>
-                                                        <constraint firstAttribute="height" constant="30" id="hxL-Sc-foG"/>
-                                                    </constraints>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <fontDescription key="fontDescription" type="system" weight="light" pointSize="11"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters"/>
                                                 </textView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="ofy-sn-G2g" firstAttribute="top" secondItem="4dr-hx-h1G" secondAttribute="bottom" constant="-15" id="iHl-pt-0DB"/>
+                                                <constraint firstItem="ofy-sn-G2g" firstAttribute="top" secondItem="4dr-hx-h1G" secondAttribute="bottom" id="IDl-g9-97Q"/>
+                                                <constraint firstAttribute="trailing" secondItem="ofy-sn-G2g" secondAttribute="trailing" id="T89-ED-nv0"/>
+                                                <constraint firstItem="ofy-sn-G2g" firstAttribute="leading" secondItem="Pup-x5-mGE" secondAttribute="leading" id="lXC-z9-n80"/>
+                                                <constraint firstAttribute="trailing" secondItem="4dr-hx-h1G" secondAttribute="trailing" id="tIQ-MJ-aHG"/>
+                                                <constraint firstItem="4dr-hx-h1G" firstAttribute="top" secondItem="Pup-x5-mGE" secondAttribute="top" id="v3A-m0-V5s"/>
+                                                <constraint firstItem="4dr-hx-h1G" firstAttribute="leading" secondItem="Pup-x5-mGE" secondAttribute="leading" id="vVt-on-eoc"/>
+                                                <constraint firstAttribute="bottom" secondItem="ofy-sn-G2g" secondAttribute="bottom" id="yE7-tI-AXU"/>
                                             </constraints>
                                         </stackView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="Pup-x5-mGE" firstAttribute="top" secondItem="tei-q8-YQ0" secondAttribute="topMargin" constant="73" id="3VB-zy-TAE"/>
-                                        <constraint firstAttribute="bottom" secondItem="BCB-cy-KRg" secondAttribute="bottom" constant="10" id="42g-QT-R39"/>
-                                        <constraint firstAttribute="trailing" secondItem="Hha-60-uwu" secondAttribute="trailing" constant="15" id="9yh-IG-Fns"/>
-                                        <constraint firstItem="Pup-x5-mGE" firstAttribute="centerY" secondItem="tei-q8-YQ0" secondAttribute="centerY" id="AzL-UY-ein"/>
-                                        <constraint firstItem="BCB-cy-KRg" firstAttribute="top" secondItem="tei-q8-YQ0" secondAttribute="top" constant="10" id="Bud-xs-dwr"/>
-                                        <constraint firstItem="Pup-x5-mGE" firstAttribute="leading" secondItem="tei-q8-YQ0" secondAttribute="leadingMargin" constant="71.5" id="Gia-EA-uAg"/>
-                                        <constraint firstItem="Hha-60-uwu" firstAttribute="top" secondItem="tei-q8-YQ0" secondAttribute="top" constant="10" id="LG8-5G-lMr"/>
-                                        <constraint firstAttribute="trailing" secondItem="BCB-cy-KRg" secondAttribute="trailing" constant="15" id="PW0-hX-XQG"/>
-                                        <constraint firstAttribute="bottom" secondItem="Hha-60-uwu" secondAttribute="bottom" constant="10" id="QN0-cB-wcp"/>
-                                        <constraint firstItem="Pup-x5-mGE" firstAttribute="centerX" secondItem="tei-q8-YQ0" secondAttribute="centerX" id="Tsm-pt-h2m"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="Pup-x5-mGE" secondAttribute="bottom" constant="75" id="czq-gb-1vC"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="Pup-x5-mGE" secondAttribute="trailing" constant="71.5" id="jMu-AS-FOA"/>
-                                        <constraint firstItem="Hha-60-uwu" firstAttribute="leading" secondItem="tei-q8-YQ0" secondAttribute="leading" constant="15" id="vWD-W0-opF"/>
-                                        <constraint firstItem="BCB-cy-KRg" firstAttribute="leading" secondItem="tei-q8-YQ0" secondAttribute="leading" constant="15" id="yrO-jx-gNN"/>
+                                        <constraint firstAttribute="trailing" secondItem="BCB-cy-KRg" secondAttribute="trailing" constant="15" id="0bh-k5-Hb3"/>
+                                        <constraint firstAttribute="bottom" secondItem="Hha-60-uwu" secondAttribute="bottom" constant="15" id="ALk-W4-QdP"/>
+                                        <constraint firstAttribute="trailing" secondItem="Hha-60-uwu" secondAttribute="trailing" constant="15" id="E8b-yB-VSa"/>
+                                        <constraint firstItem="Hha-60-uwu" firstAttribute="leading" secondItem="tei-q8-YQ0" secondAttribute="leading" constant="15" id="IOC-mP-aPV"/>
+                                        <constraint firstItem="Pup-x5-mGE" firstAttribute="centerY" secondItem="Hha-60-uwu" secondAttribute="centerY" id="Mr3-NT-gFT"/>
+                                        <constraint firstItem="Pup-x5-mGE" firstAttribute="centerX" secondItem="Hha-60-uwu" secondAttribute="centerX" id="Qbd-tt-6tq"/>
+                                        <constraint firstItem="BCB-cy-KRg" firstAttribute="leading" secondItem="tei-q8-YQ0" secondAttribute="leading" constant="15" id="fDr-ir-kWF"/>
+                                        <constraint firstItem="Hha-60-uwu" firstAttribute="top" secondItem="tei-q8-YQ0" secondAttribute="top" constant="15" id="gII-Dj-dGr"/>
+                                        <constraint firstItem="BCB-cy-KRg" firstAttribute="top" secondItem="tei-q8-YQ0" secondAttribute="top" constant="15" id="sPt-bj-Tk7"/>
+                                        <constraint firstAttribute="bottom" secondItem="BCB-cy-KRg" secondAttribute="bottom" constant="15" id="uhe-d7-65r"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -115,7 +115,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9OY-2W-KPX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="661.60000000000002" y="234.33283358320841"/>
+            <point key="canvasLocation" x="660" y="233.45070422535213"/>
         </scene>
         <!--Add Workout-->
         <scene sceneID="WIY-Wc-dcD">

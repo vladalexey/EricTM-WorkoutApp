@@ -25,9 +25,9 @@ class PersonalizeViewController: UIViewController {
         
         //MARK: Setting logo on NavBar
         
-        let logoContainer = UIView(frame: CGRect(x: 0, y: 0, width: (navigationController?.navigationBar.bounds.width)!, height: 30))
+        let logoContainer = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 30))
         
-        let imageView = UIImageView(frame: CGRect(x: 25, y: 5, width: 200, height: 20))
+        let imageView = UIImageView(frame: CGRect(x: 25, y: 5, width: 100, height: 20))
         imageView.contentMode = .scaleAspectFit
         
         let image = UIImage(named: "logo")
@@ -37,6 +37,12 @@ class PersonalizeViewController: UIViewController {
         imageView.centerYAnchor.constraint(equalTo: logoContainer.centerYAnchor).isActive = true
         
         navigationItem.titleView = logoContainer
+//        navigationItem.titleView?.sendSubview(toBack: logoContainer)
+        
+        self.tabBarController?.tabBar.layer.shadowColor = UIColor.black.cgColor
+        self.tabBarController?.tabBar.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)
+        self.tabBarController?.tabBar.layer.shadowRadius = 4.0
+        self.tabBarController?.tabBar.layer.shadowOpacity = 1.0
     }
 
     override func viewDidLoad() {

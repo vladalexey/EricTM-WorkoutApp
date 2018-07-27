@@ -666,22 +666,12 @@ class PlayerViewController: AVPlayerViewController {
             
                 disappearAnimationControll.startAnimation()
                 
-                timerTest =  Timer.scheduledTimer(
-                    timeInterval: TimeInterval(3),
-                    target      : self,
-                    selector    : #selector(initHiddenAuto),
-                    userInfo    : nil,
-                    repeats     : false)
+                setTimer()
             } else if (self.controlView.bounds.contains(pointInCtrlView)) && self.showPlayDoneButton == true {
                 
                 timerTest.invalidate()
                 
-                timerTest =  Timer.scheduledTimer(
-                    timeInterval: TimeInterval(3),
-                    target      : self,
-                    selector    : #selector(initHiddenAuto),
-                    userInfo    : nil,
-                    repeats     : false)
+               setTimer()
             }
         }
     }
@@ -734,7 +724,8 @@ class PlayerViewController: AVPlayerViewController {
     
     func toggleHidden() {
         
-        if showPlayDoneButton == true {
+        // Added extra timerTest.isValid check on July 27q
+        if showPlayDoneButton == true && timerTest.isValid == true {
             
             self.showPlayDoneButton = false
             
@@ -776,6 +767,16 @@ class PlayerViewController: AVPlayerViewController {
         }
     }
     
+    func setTimer() {
+        
+        timerTest =  Timer.scheduledTimer(
+            timeInterval: TimeInterval(3),
+            target      : self,
+            selector    : #selector(initHiddenAuto),
+            userInfo    : nil,
+            repeats     : false)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -802,12 +803,7 @@ class PlayerViewController: AVPlayerViewController {
         self.player?.play()
         self.showsPlaybackControls = false
         
-        timerTest =  Timer.scheduledTimer(
-            timeInterval: TimeInterval(3),
-            target      : self,
-            selector    : #selector(initHiddenAuto),
-            userInfo    : nil,
-            repeats     : false)
+        setTimer()
 
     }
     
@@ -888,12 +884,7 @@ class PlayerViewController: AVPlayerViewController {
             print("pauseButtonPressed")
         }
         
-        timerTest =  Timer.scheduledTimer(
-            timeInterval: TimeInterval(3),
-            target      : self,
-            selector    : #selector(initHiddenAuto),
-            userInfo    : nil,
-            repeats     : false)
+        setTimer()
         
         return
     }
@@ -928,12 +919,7 @@ class PlayerViewController: AVPlayerViewController {
         playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
         playerPlaying = true
         
-        timerTest =  Timer.scheduledTimer(
-            timeInterval: TimeInterval(3),
-            target      : self,
-            selector    : #selector(initHiddenAuto),
-            userInfo    : nil,
-            repeats     : false)
+        setTimer()
         
         return
         
@@ -966,12 +952,7 @@ class PlayerViewController: AVPlayerViewController {
         playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
         playerPlaying = true
         
-        timerTest =  Timer.scheduledTimer(
-            timeInterval: TimeInterval(3),
-            target      : self,
-            selector    : #selector(initHiddenAuto),
-            userInfo    : nil,
-            repeats     : false)
+        setTimer()
         
         return
     }
@@ -1013,12 +994,7 @@ class PlayerViewController: AVPlayerViewController {
         
         self.player?.play()
         
-        timerTest =  Timer.scheduledTimer(
-            timeInterval: TimeInterval(3),
-            target      : self,
-            selector    : #selector(initHiddenAuto),
-            userInfo    : nil,
-            repeats     : false)
+        setTimer()
         
         return
     }
@@ -1069,12 +1045,7 @@ class PlayerViewController: AVPlayerViewController {
             }
         }
         
-        timerTest =  Timer.scheduledTimer(
-            timeInterval: TimeInterval(3),
-            target      : self,
-            selector    : #selector(initHiddenAuto),
-            userInfo    : nil,
-            repeats     : false)
+        setTimer()
         
         return
     }
@@ -1101,8 +1072,6 @@ class PlayerViewController: AVPlayerViewController {
         NotificationCenter.default.removeObserver(self)
         
         AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
-        
-        return
     }
 
     override func didReceiveMemoryWarning() {
