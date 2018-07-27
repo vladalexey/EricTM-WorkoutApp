@@ -209,7 +209,7 @@ class PlayerViewController: AVPlayerViewController {
     
     func setupUI() {
         
-        self.view.isMultipleTouchEnabled = false
+//        self.view.isMultipleTouchEnabled = true
         
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         
@@ -641,7 +641,7 @@ class PlayerViewController: AVPlayerViewController {
         
         if tap.state == UIGestureRecognizerState.ended {
           
-            let disappearAnimationControll = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) {
+            let disappearAnimationControl = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) {
 
                 self.toggleHidden()
             }
@@ -649,6 +649,7 @@ class PlayerViewController: AVPlayerViewController {
             let reappearAnimationControl = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) {
                 
                 self.toggleAppear()
+
             }
 
             let point = tap.location(in: self.view)
@@ -660,7 +661,7 @@ class PlayerViewController: AVPlayerViewController {
 
                 print("[handleTap] Tap is inside topView -> Disappear")
                 
-                disappearAnimationControll.startAnimation()
+                disappearAnimationControl.startAnimation()
 
                 timerTest.invalidate()
 
@@ -671,13 +672,14 @@ class PlayerViewController: AVPlayerViewController {
                 print("[handleTap] Tap is inside topView -> Reappear")
             
                 reappearAnimationControl.startAnimation()
+                disappearAnimationControl.startAnimation()
                 
                 setTimer()
             } else if (self.controlView.bounds.contains(pointInCtrlView)) && self.showPlayDoneButton == true {
                 
                 timerTest.invalidate()
                 
-                setTimer()
+               setTimer()
             }
         }
     }
@@ -695,11 +697,13 @@ class PlayerViewController: AVPlayerViewController {
         self.routePickerView.isUserInteractionEnabled = false
         
         let disappearAnimationControll = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) {
+        let disappearAnimationControl = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) {
             
             self.toggleHidden()
+            
         }
         
-        disappearAnimationControll.startAnimation()
+        disappearAnimationControl.startAnimation()
 
         UIApplication.shared.endIgnoringInteractionEvents()
     }
@@ -721,24 +725,44 @@ class PlayerViewController: AVPlayerViewController {
             self.backward.alpha = 0.0
             self.airplay.alpha = 0.0
             self.routePickerView.alpha = 0.0
-
+            
+        } else {
+            
+            self.showPlayDoneButton = true
+            
+            self.controlView.alpha = 0.5
+            self.playButton.alpha = 1.0
+            self.doneButton.alpha = 1.0
+            self.forward15.alpha = 1.0
+            self.backward15.alpha = 1.0
+            self.forward.alpha = 1.0
+            self.backward.alpha = 1.0
+            self.airplay.alpha = 1.0
+            self.routePickerView.alpha = 1.0
         }
         
         return
-        
     }
     
     func toggleAppear() {
+    func toggleHidden() {
         
-        if showPlayDoneButton == false {
+        // Added extra timerTest.isValid check on July 27
+        if showPlayDoneButton == true && timerTest.isValid == true {
             
-            self.playButton.isUserInteractionEnabled = true
-            self.doneButton.isUserInteractionEnabled = true
-            self.forward.isUserInteractionEnabled = true
-            self.forward15.isUserInteractionEnabled = true
-            self.backward.isUserInteractionEnabled = true
-            self.backward15.isUserInteractionEnabled = true
-            self.routePickerView.isUserInteractionEnabled = true
+            self.showPlayDoneButton = false
+            
+            self.controlView.alpha = 0.0
+            self.playButton.alpha = 0.0
+            self.doneButton.alpha = 0.0
+            self.forward15.alpha = 0.0
+            self.backward15.alpha = 0.0
+            self.forward.alpha = 0.0
+            self.backward.alpha = 0.0
+            self.airplay.alpha = 0.0
+            self.routePickerView.alpha = 0.0
+
+        } else {
             
             self.showPlayDoneButton = true
             
@@ -800,7 +824,6 @@ class PlayerViewController: AVPlayerViewController {
         UIApplication.shared.endIgnoringInteractionEvents()
 
         self.player?.play()
-        self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
         self.showsPlaybackControls = false
         
         setTimer()
@@ -822,7 +845,6 @@ class PlayerViewController: AVPlayerViewController {
                 if playerPlaying {
                     
                     player?.play()
-                    self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
 //                    UIApplication.shared.endIgnoringInteractionEvents()
                 }
             }
@@ -903,6 +925,7 @@ class PlayerViewController: AVPlayerViewController {
         let currentTime: CMTime = (self.player?.currentTime())!
         
         if currentTime + seekDuration > (self.player?.currentItem?.duration)! && !(self.player?.currentItem === listVideos[2]) {
+        if currentTime + seekDuration > (self.player?.currentItem?.duration)! {
             
             
             self.player?.pause()
