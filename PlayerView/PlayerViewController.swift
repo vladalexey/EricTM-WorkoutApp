@@ -644,12 +644,13 @@ class PlayerViewController: AVPlayerViewController {
             let disappearAnimationControl = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) {
 
                 self.toggleHidden()
+
             }
             
             let reappearAnimationControl = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) {
                 
                 self.toggleAppear()
-
+                
             }
 
             let point = tap.location(in: self.view)
@@ -672,31 +673,28 @@ class PlayerViewController: AVPlayerViewController {
                 print("[handleTap] Tap is inside topView -> Reappear")
             
                 reappearAnimationControl.startAnimation()
-                disappearAnimationControl.startAnimation()
                 
                 setTimer()
             } else if (self.controlView.bounds.contains(pointInCtrlView)) && self.showPlayDoneButton == true {
                 
                 timerTest.invalidate()
                 
-               setTimer()
+                setTimer()
             }
         }
     }
     
     @objc func initHiddenAuto() {
         
-        UIApplication.shared.beginIgnoringInteractionEvents()
-        
-        self.playButton.isUserInteractionEnabled = false
         self.doneButton.isUserInteractionEnabled = false
-        self.forward.isUserInteractionEnabled = false
-        self.forward15.isUserInteractionEnabled = false
-        self.backward.isUserInteractionEnabled = false
+        self.playButton.isUserInteractionEnabled = false
         self.backward15.isUserInteractionEnabled = false
+        self.backward.isUserInteractionEnabled = false
+        self.forward15.isUserInteractionEnabled = false
+        self.forward.isUserInteractionEnabled = false
         self.routePickerView.isUserInteractionEnabled = false
         
-        let disappearAnimationControll = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) {
+        
         let disappearAnimationControl = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) {
             
             self.toggleHidden()
@@ -705,46 +703,8 @@ class PlayerViewController: AVPlayerViewController {
         
         disappearAnimationControl.startAnimation()
 
-        UIApplication.shared.endIgnoringInteractionEvents()
     }
     
-    func toggleHidden() {
-        
-        // Added extra timerTest.isValid check on July 27
-        
-        if showPlayDoneButton == true {
-            
-            self.showPlayDoneButton = false
-            
-            self.controlView.alpha = 0.0
-            self.playButton.alpha = 0.0
-            self.doneButton.alpha = 0.0
-            self.forward15.alpha = 0.0
-            self.backward15.alpha = 0.0
-            self.forward.alpha = 0.0
-            self.backward.alpha = 0.0
-            self.airplay.alpha = 0.0
-            self.routePickerView.alpha = 0.0
-            
-        } else {
-            
-            self.showPlayDoneButton = true
-            
-            self.controlView.alpha = 0.5
-            self.playButton.alpha = 1.0
-            self.doneButton.alpha = 1.0
-            self.forward15.alpha = 1.0
-            self.backward15.alpha = 1.0
-            self.forward.alpha = 1.0
-            self.backward.alpha = 1.0
-            self.airplay.alpha = 1.0
-            self.routePickerView.alpha = 1.0
-        }
-        
-        return
-    }
-    
-    func toggleAppear() {
     func toggleHidden() {
         
         // Added extra timerTest.isValid check on July 27
@@ -762,7 +722,12 @@ class PlayerViewController: AVPlayerViewController {
             self.airplay.alpha = 0.0
             self.routePickerView.alpha = 0.0
 
-        } else {
+        }
+    }
+    
+    func toggleAppear() {
+    
+        if showPlayDoneButton == false {
             
             self.showPlayDoneButton = true
             
@@ -925,8 +890,6 @@ class PlayerViewController: AVPlayerViewController {
         let currentTime: CMTime = (self.player?.currentTime())!
         
         if currentTime + seekDuration > (self.player?.currentItem?.duration)! && !(self.player?.currentItem === listVideos[2]) {
-        if currentTime + seekDuration > (self.player?.currentItem?.duration)! {
-            
             
             self.player?.pause()
             self.queuePlayer.advanceToNextItem()
