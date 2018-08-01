@@ -26,7 +26,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" image="Thumbnail" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BCB-cy-KRg">
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" image="Thumbnail" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BCB-cy-KRg">
                                             <rect key="frame" x="15" y="15" width="24" height="13.5"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -94,7 +94,6 @@
                                     <outlet property="minuteWorkout" destination="ofy-sn-G2g" id="jYD-6g-LgI"/>
                                     <outlet property="nameLabel" destination="4dr-hx-h1G" id="Fdy-Hd-n1U"/>
                                     <outlet property="photoImageView" destination="BCB-cy-KRg" id="drd-kM-pBE"/>
-                                    <segue destination="ayv-sC-yyC" kind="show" identifier="VideoPlayer" id="Hy9-3v-TO3"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -112,6 +111,9 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <segue destination="ayv-sC-yyC" kind="show" identifier="VideoPlayer" id="F3s-qf-nQp"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9OY-2W-KPX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

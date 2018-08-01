@@ -68,25 +68,33 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         tableView.estimatedRowHeight = 250
         
         setupBackground()
-        loadSampleWOV()
+        loadDefaultWOV()
     
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
-
-        tableView.reloadData()
         
+        // enter Edit mode by long press in cell
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(WorkOutTableViewController.longPressCellHandle))
+        tableView.addGestureRecognizer(longPress)
         
 //         Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         self.navigationItem.rightBarButtonItem = self.editButtonItem
         self.editButtonItem.tintColor = UIColor.white
-        self.editButtonItem.isEnabled = true
-        
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    @objc func longPressCellHandle(gesture: UILongPressGestureRecognizer) {
+        if gesture.state == UIGestureRecognizerState.began {
+            let touchPoint = gesture.location(in: tableView)
+            if self.isEditing == false {
+                self.setEditing(true, animated: true)
+            }
+        }
     }
 
     //MARK: - Table view data source
@@ -138,6 +146,14 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         
         myIndex = indexPath.row
         workoutLabel = workOutVideos[indexPath.row].workoutLabel
+        performSegue(withIdentifier: "VideoPlayer", sender: self)
+        print(listWorkOut)
+        print(workoutLabel)
+
+    }
+    
+    override func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
+        tableView.setEditing(false, animated: true)
     }
     
     func alertOnDefaultWorkouts() {
@@ -148,6 +164,7 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
             (result : UIAlertAction) -> Void in
             
             alertView.dismiss(animated: true, completion: nil)
+            self.tableView.setEditing(false, animated: true)
             print("OK")
         }
         
@@ -160,6 +177,7 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         
         let edit = UITableViewRowAction(style: .normal, title: "Edit") { action, index in
             print("Edit content")
+            
         }
         edit.backgroundColor = .lightGray
         
@@ -172,11 +190,12 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
                 
                 self.workOutVideos.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .fade)
-                tableView.reloadData()
+                tableView.setEditing(false, animated: true)
                 
             } else {
                 
                 self.alertOnDefaultWorkouts()
+                tableView.setEditing(false, animated: true)
             }
         }
         remove.backgroundColor = .red
@@ -184,9 +203,18 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         return [remove, edit]
     }
     
+    func exitEditModeIfTrue() {
+        
+        if self.isEditing {
+            self.setEditing(false, animated: true)
+        }
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "addWorkout" {
+            
+            exitEditModeIfTrue()
             
             AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
             
@@ -197,6 +225,8 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
             
         }
         else if segue.identifier == "VideoPlayer" {
+            
+            exitEditModeIfTrue()
         
             AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.landscapeRight, andRotateTo: UIInterfaceOrientation.landscapeRight)
             
@@ -205,16 +235,19 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
             let destVC = segue.destination as? PlayerViewController
             
             if workoutLabel == "Upper" {
-                workoutCode = "U"
+                workoutCode = "Upper"
                 destVC?.workoutCode = self.workoutCode
+                print(destVC?.workoutCode)
                 
             } else if workoutLabel == "Lower" {
-                workoutCode = "L"
+                workoutCode = "Lower"
                 destVC?.workoutCode = self.workoutCode
+                print(destVC?.workoutCode)
                 
             } else if workoutLabel == "Full" {
-                workoutCode = "F"
+                workoutCode = "Full"
                 destVC?.workoutCode = self.workoutCode
+                print(destVC?.workoutCode)
             }
 
         }
@@ -228,11 +261,13 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
             // Delete the row from the data source
             self.workOutVideos.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
-            tableView.reloadData()
+            tableView.setEditing(false, animated: true)
         }
         if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }
+        
+        print(listWorkOut)
     }
 
 
@@ -247,6 +282,8 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         
         workOutVideos.insert(videoWorkout, at: to.row)
         listWorkOut.insert(listLabel, at: to.row)
+        
+        print(listWorkOut)
         
     }
 
@@ -271,17 +308,20 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     
     func userDidEnterData(nameWorkout: String, lengthWorkout: String, workoutLabel: String) {    //delegate function for add custom workout
         
-        let newWorkout = WorkOutVideo(name: nameWorkout, length: lengthWorkout, workoutLabel: workoutLabel)
-        let newIndex = IndexPath(row: workOutVideos.count, section: 0)
-        workOutVideos.append(newWorkout!)
-        listWorkOut.append(nameWorkout)
-        tableView.insertRows(at: [newIndex], with: .automatic)
-        
+        if nameWorkout != "" && lengthWorkout != nil && workoutLabel != nil {
+            
+            let newWorkout = WorkOutVideo(name: nameWorkout, length: lengthWorkout, workoutLabel: workoutLabel)
+            let newIndex = IndexPath(row: workOutVideos.count, section: 0)
+            workOutVideos.append(newWorkout!)
+            listWorkOut.append(nameWorkout)
+            tableView.insertRows(at: [newIndex], with: .automatic)
+            print(listWorkOut)
+        } 
     }
 
     
     //MARK: Load workout sessions
-    private func loadSampleWOV() {
+    private func loadDefaultWOV() {
       
         guard let wov1 = WorkOutVideo(name: "FULL BODY", length: "45 minutes", workoutLabel: "Full") else {
             fatalError("Error")
@@ -300,7 +340,6 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
 
     //MARK: Setup background interface
     func setupBackground() {
-        
         
         self.navigationController?.navigationBar.layer.shadowColor = UIColor.black.cgColor
         self.navigationController?.navigationBar.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)

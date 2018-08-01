@@ -8,6 +8,8 @@
 
 import UIKit
 import Firebase
+import AVKit
+import MediaPlayer
 
 
 @UIApplicationMain
@@ -29,6 +31,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navigationBarAppearace.titleTextAttributes = [NSAttributedStringKey.foregroundColor:UIColor.white]
         
         FirebaseApp.configure()
+        
+        //MARK: Implement background video's audio when user exit app
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+            print("AVAudioSession Category Playback OK")
+            do {
+                try AVAudioSession.sharedInstance().setActive(true)
+                print("AVAudioSession is Active")
+                
+            } catch let error as NSError {
+                print(error.localizedDescription)
+            }
+        } catch let error as NSError {
+            print(error.localizedDescription)
+        }
         
         return true
     }
@@ -69,7 +86,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-        
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.

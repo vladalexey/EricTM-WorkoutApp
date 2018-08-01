@@ -132,12 +132,15 @@ class AddWorkoutViewController: UIViewController, UIPickerViewDelegate, UIPicker
         
         if delegate != nil {
             print("custom workout non nil")
-            if nameWorkoutInput != nil && lengthWorkoutPicker != nil {
+            if nameWorkoutInput.text != "" && lengthWorkoutPicker != nil {
                 print("name not nil")
                 delegate?.userDidEnterData(nameWorkout: nameWorkoutInput.text!, lengthWorkout: pickerData[lengthWorkoutPicker.selectedRow(inComponent: 0)], workoutLabel: workoutLabels[0])
                 print(lengthWorkoutPicker.selectedRow(inComponent: 0))
                 dismiss(animated: true, completion: nil)
             }
+        } else {
+            print("error: no name input")
+            return
         }
         
     }

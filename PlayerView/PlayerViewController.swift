@@ -9,6 +9,7 @@
 import UIKit
 import Foundation
 import AVKit
+import MediaPlayer
 
 import FirebaseStorage
 
@@ -32,6 +33,8 @@ class PlayerViewController: AVPlayerViewController {
     var downloadTask1: StorageReference {
         return Storage.storage().reference()
     }
+    
+    var random = [Int()]
     
     var playerPlaying: Bool = true
     var showPlayDoneButton: Bool = true
@@ -207,7 +210,12 @@ class PlayerViewController: AVPlayerViewController {
         self.contentOverlayView?.addSubview(topView)
         
         let tapOnTopView = UITapGestureRecognizer(target: self, action: #selector(PlayerViewController.handleTap))
+        
+        let doubleTapOnTopView = UITapGestureRecognizer(target: self, action: #selector(PlayerViewController.handleDoubleTap))
+        doubleTapOnTopView.numberOfTapsRequired = 2
+        
         topView.addGestureRecognizer(tapOnTopView)
+        topView.addGestureRecognizer(doubleTapOnTopView)
         
         
         self.contentOverlayView?.addSubview(activityIndicatorView)
@@ -349,10 +357,7 @@ class PlayerViewController: AVPlayerViewController {
         return
     }
     
-    func getVideos(workoutName: String) {
-        
-        let random1 = Int(arc4random_uniform(12) + 1)  // get random number
-        let videoName = workoutName + String(random1) + ".mp4"  // get random workout label
+    func getVideos(videoName: String) {
         
         //        let downloadTask1 = videoReference.child(global.videoName1)
         
@@ -387,7 +392,7 @@ class PlayerViewController: AVPlayerViewController {
             let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
             
             let localURL = documentsURL.appendingPathComponent(videoName)
-            
+
             // Download to the local filesystem
             downloadTask1.child(videoName).write(toFile: localURL) { url, error in
                 if let error = error {
@@ -426,6 +431,10 @@ class PlayerViewController: AVPlayerViewController {
         
     }
     
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         
         NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
@@ -453,12 +462,35 @@ class PlayerViewController: AVPlayerViewController {
             print("Error while enumerating files \(documentsURL.path): \(error.localizedDescription)")
         }
         
-        for _ in 1...numberOfWorkout {
-            getVideos(workoutName: "WO_Ep") //should change to workoutCode when uploaded encoded videos
+        var rand = Int()
+        random.append(Int(arc4random_uniform(4) + 1))  // get random number //change number to actual number of videos on Firebase
+
+        repeat {
+            rand = Int(arc4random_uniform(4) + 1)  // get random number //change number to actual number of videos on Firebase
+        } while rand == random[0]
+        
+        random.append(rand)
+        
+        repeat {
+            rand = Int(arc4random_uniform(4) + 1)  // get random number //change number to actual number of videos on Firebase
+        } while random[0] == rand || random[1] == rand
+        
+        random.append(rand)
+        
+        for index in 1...numberOfWorkout {
+            
+            let videoName = workoutCode + String(random[index]) + ".mp4"  // get random workout label
+            
+            getVideos(videoName: videoName) //should change to specific workoutCode when uploaded encoded videos
         }
         
         self.player? = self.queuePlayer
         self.player?.play()
+        
+    }
+    
+    @objc func handleDoubleTap(tap: UIGestureRecognizer) {
+        
         
     }
     
@@ -469,8 +501,8 @@ class PlayerViewController: AVPlayerViewController {
             let disappearAnimationControl = UIViewPropertyAnimator(duration: 0.5, curve: .easeInOut) {
 
                 self.toggleHidden()
-
             }
+            disappearAnimationControl.isUserInteractionEnabled = false
             
             let reappearAnimationControl = UIViewPropertyAnimator(duration: 0.5, curve: .easeInOut) {
                 
@@ -482,11 +514,21 @@ class PlayerViewController: AVPlayerViewController {
 
             let pointInTopView = self.topView.convert(point, from: self.view)
             let pointInCtrlView = self.controlView.convert(point, from: self.view)
+            
+            let pointInPlayView = self.playButton.convert(point, from: self.view)
+            let pointInDoneView = self.doneButton.convert(point, from: self.view)
+            let pointInForward = self.forward.convert(point, from: self.view)
+            let pointInForward15 = self.forward15.convert(point, from: self.view)
+            let pointInBackward = self.backward.convert(point, from: self.view)
+            let pointInBackward15 = self.backward15.convert(point, from: self.view)
+            
+            let arrayPointButton = [pointInPlayView, pointInDoneView, pointInForward, pointInForward15, pointInBackward, pointInBackward15]
 
-            if (self.topView.bounds.contains(pointInTopView)) && !(self.controlView.bounds.contains(pointInCtrlView)) && self.showPlayDoneButton {
+            if checkInView(points: arrayPointButton) == false && self.topView.bounds.contains(pointInTopView) && !(self.controlView.bounds.contains(pointInCtrlView)) && self.showPlayDoneButton {
 
                 print("[handleTap] Tap is inside topView -> Disappear")
                 
+                disableHighlighted()
                 disappearAnimationControl.startAnimation()
 
                 timerTest.invalidate()
@@ -494,21 +536,20 @@ class PlayerViewController: AVPlayerViewController {
             } else if (self.topView.bounds.contains(pointInTopView)) && self.showPlayDoneButton != true {
                 
                 timerTest.invalidate()
+                enableInteract()
 
- 
                 print("[handleTap] Tap is inside topView -> Reappear")
             
                 reappearAnimationControl.startAnimation()
                 
                 setTimer()
                 
-            } else if (self.controlView.bounds.contains(pointInCtrlView)) && self.showPlayDoneButton == true {
+            } else if checkInView(points: arrayPointButton) == true && self.topView.bounds.contains(pointInTopView) && self.showPlayDoneButton == true {
                 
                 timerTest.invalidate()
+                enableInteract()
 
                 print("invalidate in ctrl view")
-                
-//                enableInteract()
                 
                 setTimer()
 
@@ -516,42 +557,79 @@ class PlayerViewController: AVPlayerViewController {
         }
     }
     
+    func checkInView(points: Array<CGPoint>) -> Bool {
+        
+        for point in points {
+        
+            if self.playButton.imageView?.bounds.contains(point) == true {
+                return true
+            } else if self.doneButton.imageView?.bounds.contains(point) == true {
+                return true
+            } else if self.backward15.imageView?.bounds.contains(point) == true {
+                return true
+            } else if self.forward15.imageView?.bounds.contains(point) == true {
+                return true
+            } else if self.backward.imageView?.bounds.contains(point) == true {
+                return true
+            } else if self.forward.imageView?.bounds.contains(point) == true {
+                return true
+            }
+        }
+        
+        return false
+    }
+    
     func enableInteract() {
         
-        self.doneButton.isUserInteractionEnabled = true
-        self.playButton.isUserInteractionEnabled = true
-        self.backward15.isUserInteractionEnabled = true
-        self.backward.isUserInteractionEnabled = true
-        self.forward15.isUserInteractionEnabled = true
-        self.forward.isUserInteractionEnabled = true
+        self.doneButton.isEnabled = true
+        self.playButton.isEnabled = true
+        self.backward15.isEnabled = true
+        self.backward.isEnabled = true
+        self.forward15.isEnabled = true
+        self.forward.isEnabled = true
         self.routePickerView.isUserInteractionEnabled = true
+        self.airplay.isEnabled = true
         
         print("enable interact")
     }
     
     @objc func disableInteract() {
         
-        self.doneButton.isUserInteractionEnabled = false
-        self.playButton.isUserInteractionEnabled = false
-        self.backward15.isUserInteractionEnabled = false
-        self.backward.isUserInteractionEnabled = false
-        self.forward15.isUserInteractionEnabled = false
-        self.forward.isUserInteractionEnabled = false
+        self.doneButton.isEnabled = false
+        self.playButton.isEnabled = false
+        self.backward15.isEnabled = false
+        self.backward.isEnabled = false
+        self.forward15.isEnabled = false
+        self.forward.isEnabled = false
         self.routePickerView.isUserInteractionEnabled = false
+        self.airplay.isEnabled = false
         
         print("disable interact")
     }
     
+    func disableHighlighted() {
+        
+        self.doneButton.adjustsImageWhenHighlighted = false
+        self.playButton.adjustsImageWhenHighlighted = false
+        self.backward15.adjustsImageWhenHighlighted = false
+        self.backward.adjustsImageWhenHighlighted = false
+        self.forward15.adjustsImageWhenHighlighted = false
+        self.forward.adjustsImageWhenHighlighted = false
+        self.airplay.adjustsImageWhenHighlighted = false
+    }
+    
     @objc func initHiddenAuto() {
         
-       disableInteract()
-        
-        
+        disableInteract()
+        disableHighlighted()
+
         let disappearAnimationControl = UIViewPropertyAnimator(duration: 0.5, curve: .easeInOut) {
             
             self.toggleHidden()
+            self.disableHighlighted()
         }
         
+        disappearAnimationControl.isUserInteractionEnabled = false
         disappearAnimationControl.startAnimation()
         
         print("disappear auto")
@@ -560,7 +638,7 @@ class PlayerViewController: AVPlayerViewController {
     
     func toggleHidden() {
         
-        if showPlayDoneButton == true && timerTest.isValid == true {
+        if showPlayDoneButton == true {
             
             self.showPlayDoneButton = false
             
@@ -573,7 +651,6 @@ class PlayerViewController: AVPlayerViewController {
             self.backward.alpha = 0.0
             self.airplay.alpha = 0.0
             self.routePickerView.alpha = 0.0
-
         }
     }
     
@@ -595,7 +672,6 @@ class PlayerViewController: AVPlayerViewController {
             self.airplay.alpha = 1.0
             self.routePickerView.alpha = 1.0
         }
-
         return
     }
     
@@ -604,7 +680,6 @@ class PlayerViewController: AVPlayerViewController {
         if player?.currentItem == listVideos[2] {
             
             exitDueToForward()
-            
             return
         }
     }
@@ -619,33 +694,55 @@ class PlayerViewController: AVPlayerViewController {
             repeats     : false)
     }
     
-//    func setTimerInteract() {
-//
-//        timerForInteract = Timer.scheduledTimer(
-//            timeInterval: TimeInterval(2.75),
-//            target: self,
-//            selector: #selector(disableInteract),
-//            userInfo: nil,
-//            repeats: false)
-//    }
+    func setupCommandCenter() {
+        
+        UIApplication.shared.beginReceivingRemoteControlEvents()
+        becomeFirstResponder()
+        
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = [MPMediaItemPropertyTitle: "Eric Workout"]
+        
+        // Get the shared MPRemoteCommandCenter
+        let commandCenter = MPRemoteCommandCenter.shared()
+        
+        commandCenter.playCommand.isEnabled = true
+        
+        // Add handler for Play Command
+        commandCenter.playCommand.addTarget { [unowned self] event in
+            if self.player?.rate == 0.0 {
+                self.player?.play()
+                return .success
+            }
+            return .commandFailed
+        }
+        
+        commandCenter.pauseCommand.isEnabled = true
+        
+        // Add handler for Pause Command
+        commandCenter.pauseCommand.addTarget { [unowned self] event in
+            if self.player?.rate == 1.0 {
+                self.player?.pause()
+                return .success
+            }
+            return .commandFailed
+        }
+        
+    }
+    
+    func setupNowPlaying() {
+        // Define Now Playing Info
+        var nowPlayingInfo = [String : Any]()
+        nowPlayingInfo[MPMediaItemPropertyTitle] = "My Movie"
+
+        // Set the metadata
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //MARK: Implement background video's audio when user exit app
-        do {
-            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
-            print("AVAudioSession Category Playback OK")
-            do {
-                try AVAudioSession.sharedInstance().setActive(true)
-                print("AVAudioSession is Active")
-            } catch let error as NSError {
-                print(error.localizedDescription)
-            }
-        } catch let error as NSError {
-            print(error.localizedDescription)
-        }
-        
+        setupCommandCenter()
+        setupNowPlaying()
+
         self.player = self.queuePlayer
         
         NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
@@ -656,8 +753,26 @@ class PlayerViewController: AVPlayerViewController {
         self.showsPlaybackControls = false
         
         setTimer()
-//        setTimerInteract()
 
+    }
+    
+    override func remoteControlReceived(with event: UIEvent?) {
+        if let event = event {
+            if event.type == .remoteControl {
+                
+                switch event.subtype {
+                    
+                case .remoteControlPlay:
+                    self.player?.play()
+                    
+                case .remoteControlPause:
+                    self.player?.pause()
+                    
+                default:
+                    print("haven't setup")
+                }
+            }
+        }
     }
     
     //MARK: Observe changes in AVPlayer
@@ -675,7 +790,6 @@ class PlayerViewController: AVPlayerViewController {
                     
                     print("playing")
                     player?.play()
-                    
                 }
             }
             
@@ -705,16 +819,19 @@ class PlayerViewController: AVPlayerViewController {
     //MARK: Done button
     @objc func doneButtonPressed(sender: UIButton) {
         
-        print("doneButtonPressed")
+        if doneButton.isEnabled {
         
-        queuePlayer.removeAllItems()
+            print("doneButtonPressed")
         
-        NotificationCenter.default.removeObserver(self)
+            queuePlayer.removeAllItems()
         
-        self.toggleHidden()
+            NotificationCenter.default.removeObserver(self)
         
-        self.navigationController?.popViewController(animated: true)
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
+            self.toggleHidden()
+        
+            self.navigationController?.popViewController(animated: true)
+            self.navigationController?.setNavigationBarHidden(false, animated: true)
+        }
         
         return
     }
@@ -723,22 +840,23 @@ class PlayerViewController: AVPlayerViewController {
     @objc func playButtonPressed(sender: UIButton) {
         
         timerTest.invalidate()
-//        timerForInteract.invalidate()
         
-        if playerPlaying == false {
-            self.player?.play()
-            playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
-            playerPlaying = true
-            print("playButtonPressed")
-        } else {
-            self.player?.pause()
-            playButton.setImage(UIImage(named: "PLAY"), for: .normal)
-            playerPlaying = false
-            print("pauseButtonPressed")
+        if playButton.isEnabled {
+            
+            if playerPlaying == false {
+                self.player?.play()
+                playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
+                playerPlaying = true
+                print("playButtonPressed")
+            } else {
+                self.player?.pause()
+                playButton.setImage(UIImage(named: "PLAY"), for: .normal)
+                playerPlaying = false
+                print("pauseButtonPressed")
+            }
         }
         
         setTimer()
-//        setTimerInteract()
         
         return
     }
@@ -747,36 +865,36 @@ class PlayerViewController: AVPlayerViewController {
     @objc func forward15(sender: UIButton) {
         
         timerTest.invalidate()
-//        timerForInteract.invalidate()
         
-        self.player?.pause()
-        playButton.setImage(UIImage(named: "PLAY"), for: .normal)
-        playerPlaying = false
-        
-        let seekDuration = CMTimeMake(15, 1)
-        let currentTime: CMTime = (self.player?.currentTime())!
-        
-        if currentTime + seekDuration > (self.player?.currentItem?.duration)! && !(self.player?.currentItem === listVideos[2]) {
-            
+        if forward15.isEnabled {
             self.player?.pause()
-            self.queuePlayer.advanceToNextItem()
+            playButton.setImage(UIImage(named: "PLAY"), for: .normal)
+            playerPlaying = false
+        
+            let seekDuration = CMTimeMake(15, 1)
+            let currentTime: CMTime = (self.player?.currentTime())!
+        
+            if currentTime + seekDuration > (self.player?.currentItem?.duration)! && !(self.player?.currentItem === listVideos[2]) {
+                
+                self.player?.pause()
+                self.queuePlayer.advanceToNextItem()
+                self.player?.play()
+                self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
+                
+                return
+                
+            }
+        
+            self.player?.seek(to: currentTime + seekDuration)
+        
+            print("forward15ButtonPressed")
+        
             self.player?.play()
-            self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
-            
-            return
-            
+            playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
+            playerPlaying = true
+        
+            setTimer()
         }
-        
-        self.player?.seek(to: currentTime + seekDuration)
-        
-        print("forward15ButtonPressed")
-        
-        self.player?.play()
-        playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
-        playerPlaying = true
-        
-        setTimer()
-//        setTimerInteract()
         
         return
         
@@ -786,32 +904,33 @@ class PlayerViewController: AVPlayerViewController {
     @objc func backward15(sender: UIButton) {
         
         timerTest.invalidate()
-//        timerForInteract.invalidate()
         
-        self.player?.pause()
-        playButton.setImage(UIImage(named: "PLAY"), for: .normal)
-        playerPlaying = false
+        if backward15.isEnabled {
         
-        let seekDuration = CMTimeMake(15, 1)
-        let currentTime: CMTime = (self.player?.currentTime())!
-        if currentTime - seekDuration > kCMTimeZero {                   // check if seek duration is less than 15 seconds
-            
-            let newTime = currentTime - seekDuration
-            self.player?.seek(to: newTime)
-            
-        } else {
-            
-            self.player?.seek(to: kCMTimeZero)
+            self.player?.pause()
+            playButton.setImage(UIImage(named: "PLAY"), for: .normal)
+            playerPlaying = false
+        
+            let seekDuration = CMTimeMake(15, 1)
+            let currentTime: CMTime = (self.player?.currentTime())!
+            if currentTime - seekDuration > kCMTimeZero {                   // check if seek duration is less than 15 seconds
+                
+                let newTime = currentTime - seekDuration
+                self.player?.seek(to: newTime)
+                
+            } else {
+                
+                self.player?.seek(to: kCMTimeZero)
+            }
+        
+            print("backward15ButtonPressed")
+        
+            self.player?.play()
+            playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
+            playerPlaying = true
+        
+            setTimer()
         }
-        
-        print("backward15ButtonPressed")
-        
-        self.player?.play()
-        playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
-        playerPlaying = true
-        
-        setTimer()
-//        setTimerInteract()
         
         return
     }
@@ -820,44 +939,45 @@ class PlayerViewController: AVPlayerViewController {
     @objc func forward(sender: UIButton) {
         
         timerTest.invalidate()
-//        timerForInteract.invalidate()
         
-        self.player?.pause()
+        if forward.isEnabled {
         
-        for item in listVideos {                    // get and insert previous video into queue
-            
-            if item == self.player?.currentItem {
+            self.player?.pause()
+        
+            for item in listVideos {                    // get and insert previous video into queue
                 
-                let currentIndex = listVideos.index(of: item)
-                print(currentIndex!)
-                
-                if currentIndex! < 2 {
+                if item == self.player?.currentItem {
                     
-                    self.queuePlayer.advanceToNextItem()
-                    self.player?.seek(to: kCMTimeZero)
+                    let currentIndex = listVideos.index(of: item)
+                    print(currentIndex!)
                     
-                    print("forwardButtonPressed")
-                    
-                    self.player?.play()
-                    self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
-                    
-                    return
-                    
-                } else if currentIndex == 2 {
-                    
-                    exitDueToForward()
-                    return
+                    if currentIndex! < 2 {
+                        
+                        self.queuePlayer.advanceToNextItem()
+                        self.player?.seek(to: kCMTimeZero)
+                        
+                        print("forwardButtonPressed")
+                        
+                        self.player?.play()
+                        self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
+                        
+                        return
+                        
+                    } else if currentIndex == 2 {
+                        
+                        exitDueToForward()
+                        return
+                    }
                 }
             }
+        
+            print("forwardButtonPressed")
+        
+            self.player?.play()
+            self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
+        
+            setTimer()
         }
-        
-        print("forwardButtonPressed")
-        
-        self.player?.play()
-        self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
-        
-        setTimer()
-//        setTimerInteract()
         
         return
     }
@@ -866,67 +986,69 @@ class PlayerViewController: AVPlayerViewController {
     @objc func backward(sender: UIButton) {
         
         timerTest.invalidate()
-//        timerForInteract.invalidate()
         
-        for item in listVideos {                    // get and insert previous video into queue
-            
-            if item == self.player?.currentItem {
+        if backward.isEnabled {
+        
+            for item in listVideos {                    // get and insert previous video into queue
                 
-                let currentIndex = listVideos.index(of: item)
-                print(currentIndex!)
-                
-                if currentIndex! > 0 {
+                if item == self.player?.currentItem {
                     
-                    self.player?.pause()
+                    let currentIndex = listVideos.index(of: item)
+                    print(currentIndex!)
                     
-                    let moveBackIndex = currentIndex! - 1
-                
-                    let currentItem = self.player?.currentItem
-                    let newItem = listVideos[moveBackIndex]
+                    if currentIndex! > 0 {
+                        
+                        self.player?.pause()
+                        
+                        let moveBackIndex = currentIndex! - 1
                     
-                    self.queuePlayer.replaceCurrentItem(with: newItem)
-                    print("replace video successfully")
-                    
-                    self.player?.pause()
-                    
-                    self.queuePlayer.insert(currentItem!, after: newItem)
-                    print("inserted curent video")
+                        let currentItem = self.player?.currentItem
+                        let newItem = listVideos[moveBackIndex]
+                        
+                        self.queuePlayer.replaceCurrentItem(with: newItem)
+                        print("replace video successfully")
+                        
+                        self.player?.pause()
+                        
+                        self.queuePlayer.insert(currentItem!, after: newItem)
+                        print("inserted curent video")
 
-                    self.player?.seek(to: kCMTimeZero)
-                    
-                    print("backwardButtonPressed")
-                    
-                    self.player?.play()
-                    self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
-                    
-                } else if currentIndex == 0 {
-                    
-                    self.player?.pause()
-                    
-                    self.player?.seek(to: kCMTimeZero)
-                    
-                    self.player?.play()
-                    self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
+                        self.player?.seek(to: kCMTimeZero)
+                        
+                        print("backwardButtonPressed")
+                        
+                        self.player?.play()
+                        self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
+                        
+                    } else if currentIndex == 0 {
+                        
+                        self.player?.pause()
+                        
+                        self.player?.seek(to: kCMTimeZero)
+                        
+                        self.player?.play()
+                        self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
+                    }
                 }
             }
+            setTimer()
         }
-        
-        setTimer()
-//        setTimerInteract()
         
         return
     }
     
     @objc func airplayButton(sender: UIButton) {
         
-        print("airplayButtonPressed")
+        if airplay.isEnabled {
         
-        self.contentOverlayView?.addSubview(routePickerView)
+            print("airplayButtonPressed")
         
-        routePickerView.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        routePickerView.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
-        routePickerView.rightAnchor.constraint(equalTo: (controlView.rightAnchor), constant: -20).isActive = true
+            self.contentOverlayView?.addSubview(routePickerView)
         
+            routePickerView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+            routePickerView.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
+            routePickerView.rightAnchor.constraint(equalTo: (controlView.rightAnchor), constant: -20).isActive = true
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
