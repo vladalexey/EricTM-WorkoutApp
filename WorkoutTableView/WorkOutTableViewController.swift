@@ -44,8 +44,7 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     override func viewWillAppear(_ animated: Bool) {
         
         AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
-        
-        UIApplication.shared.endIgnoringInteractionEvents()
+    
     }
 
     
@@ -75,8 +74,8 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         // self.clearsSelectionOnViewWillAppear = false
         
         // enter Edit mode by long press in cell
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(WorkOutTableViewController.longPressCellHandle))
-        tableView.addGestureRecognizer(longPress)
+//        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(WorkOutTableViewController.longPressCellHandle))
+//        tableView.addGestureRecognizer(longPress)
         
 //         Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         self.navigationItem.rightBarButtonItem = self.editButtonItem
@@ -229,8 +228,6 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
             exitEditModeIfTrue()
         
             AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.landscapeRight, andRotateTo: UIInterfaceOrientation.landscapeRight)
-            
-            UIApplication.shared.beginIgnoringInteractionEvents()
             
             let destVC = segue.destination as? PlayerViewController
             

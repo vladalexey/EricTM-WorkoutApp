@@ -44,7 +44,7 @@ class PlayerViewController: AVPlayerViewController {
     
     var workoutCode = String()
     var videoCount = Int()
-    var numberOfWorkout = 3
+    var numberOfWorkout = 2 // should change to corresponding numbers of total workouts needed
     
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
         return UIInterfaceOrientation.landscapeRight
@@ -65,13 +65,13 @@ class PlayerViewController: AVPlayerViewController {
         return routepickerview
     }()
     
-    let controlView: UIImageView = {
+    let controlView: IgnoreTouchView = {
         
-        let controlview = UIImageView(image: UIImage(named: "PLAYER BG"))
+        let controlview = IgnoreTouchView(image: UIImage(named: "PLAYER BG"))
         controlview.translatesAutoresizingMaskIntoConstraints = false
         controlview.alpha = 0.5
 
-//        controlview.addBlurEffect()
+        //        TODO: controlview.addBlurEffect()
 
         let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.regular)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
@@ -203,8 +203,6 @@ class PlayerViewController: AVPlayerViewController {
     
     func setupUI() {
         
-//        self.view.isMultipleTouchEnabled = true
-        
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         
         self.contentOverlayView?.addSubview(topView)
@@ -214,10 +212,13 @@ class PlayerViewController: AVPlayerViewController {
         let doubleTapOnTopView = UITapGestureRecognizer(target: self, action: #selector(PlayerViewController.handleDoubleTap))
         doubleTapOnTopView.numberOfTapsRequired = 2
         
-        topView.addGestureRecognizer(tapOnTopView)
-        topView.addGestureRecognizer(doubleTapOnTopView)
+        tapOnTopView.require(toFail: doubleTapOnTopView)
         
+        contentOverlayView?.addGestureRecognizer(tapOnTopView)
+        controlView.addGestureRecognizer(doubleTapOnTopView)
         
+//        topView.addGestureRecognizer(doubleTapOnTopView)
+
         self.contentOverlayView?.addSubview(activityIndicatorView)
         activityIndicatorView.centerXAnchor.constraint(equalTo: (contentOverlayView?.centerXAnchor)!).isActive = true
         activityIndicatorView.centerYAnchor.constraint(equalTo: (contentOverlayView?.centerYAnchor)!).isActive = true
@@ -274,7 +275,7 @@ class PlayerViewController: AVPlayerViewController {
         
     }
     
-    func exitDueToForward() {
+    func exitVideoPlayer() {
         
         self.queuePlayer.removeAllItems()
         
@@ -285,7 +286,7 @@ class PlayerViewController: AVPlayerViewController {
     }
     
     //MARK: Exit video due to Error
-    func exitVideoPlayer() {
+    func exitVideoPlayerError() {
         
         print("exit video player")
         
@@ -296,13 +297,7 @@ class PlayerViewController: AVPlayerViewController {
         let okAction = UIAlertAction(title: "Try again", style: UIAlertActionStyle.default) {
             (result : UIAlertAction) -> Void in
             
-            self.queuePlayer.removeAllItems()
-            
-            NotificationCenter.default.removeObserver(self)
-            
-            self.navigationController?.popViewController(animated: true)
-            self.navigationController?.setNavigationBarHidden(false, animated: true)
-            
+            self.exitVideoPlayer()
             print("OK")
         }
         
@@ -320,14 +315,12 @@ class PlayerViewController: AVPlayerViewController {
             let filePath = pathComponent.path
             let fileManager = FileManager.default
             if fileManager.fileExists(atPath: filePath) {
-                
                 print("FILE AVAILABLE")
                 return true
-                
+
             } else {
                 print("FILE NOT AVAILABLE")
                 return false
-                
             }
         } else {
             print("FILE PATH NOT AVAILABLE")
@@ -359,15 +352,13 @@ class PlayerViewController: AVPlayerViewController {
     
     func getVideos(videoName: String) {
         
-        //        let downloadTask1 = videoReference.child(global.videoName1)
-        
         if checkFileAvailableLocal(nameFileToCheck: videoName) == false {
             
             videoReference.child(videoName).downloadURL(completion: { (url, error) in
                 if error != nil {
                     
                     print("Error " + videoName)
-                    self.exitVideoPlayer()
+                    self.exitVideoPlayerError()
                     return
                     
                 } else {
@@ -397,17 +388,17 @@ class PlayerViewController: AVPlayerViewController {
             downloadTask1.child(videoName).write(toFile: localURL) { url, error in
                 if let error = error {
                     
-                    self.exitVideoPlayer()
-                    print("Uh-oh, an error occurred!")
+                    print(error)
+                    self.exitVideoPlayerError()
+
                     return
                     
                 } else {
-                    
                     print("sucessfully downloaded video 1")
                 }
             }
             
-            //MARK: check available true video 1
+        //MARK: check available true video 1
         } else {
             
             print(videoName)
@@ -433,6 +424,25 @@ class PlayerViewController: AVPlayerViewController {
     
     override var canBecomeFirstResponder: Bool {
         return true
+    }
+    
+    func getRandomList() {
+        
+        var rand = Int()
+        random = [Int(arc4random_uniform(4) + 1)] // get random number //change number to actual number of videos on Firebase
+        
+        repeat {
+            rand = Int(arc4random_uniform(4) + 1)  // get random number //change number to actual number of videos on Firebase
+        } while rand == random[0]
+        
+        random.append(rand)
+        
+        repeat {
+            rand = Int(arc4random_uniform(4) + 1)  // get random number //change number to actual number of videos on Firebase
+        } while random[0] == rand || random[1] == rand
+        
+        random.append(rand)
+        print(random)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -462,49 +472,46 @@ class PlayerViewController: AVPlayerViewController {
             print("Error while enumerating files \(documentsURL.path): \(error.localizedDescription)")
         }
         
-        var rand = Int()
-        random.append(Int(arc4random_uniform(4) + 1))  // get random number //change number to actual number of videos on Firebase
-
-        repeat {
-            rand = Int(arc4random_uniform(4) + 1)  // get random number //change number to actual number of videos on Firebase
-        } while rand == random[0]
-        
-        random.append(rand)
-        
-        repeat {
-            rand = Int(arc4random_uniform(4) + 1)  // get random number //change number to actual number of videos on Firebase
-        } while random[0] == rand || random[1] == rand
-        
-        random.append(rand)
-        
-        for index in 1...numberOfWorkout {
-            
+        //MARK: Get randome workout videos
+        getRandomList()
+        for index in 0...numberOfWorkout {
             let videoName = workoutCode + String(random[index]) + ".mp4"  // get random workout label
-            
+
             getVideos(videoName: videoName) //should change to specific workoutCode when uploaded encoded videos
         }
-        
+
         self.player? = self.queuePlayer
         self.player?.play()
-        
     }
     
     @objc func handleDoubleTap(tap: UIGestureRecognizer) {
         
+        print("double Tap")
         
+        if tap.state == UIGestureRecognizerState.ended {
+            
+            let point = tap.location(in: self.view)
+            
+//            topView.hitTest(point, with: UIGestureRecognizer)
+            
+            if controlView.bounds.contains((controlView.convert(point, from: self.view))) {
+                
+                print("In control View: Do nothing")
+            }
+        }
     }
     
     @objc func handleTap(tap: UIGestureRecognizer) {
         
         if tap.state == UIGestureRecognizerState.ended {
           
-            let disappearAnimationControl = UIViewPropertyAnimator(duration: 0.5, curve: .easeInOut) {
+            let disappearAnimationControl = UIViewPropertyAnimator(duration: 0.25, curve: .easeInOut) {
 
                 self.toggleHidden()
             }
             disappearAnimationControl.isUserInteractionEnabled = false
             
-            let reappearAnimationControl = UIViewPropertyAnimator(duration: 0.5, curve: .easeInOut) {
+            let reappearAnimationControl = UIViewPropertyAnimator(duration: 0.25, curve: .easeInOut) {
                 
                 self.toggleAppear()
                 
@@ -623,7 +630,7 @@ class PlayerViewController: AVPlayerViewController {
         disableInteract()
         disableHighlighted()
 
-        let disappearAnimationControl = UIViewPropertyAnimator(duration: 0.5, curve: .easeInOut) {
+        let disappearAnimationControl = UIViewPropertyAnimator(duration: 0.25, curve: .easeInOut) {
             
             self.toggleHidden()
             self.disableHighlighted()
@@ -679,7 +686,7 @@ class PlayerViewController: AVPlayerViewController {
         
         if player?.currentItem == listVideos[2] {
             
-            exitDueToForward()
+            exitVideoPlayer()
             return
         }
     }
@@ -697,14 +704,16 @@ class PlayerViewController: AVPlayerViewController {
     func setupCommandCenter() {
         
         UIApplication.shared.beginReceivingRemoteControlEvents()
-        becomeFirstResponder()
+        self.becomeFirstResponder()
         
         MPNowPlayingInfoCenter.default().nowPlayingInfo = [MPMediaItemPropertyTitle: "Eric Workout"]
+        
         
         // Get the shared MPRemoteCommandCenter
         let commandCenter = MPRemoteCommandCenter.shared()
         
         commandCenter.playCommand.isEnabled = true
+        print("enable play command")
         
         // Add handler for Play Command
         commandCenter.playCommand.addTarget { [unowned self] event in
@@ -714,10 +723,11 @@ class PlayerViewController: AVPlayerViewController {
             }
             return .commandFailed
         }
-        
+
         commandCenter.pauseCommand.isEnabled = true
+        print("enable pause command")
         
-        // Add handler for Pause Command
+//         Add handler for Pause Command
         commandCenter.pauseCommand.addTarget { [unowned self] event in
             if self.player?.rate == 1.0 {
                 self.player?.pause()
@@ -725,7 +735,7 @@ class PlayerViewController: AVPlayerViewController {
             }
             return .commandFailed
         }
-        
+
     }
     
     func setupNowPlaying() {
@@ -737,26 +747,71 @@ class PlayerViewController: AVPlayerViewController {
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        self.player?.play()
+        
+        UIApplication.shared.beginReceivingRemoteControlEvents()
+        self.becomeFirstResponder()
+        
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = [MPMediaItemPropertyTitle: "Eric Workout"]
+        
+        
+//        // Get the shared MPRemoteCommandCenter
+//        let commandCenter = MPRemoteCommandCenter.shared()
+//
+//        commandCenter.playCommand.isEnabled = true
+//        print("enable play command")
+//
+////         Add handler for Play Command
+//                commandCenter.playCommand.addTarget { [unowned self] event in
+//                    if self.player?.rate == 0.0 {
+//                        self.player?.play()
+//                        return .success
+//                    }
+//                    return .commandFailed
+//                }
+//
+//        commandCenter.pauseCommand.isEnabled = true
+//        print("enable pause command")
+//
+////         Add handler for Pause Command
+//                commandCenter.pauseCommand.addTarget { [unowned self] event in
+//                    if self.player?.rate == 1.0 {
+//                        self.player?.pause()
+//                        return .success
+//                    }
+//                    return .commandFailed
+//                }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupCommandCenter()
-        setupNowPlaying()
-
+//        setupCommandCenter()
+//        setupNowPlaying()
+        
         self.player = self.queuePlayer
         
         NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
-        
-        UIApplication.shared.endIgnoringInteractionEvents()
 
-        self.player?.play()
         self.showsPlaybackControls = false
         
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+            let _ = try AVAudioSession.sharedInstance().setActive(true)
+        } catch let error as NSError {
+            print("an error occurred when audio session category.\n \(error)")
+        }
         setTimer()
 
     }
     
     override func remoteControlReceived(with event: UIEvent?) {
+        
+        print("received Event")
+        
         if let event = event {
             if event.type == .remoteControl {
                 
@@ -965,7 +1020,7 @@ class PlayerViewController: AVPlayerViewController {
                         
                     } else if currentIndex == 2 {
                         
-                        exitDueToForward()
+                        exitVideoPlayer()
                         return
                     }
                 }
@@ -1052,32 +1107,23 @@ class PlayerViewController: AVPlayerViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(true)
+        super.viewWillDisappear(animated)
         
         queuePlayer.removeAllItems()
-        
-        UIApplication.shared.beginIgnoringInteractionEvents()
-        
         NotificationCenter.default.removeObserver(self)
         
         AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        UIApplication.shared.endReceivingRemoteControlEvents()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-    /*
-     
-     
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
