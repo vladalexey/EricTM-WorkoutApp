@@ -10,7 +10,6 @@
 		821799B12112C332009516EA /* IgnoreTouchTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 821799B02112C332009516EA /* IgnoreTouchTest.swift */; };
 		8223CDFE20EA2E9500569D3F /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8223CDFD20EA2E9500569D3F /* PlayerViewController.swift */; };
 		82340FD820DCD6BE003079A2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82340FD720DCD6BE003079A2 /* AppDelegate.swift */; };
-		82340FDA20DCD6BE003079A2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82340FD920DCD6BE003079A2 /* ViewController.swift */; };
 		82340FDD20DCD6BE003079A2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 82340FDB20DCD6BE003079A2 /* Main.storyboard */; };
 		82340FE220DCD6BE003079A2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 82340FE020DCD6BE003079A2 /* LaunchScreen.storyboard */; };
 		82340FEA20DCDBCC003079A2 /* WorkOutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82340FE920DCDBCC003079A2 /* WorkOutTableViewCell.swift */; };
@@ -35,7 +34,6 @@
 		8223CDFD20EA2E9500569D3F /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
 		82340FD420DCD6BE003079A2 /* EricTM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EricTM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		82340FD720DCD6BE003079A2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		82340FD920DCD6BE003079A2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		82340FDC20DCD6BE003079A2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		82340FE120DCD6BE003079A2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		82340FE320DCD6BE003079A2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -113,7 +111,6 @@
 				8256A469210829C0004F3CF9 /* EricTM.entitlements */,
 				82A219D020DF40F900F19132 /* GoogleService-Info.plist */,
 				82340FD720DCD6BE003079A2 /* AppDelegate.swift */,
-				82340FD920DCD6BE003079A2 /* ViewController.swift */,
 				829FBCB620E0E5070052601F /* TabBarViewController.swift */,
 				82EF187B21007ED400685FC4 /* Assets.xcassets */,
 				82340FDB20DCD6BE003079A2 /* Main.storyboard */,
@@ -304,7 +301,6 @@
 				82F947182109A2AD00947FEB /* NutritionViewController.swift in Sources */,
 				821799B12112C332009516EA /* IgnoreTouchTest.swift in Sources */,
 				82EAC90720EC94B00093386C /* AddWorkoutViewController.swift in Sources */,
-				82340FDA20DCD6BE003079A2 /* ViewController.swift in Sources */,
 				823876C221099CDC002A8E62 /* PersonalizeViewController.swift in Sources */,
 				82340FD820DCD6BE003079A2 /* AppDelegate.swift in Sources */,
 				82340FEC20DCE2D0003079A2 /* WorkOutTableViewController.swift in Sources */,

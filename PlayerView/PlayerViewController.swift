@@ -256,12 +256,12 @@ class PlayerViewController: AVPlayerViewController {
         self.contentOverlayView?.insertSubview(forward, aboveSubview: controlView)
         forward.heightAnchor.constraint(equalToConstant: 40).isActive = true
         forward.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
-        forward.leftAnchor.constraint(equalTo: (playButton.rightAnchor), constant: 120).isActive = true
+        forward.leftAnchor.constraint(equalTo: (playButton.centerXAnchor), constant: 140).isActive = true
         
         self.contentOverlayView?.insertSubview(backward, aboveSubview: controlView)
         backward.heightAnchor.constraint(equalToConstant: 40).isActive = true
         backward.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
-        backward.rightAnchor.constraint(equalTo: (playButton.leftAnchor), constant: -120).isActive = true
+        backward.rightAnchor.constraint(equalTo: (playButton.centerXAnchor), constant: -140).isActive = true
         
 //        self.contentOverlayView?.insertSubview(airplay, aboveSubview: controlView)
 //        airplay.heightAnchor.constraint(equalToConstant: 40).isActive = true
@@ -283,6 +283,8 @@ class PlayerViewController: AVPlayerViewController {
         
         self.navigationController?.popViewController(animated: true)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
+        
+        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
     }
     
     //MARK: Exit video due to Error
@@ -328,13 +330,87 @@ class PlayerViewController: AVPlayerViewController {
         }
     }
     
+    @objc func playRemote() {
+        self.queuePlayer.play()
+        print("[Remote] play")
+    }
+    
+    @objc func pauseRemote() {
+        self.queuePlayer.pause()
+        print("[Remote] pause")
+        
+    }
+    
+    @objc func forward15Remote() {
+        
+        if !(self.queuePlayer.currentItem! === listVideos[2]) {
+            
+            let seekDuration = CMTimeMake(15, 1)
+            let currentTime: CMTime = (self.queuePlayer.currentItem!.currentTime())
+            
+            if currentTime + seekDuration > (self.queuePlayer.currentItem!.duration) && !(self.queuePlayer.currentItem! === listVideos[2]) {
+                
+                self.queuePlayer.pause()
+                self.queuePlayer.advanceToNextItem()
+                self.queuePlayer.play()
+                self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
+                
+                return
+                
+            }
+            
+            self.queuePlayer.currentItem!.seek(to: currentTime + seekDuration, completionHandler: nil)
+            self.queuePlayer.play()
+            
+            print("[Remote] forward15")
+        } else {
+            
+            exitVideoPlayer()
+            AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
+        }
+    }
+    
+    @objc func backward15Remote() {
+        let seekDuration = CMTimeMake(15, 1)
+        let currentTime: CMTime = (self.queuePlayer.currentItem!.currentTime())
+        if currentTime - seekDuration > kCMTimeZero {                   // check if seek duration is less than 15 seconds
+            
+            let newTime = currentTime - seekDuration
+            self.queuePlayer.currentItem!.seek(to: newTime, completionHandler: nil)
+            self.queuePlayer.play()
+            
+        } else {
+            
+            self.queuePlayer.currentItem!.seek(to: kCMTimeZero, completionHandler: nil)
+            self.queuePlayer.play()
+        }
+        
+        print("[Remote] backward15")
+    }
     @objc func didEnterBackground() {
         
         self.player = nil
-        self.player?.pause()
         
-        playButton.setImage(UIImage(named: "PLAY"), for: .normal)
-        playerPlaying = false
+        UIApplication.shared.beginReceivingRemoteControlEvents()
+        self.becomeFirstResponder()
+        
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = [MPMediaItemPropertyTitle: "Eric Workout"]
+        
+        
+        // Get the shared MPRemoteCommandCenter
+        let commandCenter = MPRemoteCommandCenter.shared()
+        
+        commandCenter.playCommand.isEnabled = true
+        commandCenter.playCommand.addTarget(self, action: #selector(playRemote))
+        
+        commandCenter.skipForwardCommand.isEnabled = true
+        commandCenter.skipForwardCommand.addTarget(self, action: #selector(forward15Remote))
+        
+        commandCenter.skipBackwardCommand.isEnabled = true
+        commandCenter.skipBackwardCommand.addTarget(self, action: #selector(backward15Remote))
+        
+        commandCenter.pauseCommand.isEnabled = true
+        commandCenter.pauseCommand.addTarget(self, action: #selector(pauseRemote))
         
         return
     }
@@ -446,14 +522,6 @@ class PlayerViewController: AVPlayerViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
-      
-        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
         
         setupUI()
         
@@ -701,52 +769,6 @@ class PlayerViewController: AVPlayerViewController {
             repeats     : false)
     }
     
-    func setupCommandCenter() {
-        
-        UIApplication.shared.beginReceivingRemoteControlEvents()
-        self.becomeFirstResponder()
-        
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = [MPMediaItemPropertyTitle: "Eric Workout"]
-        
-        
-        // Get the shared MPRemoteCommandCenter
-        let commandCenter = MPRemoteCommandCenter.shared()
-        
-        commandCenter.playCommand.isEnabled = true
-        print("enable play command")
-        
-        // Add handler for Play Command
-        commandCenter.playCommand.addTarget { [unowned self] event in
-            if self.player?.rate == 0.0 {
-                self.player?.play()
-                return .success
-            }
-            return .commandFailed
-        }
-
-        commandCenter.pauseCommand.isEnabled = true
-        print("enable pause command")
-        
-//         Add handler for Pause Command
-        commandCenter.pauseCommand.addTarget { [unowned self] event in
-            if self.player?.rate == 1.0 {
-                self.player?.pause()
-                return .success
-            }
-            return .commandFailed
-        }
-
-    }
-    
-    func setupNowPlaying() {
-        // Define Now Playing Info
-        var nowPlayingInfo = [String : Any]()
-        nowPlayingInfo[MPMediaItemPropertyTitle] = "My Movie"
-
-        // Set the metadata
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -756,45 +778,23 @@ class PlayerViewController: AVPlayerViewController {
         self.becomeFirstResponder()
         
         MPNowPlayingInfoCenter.default().nowPlayingInfo = [MPMediaItemPropertyTitle: "Eric Workout"]
-        
-        
-//        // Get the shared MPRemoteCommandCenter
-//        let commandCenter = MPRemoteCommandCenter.shared()
-//
-//        commandCenter.playCommand.isEnabled = true
-//        print("enable play command")
-//
-////         Add handler for Play Command
-//                commandCenter.playCommand.addTarget { [unowned self] event in
-//                    if self.player?.rate == 0.0 {
-//                        self.player?.play()
-//                        return .success
-//                    }
-//                    return .commandFailed
-//                }
-//
-//        commandCenter.pauseCommand.isEnabled = true
-//        print("enable pause command")
-//
-////         Add handler for Pause Command
-//                commandCenter.pauseCommand.addTarget { [unowned self] event in
-//                    if self.player?.rate == 1.0 {
-//                        self.player?.pause()
-//                        return .success
-//                    }
-//                    return .commandFailed
-//                }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        setupCommandCenter()
-//        setupNowPlaying()
+        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
         
         self.player = self.queuePlayer
         
         NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
+        
 
         self.showsPlaybackControls = false
         
@@ -807,29 +807,36 @@ class PlayerViewController: AVPlayerViewController {
         setTimer()
 
     }
-    
-    override func remoteControlReceived(with event: UIEvent?) {
-        
-        print("received Event")
-        
-        if let event = event {
-            if event.type == .remoteControl {
-                
-                switch event.subtype {
-                    
-                case .remoteControlPlay:
-                    self.player?.play()
-                    
-                case .remoteControlPause:
-                    self.player?.pause()
-                    
-                default:
-                    print("haven't setup")
-                }
-            }
-        }
-    }
-    
+
+//    override func remoteControlReceived(with event: UIEvent?) {
+//
+//        print("received Event")
+//
+//        if let event = event {
+//            if event.type == .remoteControl {
+//
+//                switch event.subtype {
+//
+//                case .remoteControlTogglePlayPause:
+//                    if Double((self.player?.rate)!) > 0.0 {
+//                        self.player?.pause()
+//                    } else {
+//                        self.player?.play()
+//                    }
+//
+//                case .remoteControlPlay:
+//                    self.player?.play()
+//
+//                case .remoteControlPause:
+//                    self.player?.pause()
+//
+//                default:
+//                    print("haven't setup")
+//                }
+//            }
+//        }
+//    }
+
     //MARK: Observe changes in AVPlayer
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         
@@ -886,6 +893,8 @@ class PlayerViewController: AVPlayerViewController {
         
             self.navigationController?.popViewController(animated: true)
             self.navigationController?.setNavigationBarHidden(false, animated: true)
+            
+            AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
         }
         
         return

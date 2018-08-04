@@ -59,12 +59,25 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableViewAutomaticDimension
     }
+    
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        tableView.allowsMultipleSelectionDuringEditing = false
+        
+        if editing {
+            tableView.setEditing(true, animated: true)
+        } else {
+            tableView.setEditing(false, animated: true)
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
     
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 250
+        
+        tableView.contentInsetAdjustmentBehavior = .never
         
         setupBackground()
         loadDefaultWOV()
@@ -106,6 +119,10 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         return workOutVideos.count
     }
 
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        tableView.updateConstraintsIfNeeded()
+    }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         // Table view cells are reused and should be dequeued using a cell identifier.
@@ -115,7 +132,7 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
             fatalError("The dequeued cell is not an instance of WorkOutTableViewCell.")
         }
         
-        // Fetches the appropriate meal for the data source layout.
+        // Fetches the appropriate workout for the data source layout.
         let workOutVideo = workOutVideos[indexPath.row]
         
         cell.nameLabel.text = workOutVideo.name.uppercased()
@@ -311,7 +328,9 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
             let newIndex = IndexPath(row: workOutVideos.count, section: 0)
             workOutVideos.append(newWorkout!)
             listWorkOut.append(nameWorkout)
-            tableView.insertRows(at: [newIndex], with: .automatic)
+            tableView.beginUpdates()
+            tableView.insertRows(at: [newIndex], with: .bottom)
+            tableView.endUpdates()
             print(listWorkOut)
         } 
     }
