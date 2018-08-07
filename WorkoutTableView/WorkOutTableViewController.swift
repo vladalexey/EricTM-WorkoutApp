@@ -43,8 +43,12 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         
-        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
-    
+        tableView.reloadData()
+        
+        if UIDevice.current.orientation.isPortrait == false {
+            print("change to Portrait")
+            AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
+        }
     }
 
     
@@ -232,7 +236,10 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
             
             exitEditModeIfTrue()
             
-            AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
+            if UIDevice.current.orientation.isPortrait == false {
+                print("change to Portrait")
+                AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
+            }
             
             let destVC = segue.destination as? UINavigationController
 
@@ -322,7 +329,7 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     
     func userDidEnterData(nameWorkout: String, lengthWorkout: String, workoutLabel: String) {    //delegate function for add custom workout
         
-        if nameWorkout != "" && lengthWorkout != nil && workoutLabel != nil {
+        if nameWorkout != "" && lengthWorkout != "" && workoutLabel != "" {
             
             let newWorkout = WorkOutVideo(name: nameWorkout, length: lengthWorkout, workoutLabel: workoutLabel)
             let newIndex = IndexPath(row: workOutVideos.count, section: 0)

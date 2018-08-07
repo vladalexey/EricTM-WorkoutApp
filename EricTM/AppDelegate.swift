@@ -112,7 +112,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //    }
     
     //MARK: Set locked portrait mode for one screen
-//    
+    
 //    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
 //        if self.window?.rootViewController?.presentedViewController is WorkOutTableViewController {
 //            return UIInterfaceOrientationMask.portrait
