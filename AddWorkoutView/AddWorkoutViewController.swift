@@ -134,7 +134,7 @@ class AddWorkoutViewController: UIViewController, UIPickerViewDelegate, UIPicker
             print("custom workout non nil")
             if nameWorkoutInput.text != "" && lengthWorkoutPicker != nil {
                 print("name not nil")
-                delegate?.userDidEnterData(nameWorkout: nameWorkoutInput.text!, lengthWorkout: pickerData[lengthWorkoutPicker.selectedRow(inComponent: 0)], workoutLabel: workoutLabels[0])
+                delegate?.userDidEnterData(nameWorkout: nameWorkoutInput.text!, lengthWorkout: pickerData[lengthWorkoutPicker.selectedRow(inComponent: 0)], workoutLabel: workoutLabels[0]) //TODO: Change workoutLabel to appropriate code in Personalize
                 print(lengthWorkoutPicker.selectedRow(inComponent: 0))
                 dismiss(animated: true, completion: nil)
             }

@@ -22,8 +22,12 @@ class WorkOutTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        
-        
+//        self.layoutIfNeeded()
+    }
+    
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        layoutIfNeeded()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

@@ -42,15 +42,22 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     
     
     override func viewWillAppear(_ animated: Bool) {
-        
-        tableView.reloadData()
+        super.viewWillAppear(animated)
         
         if UIDevice.current.orientation.isPortrait == false {
             print("change to Portrait")
             AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
         }
     }
-
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+//        tableView.reloadData()
+    }
     
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
         return UIInterfaceOrientation.portrait
@@ -60,32 +67,45 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         return false
     }
     
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 250
+    }
+    
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableViewAutomaticDimension
     }
     
-    override func setEditing(_ editing: Bool, animated: Bool) {
-        super.setEditing(editing, animated: animated)
-        tableView.allowsMultipleSelectionDuringEditing = false
-        
-        if editing {
-            tableView.setEditing(true, animated: true)
-        } else {
-            tableView.setEditing(false, animated: true)
-        }
-    }
+//    override func setEditing(_ editing: Bool, animated: Bool) {
+//        super.setEditing(editing, animated: animated)
+//
+//        tableView.allowsMultipleSelectionDuringEditing = false
+//
+//        if editing {
+//            tableView.setEditing(true, animated: true)
+//        } else {
+//            tableView.setEditing(false, animated: true)
+//        }
+//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
     
+        tableView.estimatedRowHeight = 300
         tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 250
-        
-        tableView.contentInsetAdjustmentBehavior = .never
-        
+
         setupBackground()
         loadDefaultWOV()
-    
+        
+        tableView.allowsSelectionDuringEditing = false
+        
+//        DispatchQueue.main.async {
+//            self.tableView.reloadData()
+//
+//            self.tableView.setNeedsLayout()
+//            self.tableView.layoutIfNeeded()
+//
+//            self.tableView.reloadData()
+//        }
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -124,9 +144,13 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     }
 
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
-        tableView.updateConstraintsIfNeeded()
+
     }
+    
+    override func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {
+//        tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         // Table view cells are reused and should be dequeued using a cell identifier.
@@ -143,11 +167,13 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         cell.photoImageView.image = workOutVideo.image
         cell.Vignette.image = workOutVideo.background
         cell.minuteWorkout.text = workOutVideo.length.uppercased()
+
         return cell
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.backgroundColor = backgroundColor
+
     }
     
     override func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
@@ -158,6 +184,11 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
+    }
+    
+    override func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
+//        tableView.reloadRows(at: [indexPath!], with: .automatic)
+//        tableView.updateConstraints()
     }
     
     // Override to handle actions in cell touch
@@ -171,10 +202,10 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         print(workoutLabel)
 
     }
-    
-    override func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
-        tableView.setEditing(false, animated: true)
-    }
+
+//    override func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
+//        tableView.reloadRows(at: [indexPath!], with: UITableViewRowAnimation.automatic)
+//    }
     
     func alertOnDefaultWorkouts() {
         
@@ -184,7 +215,7 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
             (result : UIAlertAction) -> Void in
             
             alertView.dismiss(animated: true, completion: nil)
-            self.tableView.setEditing(false, animated: true)
+            
             print("OK")
         }
         
@@ -208,15 +239,18 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
                 
                 print(self.workOutVideos[indexPath.row].name + " deleted")
                 
+//                tableView.beginUpdates()
+                
                 self.workOutVideos.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .fade)
-                tableView.setEditing(false, animated: true)
+                
+//                tableView.endUpdates()
                 
             } else {
                 
                 self.alertOnDefaultWorkouts()
-                tableView.setEditing(false, animated: true)
             }
+
         }
         remove.backgroundColor = .red
         
@@ -226,7 +260,7 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     func exitEditModeIfTrue() {
         
         if self.isEditing {
-            self.setEditing(false, animated: true)
+            tableView.endEditing(true)
         }
     }
     
@@ -280,14 +314,18 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         if editingStyle == .delete {
             
             // Delete the row from the data source
+            
             self.workOutVideos.remove(at: indexPath.row)
+            
+//            tableView.beginUpdates()
             tableView.deleteRows(at: [indexPath], with: .fade)
-            tableView.setEditing(false, animated: true)
+//            tableView.endUpdates()
+            
+//            tableView.updateConstraints()
         }
         if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }
-        
         print(listWorkOut)
     }
 
@@ -298,11 +336,14 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         let videoWorkout = workOutVideos[fromIndexPath.row]
         let listLabel = listWorkOut[fromIndexPath.row]
         
+        
         workOutVideos.remove(at: fromIndexPath.row)
         listWorkOut.remove(at: fromIndexPath.row)
         
         workOutVideos.insert(videoWorkout, at: to.row)
         listWorkOut.insert(listLabel, at: to.row)
+        
+//        tableView.updateConstraints()
         
         print(listWorkOut)
         
@@ -313,16 +354,6 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         // Return false if you do not want the item to be re-orderable.
         return true
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
     
     
     //MARK: Private Methods
@@ -335,9 +366,13 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
             let newIndex = IndexPath(row: workOutVideos.count, section: 0)
             workOutVideos.append(newWorkout!)
             listWorkOut.append(nameWorkout)
-            tableView.beginUpdates()
+            
+//            tableView.beginUpdates()
             tableView.insertRows(at: [newIndex], with: .bottom)
-            tableView.endUpdates()
+//            tableView.endUpdates()
+            
+//            tableView.updateConstraints()
+
             print(listWorkOut)
         } 
     }

@@ -280,13 +280,17 @@ class PlayerViewController: AVPlayerViewController {
     
     func exitVideoPlayer() {
         
+        UIApplication.shared.beginIgnoringInteractionEvents()
+        
         let exitVideo = DispatchQueue(label: "exitVideoPlayer")
         
         exitVideo.sync {
             
+            self.player?.pause()
             self.player = nil
             
             NotificationCenter.default.removeObserver(self)
+            self.toggleHidden()
             
             if UIDevice.current.orientation.isPortrait == false {
                 print("change to Portrait")
@@ -295,6 +299,8 @@ class PlayerViewController: AVPlayerViewController {
             
             self.navigationController?.popViewController(animated: true)
             self.navigationController?.setNavigationBarHidden(false, animated: true)
+            
+            UIApplication.shared.endIgnoringInteractionEvents()
         }
     }
     
@@ -316,24 +322,26 @@ class PlayerViewController: AVPlayerViewController {
         
         print("exit video player")
         
-//        let alertView = UIAlertController(title: "Error", message: "Cannot load videos", preferredStyle: UIAlertControllerStyle.alert)
-//
-//        let okAction = UIAlertAction(title: "Try again", style: UIAlertActionStyle.default) {
-//            (result : UIAlertAction) -> Void in
-//
-//            print("OK")
-//
-//            self.navigationController?.popViewController(animated: true)
-//            self.navigationController?.setNavigationBarHidden(false, animated: true)
-//        }
-//
-//        alertView.addAction(okAction)
+        let alertView = UIAlertController(title: "Error", message: "Cannot load videos", preferredStyle: UIAlertControllerStyle.alert)
+
+        let okAction = UIAlertAction(title: "Try again", style: UIAlertActionStyle.default) {
+            (result : UIAlertAction) -> Void in
+
+            print("OK")
+
+            self.navigationController?.popViewController(animated: true)
+            self.navigationController?.setNavigationBarHidden(false, animated: true)
+        }
+
+        alertView.addAction(okAction)
+        self.present(alertView, animated: true, completion: nil)
+
         
         let checkPortrait = DispatchQueue(label: "checkPortrait")
         
         checkPortrait.sync {
             
-//            self.present(alertView, animated: true, completion: nil)
+            alertView.dismiss(animated: true, completion: nil)
             
             self.player = nil
             
@@ -598,6 +606,8 @@ class PlayerViewController: AVPlayerViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
+        UIApplication.shared.endIgnoringInteractionEvents()
         
         setupUI()
         
@@ -880,15 +890,7 @@ class PlayerViewController: AVPlayerViewController {
         super.viewDidAppear(animated)
         
         self.player?.play()
-        
-//        do {
-//            print("[Remote] Share audio")
-//            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
-//            let _ = try AVAudioSession.sharedInstance().setActive(true)
-//        } catch let error as NSError {
-//            print("an error occurred when audio session category.\n \(error)")
-//        }
-        
+
         UIApplication.shared.beginReceivingRemoteControlEvents()
         self.becomeFirstResponder()
         
@@ -914,45 +916,38 @@ class PlayerViewController: AVPlayerViewController {
 
         self.showsPlaybackControls = false
 
-//        do {
-//            print("[Remote] Share audio")
-//            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
-//            let _ = try AVAudioSession.sharedInstance().setActive(true)
-//        } catch let error as NSError {
-//            print("an error occurred when audio session category.\n \(error)")
-//        }
         setTimer()
 
     }
 
-    override func remoteControlReceived(with event: UIEvent?) {
-
-        print("received Event")
-
-        if let event = event {
-            if event.type == .remoteControl {
-
-                switch event.subtype {
-
-                case .remoteControlTogglePlayPause:
-                    if Double((self.player?.rate)!) > 0.0 {
-                        self.player?.pause()
-                    } else {
-                        self.player?.play()
-                    }
-
-                case .remoteControlPlay:
-                    self.player?.play()
-
-                case .remoteControlPause:
-                    self.player?.pause()
-
-                default:
-                    print("haven't setup")
-                }
-            }
-        }
-    }
+//    override func remoteControlReceived(with event: UIEvent?) {
+//
+//        print("received Event")
+//
+//        if let event = event {
+//            if event.type == .remoteControl {
+//
+//                switch event.subtype {
+//
+//                case .remoteControlTogglePlayPause:
+//                    if Double((self.player?.rate)!) > 0.0 {
+//                        self.player?.pause()
+//                    } else {
+//                        self.player?.play()
+//                    }
+//
+//                case .remoteControlPlay:
+//                    self.player?.play()
+//
+//                case .remoteControlPause:
+//                    self.player?.pause()
+//
+//                default:
+//                    print("haven't setup")
+//                }
+//            }
+//        }
+//    }
 
     //MARK: Observe changes in AVPlayer
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -999,21 +994,10 @@ class PlayerViewController: AVPlayerViewController {
     @objc func doneButtonPressed(sender: UIButton) {
         
         if doneButton.isEnabled {
-        
-            self.player = nil
+
             print("doneButtonPressed")
         
-            NotificationCenter.default.removeObserver(self)
-        
-            self.toggleHidden()
-        
-            self.navigationController?.popViewController(animated: true)
-            self.navigationController?.setNavigationBarHidden(false, animated: true)
-            
-            if UIDevice.current.orientation.isPortrait == false {
-                print("change to Portrait")
-                AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
-            }
+            exitVideoPlayer()
         }
         
         return
