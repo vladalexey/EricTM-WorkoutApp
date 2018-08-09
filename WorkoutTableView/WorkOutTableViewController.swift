@@ -75,17 +75,17 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         return UITableViewAutomaticDimension
     }
     
-//    override func setEditing(_ editing: Bool, animated: Bool) {
-//        super.setEditing(editing, animated: animated)
-//
-//        tableView.allowsMultipleSelectionDuringEditing = false
-//
-//        if editing {
-//            tableView.setEditing(true, animated: true)
-//        } else {
-//            tableView.setEditing(false, animated: true)
-//        }
-//    }
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+
+        if editing {
+            tableView.setEditing(true, animated: true)
+            self.editButtonItem.title = "Done"
+        } else {
+            tableView.setEditing(false, animated: true)
+            self.editButtonItem.title = "Edit"
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -260,7 +260,8 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     func exitEditModeIfTrue() {
         
         if self.isEditing {
-            tableView.endEditing(true)
+            self.setEditing(false, animated: true)
+            //TODO: Done button still shows after go back from Add Workout
         }
     }
     
