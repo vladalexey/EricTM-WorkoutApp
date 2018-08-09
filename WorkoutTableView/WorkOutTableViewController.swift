@@ -44,9 +44,20 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if UIDevice.current.orientation.isPortrait == false {
-            print("change to Portrait")
-            AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
+        print("check Portrait in Table view")
+        
+        let checkPortraitWorkoutTable = DispatchQueue(label: "checkPortraitWorkoutTable")
+        checkPortraitWorkoutTable.sync {
+            
+            if (self.navigationController?.navigationBar.isHidden)! {
+                self.navigationController?.isNavigationBarHidden = false
+            }
+            
+            print("check Portrait in Table view")
+            if UIApplication.shared.statusBarOrientation.isPortrait == false {
+                print("change to Portrait")
+                AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
+            }
         }
     }
     
@@ -67,6 +78,9 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         return false
     }
     
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask.portrait //TODO: Navigation Bar disappear error after add this line
+    }
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return 250
     }
@@ -271,7 +285,7 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
             
             exitEditModeIfTrue()
             
-            if UIDevice.current.orientation.isPortrait == false {
+            if UIApplication.shared.statusBarOrientation.isPortrait == false {
                 print("change to Portrait")
                 AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
             }

@@ -53,6 +53,10 @@ class PlayerViewController: AVPlayerViewController {
         return UIInterfaceOrientation.landscapeRight
     }
     
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask.landscapeRight
+    }
+    
     override var shouldAutorotate: Bool {
         return false
     }
@@ -218,6 +222,7 @@ class PlayerViewController: AVPlayerViewController {
         tapOnTopView.require(toFail: doubleTapOnTopView)
         
         contentOverlayView?.addGestureRecognizer(tapOnTopView)
+        topView.addGestureRecognizer(tapOnTopView)
         controlView.addGestureRecognizer(doubleTapOnTopView)
         
 //        topView.addGestureRecognizer(doubleTapOnTopView)
@@ -292,10 +297,7 @@ class PlayerViewController: AVPlayerViewController {
             NotificationCenter.default.removeObserver(self)
             self.toggleHidden()
             
-            if UIDevice.current.orientation.isPortrait == false {
-                print("change to Portrait")
-                AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
-            }
+            checkPortrait()
             
             self.navigationController?.popViewController(animated: true)
             self.navigationController?.setNavigationBarHidden(false, animated: true)
@@ -309,12 +311,20 @@ class PlayerViewController: AVPlayerViewController {
         let checkPortrait = DispatchQueue(label: "checkPortrait")
         
         checkPortrait.sync {
+            
+            print("checking Portrait in Player")
         
-            if UIDevice.current.orientation.isPortrait == false {
-                print("change to Portrait")
+            if UIApplication.shared.statusBarOrientation.isPortrait == false {
+                print("changing to portrait")
                 AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
             }
         }
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        
+        checkPortrait()
     }
     
     //MARK: Exit video due to Error
@@ -349,7 +359,7 @@ class PlayerViewController: AVPlayerViewController {
             self.navigationController?.setNavigationBarHidden(false, animated: true)
             
             if UIDevice.current.orientation.isPortrait == false {
-                print("change to Portrait")
+                print("changing to Portrait")
                 AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
             }
         }
@@ -497,7 +507,7 @@ class PlayerViewController: AVPlayerViewController {
     
     @objc func willEnterForeground() {
         
-        if UIDevice.current.orientation.isLandscape == false {
+        if UIApplication.shared.statusBarOrientation.isLandscape == false {
             print("change to Landscape")
             AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.landscapeRight, andRotateTo: UIInterfaceOrientation.landscapeRight)
         }
@@ -655,7 +665,7 @@ class PlayerViewController: AVPlayerViewController {
             
 //            topView.hitTest(point, with: UIGestureRecognizer)
             
-            if controlView.bounds.contains((controlView.convert(point, from: self.view))) {
+            if controlView.bounds.contains(controlView.convert(point, from: self.view)) {
                 
                 print("In control View: Do nothing")
             }
@@ -670,7 +680,6 @@ class PlayerViewController: AVPlayerViewController {
 
                 self.toggleHidden()
             }
-            disappearAnimationControl.isUserInteractionEnabled = false
             
             let reappearAnimationControl = UIViewPropertyAnimator(duration: 0.25, curve: .easeInOut) {
                 
@@ -1223,6 +1232,8 @@ class PlayerViewController: AVPlayerViewController {
         
         self.player = nil
         NotificationCenter.default.removeObserver(self)
+        
+        print("checking Portrait in exiting Player")
     
         checkPortrait()
     }
