@@ -27,7 +27,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="245.66666666666666"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" image="Thumbnail" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BCB-cy-KRg">
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" verticalCompressionResistancePriority="1000" image="Thumbnail" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BCB-cy-KRg">
                                             <rect key="frame" x="14.666666666666657" y="15" width="383.66666666666674" height="215.66666666666666"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -36,17 +36,17 @@
                                                 <constraint firstAttribute="width" secondItem="BCB-cy-KRg" secondAttribute="height" multiplier="383.33:215.66" id="9S8-lf-D3Z"/>
                                             </constraints>
                                         </imageView>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" image="Vignette" translatesAutoresizingMaskIntoConstraints="NO" id="Hha-60-uwu">
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" verticalCompressionResistancePriority="1000" image="Vignette" translatesAutoresizingMaskIntoConstraints="NO" id="Hha-60-uwu">
                                             <rect key="frame" x="15" y="15" width="383.33333333333331" height="215.66666666666666"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="Hha-60-uwu" secondAttribute="height" multiplier="383.33:215.66" id="WZu-N9-uLc"/>
                                             </constraints>
                                         </imageView>
-                                        <stackView opaque="NO" contentMode="scaleAspectFit" axis="vertical" distribution="fillEqually" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="xdX-8R-Uc1">
+                                        <stackView opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" axis="vertical" distribution="equalCentering" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="xdX-8R-Uc1">
                                             <rect key="frame" x="15" y="92" width="384" height="61.666666666666657"/>
                                             <subviews>
-                                                <label autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" text="FULL BODY" textAlignment="center" lineBreakMode="headTruncation" numberOfLines="0" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4dr-hx-h1G" userLabel="Label Exercise">
-                                                    <rect key="frame" x="118" y="0.0" width="148" height="31"/>
+                                                <label autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" text="FULL BODY" textAlignment="center" lineBreakMode="headTruncation" numberOfLines="0" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4dr-hx-h1G" userLabel="Label Exercise">
+                                                    <rect key="frame" x="118" y="0.0" width="148" height="32.333333333333336"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="27"/>
@@ -54,7 +54,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" contentInsetAdjustmentBehavior="never" indicatorStyle="black" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" editable="NO" text="45 MINUTES" textAlignment="center" adjustsFontForContentSizeCategory="YES" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ofy-sn-G2g">
-                                                    <rect key="frame" x="154" y="31" width="76" height="30.666666666666671"/>
+                                                    <rect key="frame" x="154" y="32.333333333333329" width="76" height="29.333333333333329"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <accessibility key="accessibilityConfiguration">
                                                         <accessibilityTraits key="traits" notEnabled="YES"/>
@@ -76,13 +76,13 @@
                                         <constraint firstItem="xdX-8R-Uc1" firstAttribute="leading" secondItem="tei-q8-YQ0" secondAttribute="leading" constant="15" id="Qcv-dr-0mQ"/>
                                         <constraint firstItem="xdX-8R-Uc1" firstAttribute="top" secondItem="tei-q8-YQ0" secondAttribute="top" constant="92" id="W1n-Zc-UKS"/>
                                         <constraint firstAttribute="trailing" secondItem="xdX-8R-Uc1" secondAttribute="trailing" constant="15" id="c7u-oR-BdT"/>
+                                        <constraint firstAttribute="bottom" secondItem="Hha-60-uwu" secondAttribute="bottom" constant="15" id="eN1-z0-3b6"/>
+                                        <constraint firstAttribute="bottom" secondItem="BCB-cy-KRg" secondAttribute="bottom" constant="15" id="ezf-Ub-uJF"/>
                                         <constraint firstItem="BCB-cy-KRg" firstAttribute="leading" secondItem="tei-q8-YQ0" secondAttribute="leading" constant="15" id="fDr-ir-kWF"/>
-                                        <constraint firstItem="Hha-60-uwu" firstAttribute="top" secondItem="tei-q8-YQ0" secondAttribute="top" constant="15" id="jLy-8p-OUh"/>
-                                        <constraint firstAttribute="bottom" secondItem="Hha-60-uwu" secondAttribute="bottom" constant="15" id="jzY-48-xSL"/>
                                         <constraint firstAttribute="bottom" secondItem="xdX-8R-Uc1" secondAttribute="bottom" constant="92" id="pto-rw-B01"/>
                                         <constraint firstAttribute="trailing" secondItem="Hha-60-uwu" secondAttribute="trailing" constant="15" id="qTA-6s-ft1"/>
                                         <constraint firstItem="BCB-cy-KRg" firstAttribute="top" secondItem="tei-q8-YQ0" secondAttribute="top" constant="15" id="sPt-bj-Tk7"/>
-                                        <constraint firstAttribute="bottom" secondItem="BCB-cy-KRg" secondAttribute="bottom" constant="15" id="uhe-d7-65r"/>
+                                        <constraint firstItem="Hha-60-uwu" firstAttribute="top" secondItem="tei-q8-YQ0" secondAttribute="top" constant="15" id="x0m-Sl-ueV"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
