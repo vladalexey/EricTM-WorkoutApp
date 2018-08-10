@@ -117,7 +117,8 @@ class AddWorkoutViewController: UIViewController, UIPickerViewDelegate, UIPicker
         self.tabBarController?.tabBar.layer.shadowColor = UIColor.black.cgColor
         self.tabBarController?.tabBar.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)
         self.tabBarController?.tabBar.layer.shadowRadius = 4.0
-        self.tabBarController?.tabBar.layer.shadowOpacity = 1.0
+        self.tabBarController?.tabBar.layer.shadowOpacity = 0.7
+        self.tabBarController?.tabBar.backgroundColor = UIColor.backgroundColor
     }
     
     func saveWorkout() {

@@ -304,6 +304,8 @@ class PlayerViewController: AVPlayerViewController {
             
             UIApplication.shared.endIgnoringInteractionEvents()
         }
+        
+        UIApplication.shared.endReceivingRemoteControlEvents() // when video ends and app in background
     }
     
     func checkPortrait() {
@@ -311,9 +313,7 @@ class PlayerViewController: AVPlayerViewController {
         let checkPortrait = DispatchQueue(label: "checkPortrait")
         
         checkPortrait.sync {
-            
-            print("checking Portrait in Player")
-        
+
             if UIApplication.shared.statusBarOrientation.isPortrait == false {
                 print("changing to portrait")
                 AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
@@ -330,14 +330,14 @@ class PlayerViewController: AVPlayerViewController {
     //MARK: Exit video due to Error
     func exitVideoPlayerError() {
         
-        print("exit video player")
+        print("[Error] Exit video player")
         
         let alertView = UIAlertController(title: "Error", message: "Cannot load videos", preferredStyle: UIAlertControllerStyle.alert)
 
         let okAction = UIAlertAction(title: "Try again", style: UIAlertActionStyle.default) {
             (result : UIAlertAction) -> Void in
 
-            print("OK")
+            print("[Error] OK")
 
             self.navigationController?.popViewController(animated: true)
             self.navigationController?.setNavigationBarHidden(false, animated: true)
@@ -358,8 +358,8 @@ class PlayerViewController: AVPlayerViewController {
             self.navigationController?.popViewController(animated: true)
             self.navigationController?.setNavigationBarHidden(false, animated: true)
             
-            if UIDevice.current.orientation.isPortrait == false {
-                print("changing to Portrait")
+            if UIApplication.shared.statusBarOrientation.isPortrait == false {
+                print("[Error] exit changing to Portrait")
                 AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
             }
         }
@@ -402,7 +402,7 @@ class PlayerViewController: AVPlayerViewController {
         
         if let currentPlayingItem: AVPlayerItem = self.queuePlayer.currentItem {
             
-            print("[Remote] current playing item")
+            print("[Remote] forward 15")
             if currentPlayingItem != listVideos[2] {
                 
                 let seekDuration = CMTimeMake(15, 1)
@@ -425,7 +425,7 @@ class PlayerViewController: AVPlayerViewController {
                 
                 if currentTime + seekDuration > (self.queuePlayer.currentItem!.duration) && (self.queuePlayer.currentItem! === listVideos[2]) {
                     
-                    print("[Remote] Exit video")
+                    print("[Remote] Exit video when forward 15")
                     exitVideoPlayer()
                     AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
                     
@@ -438,8 +438,6 @@ class PlayerViewController: AVPlayerViewController {
             
             self.queuePlayer.currentItem!.seek(to: currentTime + seekDuration, completionHandler: nil)
             self.queuePlayer.play()
-            
-            print("[Remote] forward15")
         }
     }
     
@@ -508,7 +506,7 @@ class PlayerViewController: AVPlayerViewController {
     @objc func willEnterForeground() {
         
         if UIApplication.shared.statusBarOrientation.isLandscape == false {
-            print("change to Landscape")
+            print("[Enter foreground] change to Landscape")
             AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.landscapeRight, andRotateTo: UIInterfaceOrientation.landscapeRight)
         }
         
@@ -1232,8 +1230,6 @@ class PlayerViewController: AVPlayerViewController {
         
         self.player = nil
         NotificationCenter.default.removeObserver(self)
-        
-        print("checking Portrait in exiting Player")
     
         checkPortrait()
     }

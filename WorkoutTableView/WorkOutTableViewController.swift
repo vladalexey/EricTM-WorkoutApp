@@ -32,13 +32,7 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     var listWorkOut = ["Full", "Upper", "Lower"]
     var workoutLabel = String()
     var workoutCode = String()
-    
-    let backgroundColor = UIColor(
-        red: 0.20,
-        green: 0.20,
-        blue: 0.20,
-        alpha: 1.0
-    )
+
     
     
     override func viewWillAppear(_ animated: Bool) {
@@ -130,7 +124,7 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         
 //         Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         self.navigationItem.rightBarButtonItem = self.editButtonItem
-        self.editButtonItem.tintColor = UIColor.white
+        self.editButtonItem.tintColor = UIColor.lightGray 
     }
 
     override func didReceiveMemoryWarning() {
@@ -186,7 +180,7 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cell.backgroundColor = backgroundColor
+        cell.backgroundColor = UIColor.backgroundColor
 
     }
     
@@ -416,11 +410,11 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         
         self.navigationController?.navigationBar.layer.shadowColor = UIColor.black.cgColor
         self.navigationController?.navigationBar.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)
-        self.navigationController?.navigationBar.layer.shadowRadius = 4.0
-        self.navigationController?.navigationBar.layer.shadowOpacity = 1.0
+        self.navigationController?.navigationBar.layer.shadowRadius = 6.0
+        self.navigationController?.navigationBar.layer.shadowOpacity = 0.3
         
-        self.view.backgroundColor = backgroundColor
-        navigationController?.navigationBar.barTintColor = backgroundColor // color top bar black
+        self.tableView.backgroundColor = UIColor.backgroundColor
+        self.navigationController?.navigationBar.barTintColor = UIColor.backgroundColor // color top bar black
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]  // color top bar text white
         
         //MARK: Setting logo on NavBar
@@ -441,8 +435,10 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         
         self.tabBarController?.tabBar.layer.shadowColor = UIColor.black.cgColor
         self.tabBarController?.tabBar.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)
-        self.tabBarController?.tabBar.layer.shadowRadius = 4.0
-        self.tabBarController?.tabBar.layer.shadowOpacity = 1.0
+        self.tabBarController?.tabBar.layer.shadowRadius = 6.0
+        self.tabBarController?.tabBar.layer.shadowOpacity = 0.3
+        
+        self.tabBarController?.tabBar.barTintColor = UIColor.backgroundColor
     }
     
     override func viewWillDisappear(_ animated: Bool) {

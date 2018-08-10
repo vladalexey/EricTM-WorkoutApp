@@ -14,10 +14,11 @@
         <scene sceneID="lf4-S2-jOz">
             <objects>
                 <tableViewController autoresizesArchivedViewToFullSize="NO" clearsSelectionOnViewWillAppear="NO" id="wr2-0j-NN9" customClass="WorkOutTableViewController" customModule="EricTM" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" autoresizesSubviews="NO" clipsSubviews="YES" contentMode="scaleAspectFit" directionalLockEnabled="YES" showsVerticalScrollIndicator="NO" indicatorStyle="black" delaysContentTouches="NO" bouncesZoom="NO" keyboardDismissMode="interactive" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelection="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="ygC-xK-B4V">
+                    <tableView key="view" autoresizesSubviews="NO" clipsSubviews="YES" contentMode="scaleAspectFit" directionalLockEnabled="YES" showsVerticalScrollIndicator="NO" indicatorStyle="black" delaysContentTouches="NO" bouncesZoom="NO" keyboardDismissMode="interactive" dataMode="prototypes" style="plain" allowsSelectionDuringEditing="YES" allowsMultipleSelection="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="ygC-xK-B4V">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="623"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="separatorColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <prototypes>
                             <tableViewCell autoresizesSubviews="NO" clipsSubviews="YES" contentMode="scaleAspectFit" selectionStyle="none" showsReorderControl="YES" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="WorkOutTableViewCell" rowHeight="246" id="v6V-yt-Ixt" customClass="WorkOutTableViewCell" customModule="EricTM" customModuleProvider="target">
@@ -27,8 +28,8 @@
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="245.66666666666666"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" verticalCompressionResistancePriority="1000" image="Thumbnail" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BCB-cy-KRg">
-                                            <rect key="frame" x="14.666666666666657" y="15" width="383.66666666666674" height="215.66666666666666"/>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="999" image="Thumbnail" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BCB-cy-KRg">
+                                            <rect key="frame" x="14.666666666666657" y="15" width="384" height="215.66666666666666"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="0.0"/>
@@ -36,17 +37,17 @@
                                                 <constraint firstAttribute="width" secondItem="BCB-cy-KRg" secondAttribute="height" multiplier="383.33:215.66" id="9S8-lf-D3Z"/>
                                             </constraints>
                                         </imageView>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" verticalCompressionResistancePriority="1000" image="Vignette" translatesAutoresizingMaskIntoConstraints="NO" id="Hha-60-uwu">
-                                            <rect key="frame" x="15" y="15" width="383.33333333333331" height="215.66666666666666"/>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="999" image="Vignette" translatesAutoresizingMaskIntoConstraints="NO" id="Hha-60-uwu">
+                                            <rect key="frame" x="15" y="15" width="383.66666666666669" height="215.66666666666666"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="Hha-60-uwu" secondAttribute="height" multiplier="383.33:215.66" id="WZu-N9-uLc"/>
                                             </constraints>
                                         </imageView>
-                                        <stackView opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" axis="vertical" distribution="fillEqually" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="xdX-8R-Uc1">
-                                            <rect key="frame" x="15" y="92" width="384" height="61.666666666666657"/>
+                                        <stackView opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="999" axis="vertical" distribution="fillEqually" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="xdX-8R-Uc1">
+                                            <rect key="frame" x="15" y="92" width="383.33333333333331" height="61.666666666666657"/>
                                             <subviews>
                                                 <label autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" text="FULL BODY" textAlignment="center" lineBreakMode="headTruncation" numberOfLines="0" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4dr-hx-h1G" userLabel="Label Exercise">
-                                                    <rect key="frame" x="118" y="0.0" width="148" height="31"/>
+                                                    <rect key="frame" x="117.66666666666666" y="0.0" width="147.99999999999997" height="31"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="27"/>
@@ -54,7 +55,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" contentInsetAdjustmentBehavior="never" indicatorStyle="black" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" editable="NO" text="45 MINUTES" textAlignment="center" adjustsFontForContentSizeCategory="YES" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ofy-sn-G2g">
-                                                    <rect key="frame" x="154" y="31" width="76" height="30.666666666666671"/>
+                                                    <rect key="frame" x="153.66666666666666" y="31" width="76" height="30.666666666666671"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <accessibility key="accessibilityConfiguration">
                                                         <accessibilityTraits key="traits" notEnabled="YES"/>
@@ -66,7 +67,7 @@
                                                 </textView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="width" secondItem="xdX-8R-Uc1" secondAttribute="height" multiplier="383.33:61.6667" id="fIy-UH-hH7"/>
+                                                <constraint firstAttribute="width" secondItem="xdX-8R-Uc1" secondAttribute="height" multiplier="383.33:61.66" id="fIy-UH-hH7"/>
                                             </constraints>
                                         </stackView>
                                     </subviews>
@@ -85,6 +86,7 @@
                                         <constraint firstItem="Hha-60-uwu" firstAttribute="top" secondItem="tei-q8-YQ0" secondAttribute="top" constant="15" id="x0m-Sl-ueV"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <connections>
                                     <outlet property="Vignette" destination="Hha-60-uwu" id="dFU-xf-l26"/>
                                     <outlet property="minuteWorkout" destination="ofy-sn-G2g" id="jYD-6g-LgI"/>
@@ -101,7 +103,7 @@
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Eric TM" id="5Gy-XB-ppf">
                         <barButtonItem key="leftBarButtonItem" systemItem="add" id="baa-B8-i5j">
-                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
                                 <segue destination="sTX-M2-nwG" kind="presentation" identifier="addWorkout" id="VSw-FY-6m3"/>
                             </connections>
@@ -180,7 +182,7 @@
             <objects>
                 <viewController id="IXm-20-kWN" customClass="NutritionViewController" customModule="EricTM" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="gMu-11-9Oy">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="623"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="CXV-DA-jpo"/>
@@ -196,7 +198,7 @@
             <objects>
                 <viewController id="jPu-Dk-ZQG" customClass="PersonalizeViewController" customModule="EricTM" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="q1q-Nk-YYB">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="623"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="Eg6-TZ-wTJ"/>
@@ -211,11 +213,9 @@
         <scene sceneID="mhd-YJ-eIx">
             <objects>
                 <tabBarController modalTransitionStyle="flipHorizontal" id="97A-TD-XhJ" customClass="TabBarViewController" customModule="EricTM" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBar key="tabBar" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" barStyle="black" shadowImage="12" id="4Jv-EN-DxD">
+                    <tabBar key="tabBar" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" barStyle="black" translucent="NO" shadowImage="12" itemPositioning="fill" id="4Jv-EN-DxD">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" red="0.15686274509803921" green="0.15686274509803921" blue="0.15686274509803921" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="barTintColor" red="0.15686274509803921" green="0.15686274509803921" blue="0.15686274509803921" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="selectedImageTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     </tabBar>
                     <connections>
@@ -228,13 +228,16 @@
             </objects>
             <point key="canvasLocation" x="-1657" y="1137"/>
         </scene>
-        <!--Workouts-->
+        <!--Navigation Controller-->
         <scene sceneID="QFg-Gc-102">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="8va-wy-z1f" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Workouts" image="Dumbell" id="JKI-A4-til"/>
+                    <tabBarItem key="tabBarItem" title="" image="Dumbell" id="JKI-A4-til">
+                        <inset key="imageInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="-10"/>
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="2"/>
+                    </tabBarItem>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="sGn-5E-TO7">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="sGn-5E-TO7">
                         <rect key="frame" x="0.0" y="20" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -247,13 +250,15 @@
             </objects>
             <point key="canvasLocation" x="-343" y="236"/>
         </scene>
-        <!--Personalize-->
+        <!--Navigation Controller-->
         <scene sceneID="taR-kb-f7w">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="mXt-Jl-N84" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Personalize" image="Human" landscapeImage="1" id="cF3-H6-6ou"/>
+                    <tabBarItem key="tabBarItem" title="" image="Human" landscapeImage="1" id="cF3-H6-6ou">
+                        <inset key="imageInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="-10"/>
+                    </tabBarItem>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ao9-Ur-rEW">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="ao9-Ur-rEW">
                         <rect key="frame" x="0.0" y="20" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -266,13 +271,15 @@
             </objects>
             <point key="canvasLocation" x="-343" y="994"/>
         </scene>
-        <!--Nutrition-->
+        <!--Navigation Controller-->
         <scene sceneID="nI7-TE-PCz">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="hm9-vn-KIs" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Nutrition" image="Culinary" id="8Pr-g0-T03"/>
+                    <tabBarItem key="tabBarItem" title="" image="Culinary" id="8Pr-g0-T03">
+                        <inset key="imageInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="-10"/>
+                    </tabBarItem>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="j11-5f-ogk">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="j11-5f-ogk">
                         <rect key="frame" x="0.0" y="20" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>

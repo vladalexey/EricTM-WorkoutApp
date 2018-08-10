@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "WorkoutTableView/WorkOutTableViewController.swift"
-            timestampString = "555517618.857345"
+            timestampString = "555587897.7443759"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "97"
-            endingLineNumber = "97"
+            startingLineNumber = "91"
+            endingLineNumber = "91"
             landmarkName = "setEditing(_:animated:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "WorkoutTableView/WorkOutTableViewController.swift"
-            timestampString = "555517618.857751"
+            timestampString = "555587897.744481"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "277"
-            endingLineNumber = "277"
+            startingLineNumber = "271"
+            endingLineNumber = "271"
             landmarkName = "exitEditModeIfTrue()"
             landmarkType = "7">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "WorkoutTableView/WorkOutTableViewController.swift"
-            timestampString = "555517618.8581049"
+            timestampString = "555587897.744559"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "286"
-            endingLineNumber = "286"
+            startingLineNumber = "280"
+            endingLineNumber = "280"
             landmarkName = "prepare(for:sender:)"
             landmarkType = "7">
          </BreakpointContent>

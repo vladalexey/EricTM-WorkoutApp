@@ -23,6 +23,8 @@ class WorkOutTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
 //        self.layoutIfNeeded()
+        
+        self.Vignette.alpha = 0.6
     }
     
     override func didMoveToSuperview() {
