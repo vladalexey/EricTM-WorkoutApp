@@ -208,7 +208,6 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         performSegue(withIdentifier: "VideoPlayer", sender: self)
         print(listWorkOut)
         print(workoutLabel)
-
     }
 
 //    override func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {

@@ -101,7 +101,7 @@ class PlayerViewController: AVPlayerViewController {
     let activityIndicatorView: UIActivityIndicatorView = {
         let aiv = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
         aiv.translatesAutoresizingMaskIntoConstraints = false
-        aiv.startAnimating()
+//        aiv.startAnimating()
         return aiv
     }()
     
@@ -291,8 +291,11 @@ class PlayerViewController: AVPlayerViewController {
         
         exitVideo.sync {
             
+            UIApplication.shared.endReceivingRemoteControlEvents() // when video ends and app in background
+            
             self.player?.pause()
             self.player = nil
+            self.queuePlayer.removeAllItems()
             
             NotificationCenter.default.removeObserver(self)
             self.toggleHidden()
@@ -304,8 +307,6 @@ class PlayerViewController: AVPlayerViewController {
             
             UIApplication.shared.endIgnoringInteractionEvents()
         }
-        
-        UIApplication.shared.endReceivingRemoteControlEvents() // when video ends and app in background
     }
     
     func checkPortrait() {
@@ -402,8 +403,9 @@ class PlayerViewController: AVPlayerViewController {
         
         if let currentPlayingItem: AVPlayerItem = self.queuePlayer.currentItem {
             
-            print("[Remote] forward 15")
             if currentPlayingItem != listVideos[2] {
+                
+                print("[Remote] forward 15")
                 
                 let seekDuration = CMTimeMake(15, 1)
                 let currentTime: CMTime = (self.queuePlayer.currentItem!.currentTime())
@@ -442,20 +444,24 @@ class PlayerViewController: AVPlayerViewController {
     }
     
     @objc func backward15Remote() {
-        let seekDuration = CMTimeMake(15, 1)
-        let currentTime: CMTime = (self.queuePlayer.currentItem!.currentTime())
-        if currentTime - seekDuration > kCMTimeZero {                   // check if seek duration is less than 15 seconds
-            
-            let newTime = currentTime - seekDuration
-            self.queuePlayer.currentItem!.seek(to: newTime, completionHandler: nil)
-            self.queuePlayer.play()
-            
-        } else {
-            
-            self.queuePlayer.currentItem!.seek(to: kCMTimeZero, completionHandler: nil)
-            self.queuePlayer.play()
-        }
         
+        let seekDuration = CMTimeMake(15, 1)
+        if let currentItem: AVPlayerItem = self.queuePlayer.currentItem {
+            
+            let currentTime: CMTime = currentItem.currentTime()
+            
+            if currentTime - seekDuration > kCMTimeZero {                   // check if remaining time is less than 15 seconds
+                
+                let newTime = currentTime - seekDuration
+                self.queuePlayer.currentItem!.seek(to: newTime, completionHandler: nil)
+                self.queuePlayer.play()
+                
+            } else {
+                
+                self.queuePlayer.currentItem!.seek(to: kCMTimeZero, completionHandler: nil)
+                self.queuePlayer.play()
+            }
+        }
         print("[Remote] backward15")
     }
     @objc func didEnterBackground() {
@@ -490,7 +496,16 @@ class PlayerViewController: AVPlayerViewController {
             let commandCenter = MPRemoteCommandCenter.shared()
             
             commandCenter.playCommand.isEnabled = true
-            commandCenter.playCommand.addTarget(self, action: #selector(playRemote))
+//            commandCenter.playCommand.addTarget(self, action: #selector(playRemote))
+
+            commandCenter.playCommand.addTarget(handler: { (event) in    // Begin playing the current track
+                
+                if self.queuePlayer.rate == 0 {
+                    self.queuePlayer.play()
+                    print("[Remote] play")
+                }
+                
+                return MPRemoteCommandHandlerStatus.success})
             
             commandCenter.skipForwardCommand.isEnabled = true
             commandCenter.skipForwardCommand.addTarget(self, action: #selector(forward15Remote))
@@ -499,24 +514,37 @@ class PlayerViewController: AVPlayerViewController {
             commandCenter.skipBackwardCommand.addTarget(self, action: #selector(backward15Remote))
             
             commandCenter.pauseCommand.isEnabled = true
-            commandCenter.pauseCommand.addTarget(self, action: #selector(pauseRemote))
+//            commandCenter.pauseCommand.addTarget(self, action: #selector(pauseRemote))
+            
+            commandCenter.pauseCommand.addTarget(handler: { (event) in    // Begin playing the current track
+                
+                if self.queuePlayer.rate > 0 {
+                    self.queuePlayer.pause()
+                    print("[Remote] pause")
+                }
+                return MPRemoteCommandHandlerStatus.success})
         }
     }
     
     @objc func willEnterForeground() {
         
-        if UIApplication.shared.statusBarOrientation.isLandscape == false {
-            print("[Enter foreground] change to Landscape")
-            AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.landscapeRight, andRotateTo: UIInterfaceOrientation.landscapeRight)
+        let enterForeground = DispatchQueue(label: "enterForeground")
+        enterForeground.sync {
+            
+            print("[Remote] entering foreground + end receiving")
+            UIApplication.shared.endReceivingRemoteControlEvents()
+            
+            self.player = queuePlayer
+            self.player?.play()
+            
+            if UIApplication.shared.statusBarOrientation.isLandscape == false {
+                print("[Enter foreground] change to Landscape")
+                AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.landscapeRight, andRotateTo: UIInterfaceOrientation.landscapeRight)
+            }
+            
+            playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
+            playerPlaying = true
         }
-        
-        UIApplication.shared.endReceivingRemoteControlEvents()
-        
-        self.player = queuePlayer
-        self.player?.play()
-        
-        playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
-        playerPlaying = true
     }
     
     func getVideos(videoName: String) {
@@ -579,11 +607,11 @@ class PlayerViewController: AVPlayerViewController {
             
             let item1 = AVPlayerItem(url: localURL)
             
-            item1.addObserver(self, forKeyPath: "loadedTimeRanges", options: NSKeyValueObservingOptions.new, context: nil)
-            item1.addObserver(self, forKeyPath: "playbackBufferEmpty", options: NSKeyValueObservingOptions.new, context: nil)
-            item1.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: NSKeyValueObservingOptions.new, context: nil)
-            item1.addObserver(self, forKeyPath: "playbackBufferFull", options: NSKeyValueObservingOptions.new, context: nil)
-            item1.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions.new, context: nil)
+//            item1.addObserver(self, forKeyPath: "loadedTimeRanges", options: NSKeyValueObservingOptions.new, context: nil)
+//            item1.addObserver(self, forKeyPath: "playbackBufferEmpty", options: NSKeyValueObservingOptions.new, context: nil)
+//            item1.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: NSKeyValueObservingOptions.new, context: nil)
+//            item1.addObserver(self, forKeyPath: "playbackBufferFull", options: NSKeyValueObservingOptions.new, context: nil)
+//            item1.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions.new, context: nil)
             
             self.queuePlayer.insert(item1, after: nil)
             self.listVideos.append(item1)
@@ -852,7 +880,7 @@ class PlayerViewController: AVPlayerViewController {
     
     @objc func playerDidPlayToEnd() {
         
-        if player?.currentItem == listVideos[2] {
+        if self.queuePlayer.currentItem == listVideos[2] || self.player?.currentItem == listVideos[2] {
             
             exitVideoPlayer()
             return
@@ -869,14 +897,14 @@ class PlayerViewController: AVPlayerViewController {
         
         if type == .began {
             // Interruption began, take appropriate actions
-            queuePlayer.pause()
+            self.queuePlayer.pause()
             
         } else if type == .ended {
             if let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt {
                 let options = AVAudioSessionInterruptionOptions(rawValue: optionsValue)
                 if options.contains(.shouldResume) {
                     // Interruption Ended - playback should resume
-                    queuePlayer.play()
+                    self.queuePlayer.play()
                 } else {
                     // Interruption Ended - playback should NOT resume
                 }
@@ -897,11 +925,11 @@ class PlayerViewController: AVPlayerViewController {
         super.viewDidAppear(animated)
         
         self.player?.play()
-
-        UIApplication.shared.beginReceivingRemoteControlEvents()
-        self.becomeFirstResponder()
-        
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = [MPMediaItemPropertyTitle: "Eric Workout"]
+//
+//        UIApplication.shared.beginReceivingRemoteControlEvents()
+//        self.becomeFirstResponder()
+//
+//        MPNowPlayingInfoCenter.default().nowPlayingInfo = [MPMediaItemPropertyTitle: "Eric Workout [ViewDidLoad]"]
     }
     
     override func viewDidLoad() {
@@ -918,6 +946,7 @@ class PlayerViewController: AVPlayerViewController {
         self.player = self.queuePlayer
         
         NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
+        NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.queuePlayer.currentItem)
         
         NotificationCenter.default.addObserver(self, selector: #selector(audioInterruptionHandle), name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
 
@@ -1229,6 +1258,7 @@ class PlayerViewController: AVPlayerViewController {
         super.viewWillDisappear(animated)
         
         self.player = nil
+        self.queuePlayer.removeAllItems()
         NotificationCenter.default.removeObserver(self)
     
         checkPortrait()
@@ -1241,6 +1271,7 @@ class PlayerViewController: AVPlayerViewController {
     
     deinit {
         self.player = nil
+        self.queuePlayer.removeAllItems()
         NotificationCenter.default.removeObserver(self)
     }
 
