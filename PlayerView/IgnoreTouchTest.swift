@@ -12,7 +12,7 @@ import AVKit
 
 class IgnoreTouchView : UIView {
     
-    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+//    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
 
 //        for gesture: UIGestureRecognizer in self.gestureRecognizers! {
 //
@@ -21,16 +21,16 @@ class IgnoreTouchView : UIView {
 //            }
 //        }
 //        return true
-    
-        for view: UIView in self.subviews {
-
-            let point: CGPoint = view.convert(point, from: self)
-            if view.point(inside: point, with: event) {
-                return true
-            }
-        }
-        
-        
-        return false
-    }
+//
+//        for view: UIView in self.subviews {
+//
+//            let point: CGPoint = view.convert(point, from: self)
+//            if view.point(inside: point, with: event) {
+//                return true
+//            }
+//        }
+//
+//
+//        return false
+//    }
 }

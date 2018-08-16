@@ -69,37 +69,27 @@ class PlayerViewController: AVPlayerViewController {
         routepickerview.tintColor = UIColor.white
         routepickerview.backgroundColor = UIColor.clear
         
+        routepickerview.isUserInteractionEnabled = true
+        
         return routepickerview
     }()
     
-    let controlView: UIImageView = {
+    let controlView: UIView = {
         
-        let controlview = UIImageView(image: UIImage(named: "PLAYER BG"))
+        let controlview = UIImageView(image: UIImage(named: "PLAYER BG 2"))
         controlview.translatesAutoresizingMaskIntoConstraints = false
-        controlview.alpha = 0.5
+//        controlview.alpha = 0.5
 
-//        TODO: controlview.addBlurEffect()
-
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.regular)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = controlview.bounds
+//        controlview.addBlurEffect()
+//        controlview.roundedAllCorner()
         
-        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight] // for supporting device rotation
-        controlview.sendSubview(toBack: blurEffectView)
-        
-        controlview.roundedAllCorner()
+        controlview.isUserInteractionEnabled = true
         
         return controlview
     }()
     
     let topView: IgnoreTouchView = {
         let topview = IgnoreTouchView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.height, height: UIScreen.main.bounds.width))
-        topview.backgroundColor = UIColor.clear
-        return topview
-    }()
-    
-    let topView2: UIView = {
-        let topview = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.height, height: UIScreen.main.bounds.width))
         topview.backgroundColor = UIColor.clear
         return topview
     }()
@@ -121,7 +111,10 @@ class PlayerViewController: AVPlayerViewController {
         button.setImage(UIImage(named: "X"), for: .normal)
         button.tintColor = UIColor.white
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(doneButtonPressed(sender:)), for: UIControlEvents.touchUpInside)
+        button.addTarget(self, action: #selector(doneButtonPressed), for: UIControlEvents.touchUpInside)
+        
+        button.isUserInteractionEnabled = true
+        
         return button
         }()
     
@@ -135,7 +128,10 @@ class PlayerViewController: AVPlayerViewController {
         button.setImage(UIImage(named: "PAUSE"), for: .normal)
         button.tintColor = UIColor.white
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(playButtonPressed(sender:)), for: UIControlEvents.touchUpInside)
+        button.addTarget(self, action: #selector(playButtonPressed), for: UIControlEvents.touchUpInside)
+        
+        button.isUserInteractionEnabled = true
+        
         return button
     }()
     
@@ -149,7 +145,9 @@ class PlayerViewController: AVPlayerViewController {
         button.setImage(UIImage(named: "15FORWARD"), for: .normal)
         button.tintColor = UIColor.white
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(forward15(sender:)), for: UIControlEvents.touchUpInside)
+        button.addTarget(self, action: #selector(forward15Pressed), for: UIControlEvents.touchUpInside)
+        
+        button.isUserInteractionEnabled = true
         
         return button
     }()
@@ -164,7 +162,9 @@ class PlayerViewController: AVPlayerViewController {
         button.setImage(UIImage(named: "15BACKWARD"), for: .normal)
         button.tintColor = UIColor.white
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(backward15(sender:)), for: UIControlEvents.touchUpInside)
+        button.addTarget(self, action: #selector(backward15Pressed), for: UIControlEvents.touchUpInside)
+        
+        button.isUserInteractionEnabled = true
         
         return button
     }()
@@ -179,7 +179,9 @@ class PlayerViewController: AVPlayerViewController {
         button.setImage(UIImage(named: "FORWARD"), for: .normal)
         button.tintColor = UIColor.white
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(forward(sender:)), for: UIControlEvents.touchUpInside)
+        button.addTarget(self, action: #selector(forwardPressed), for: UIControlEvents.touchUpInside)
+        
+        button.isUserInteractionEnabled = true
         
         return button
     }()
@@ -194,7 +196,9 @@ class PlayerViewController: AVPlayerViewController {
         button.setImage(UIImage(named: "BACKWARD"), for: .normal)
         button.tintColor = UIColor.white
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(backward(sender:)), for: UIControlEvents.touchUpInside)
+        button.addTarget(self, action: #selector(backwardPressed), for: UIControlEvents.touchUpInside)
+        
+        button.isUserInteractionEnabled = true
         
         return button
     }()
@@ -203,73 +207,72 @@ class PlayerViewController: AVPlayerViewController {
         
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         
-        self.contentOverlayView?.addSubview(topView)
+//        self.contentOverlayView?.addSubview(topView)
         
         let tapOnTopView = UITapGestureRecognizer(target: self, action: #selector(PlayerViewController.handleTap))
         
         let doubleTapOnTopView = UITapGestureRecognizer(target: self, action: #selector(PlayerViewController.handleDoubleTap))
         doubleTapOnTopView.numberOfTapsRequired = 2
-        
-//        contentOverlayView?.isUserInteractionEnabled = false
-//        
-//        self.topView.addSubview(topView2)
-//        topView2.centerXAnchor.constraint(equalTo: topView.centerXAnchor).isActive = true
-//        topView2.centerYAnchor.constraint(equalTo: topView.centerYAnchor).isActive = true
 
-        self.topView.addSubview(activityIndicatorView)
+        self.contentOverlayView?.addSubview(activityIndicatorView)
         activityIndicatorView.centerXAnchor.constraint(equalTo: (contentOverlayView?.centerXAnchor)!).isActive = true
         activityIndicatorView.centerYAnchor.constraint(equalTo: (contentOverlayView?.centerYAnchor)!).isActive = true
         
-        
-        self.topView.insertSubview(controlView, aboveSubview: topView)
-        controlView.alpha = 0.5
+        self.contentOverlayView?.addSubview(controlView)
+
         controlView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         controlView.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 20).isActive = true
         controlView.centerXAnchor.constraint(equalTo: (contentOverlayView?.centerXAnchor)!).isActive = true
         
-        controlView.addGestureRecognizer(doubleTapOnTopView)
-        
-        topView.addGestureRecognizer(tapOnTopView)
-        topView.addGestureRecognizer(doubleTapOnTopView)
+        contentOverlayView?.addGestureRecognizer(tapOnTopView)
         
         tapOnTopView.require(toFail: doubleTapOnTopView)
         
-        self.topView.insertSubview(playButton, aboveSubview: controlView)
+        self.controlView.addSubview(playButton)
+        self.controlView.bringSubview(toFront: playButton)
         playButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         playButton.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         playButton.centerXAnchor.constraint(equalTo: (contentOverlayView?.centerXAnchor)!).isActive = true
         
         
-        self.topView.insertSubview(doneButton, aboveSubview: controlView)
+        self.controlView.addSubview(doneButton)
+        self.controlView.bringSubview(toFront: doneButton)
         doneButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         doneButton.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         doneButton.leftAnchor.constraint(equalTo: (controlView.leftAnchor), constant: 20).isActive = true
         
-        self.topView.insertSubview(backward15, aboveSubview: controlView)
+        self.controlView.addSubview(backward15)
+        self.controlView.bringSubview(toFront: backward15)
         backward15.heightAnchor.constraint(equalToConstant: 40).isActive = true
         backward15.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         backward15.rightAnchor.constraint(equalTo: (playButton.centerXAnchor), constant: -60).isActive = true
         
         
-        self.topView.insertSubview(forward15, aboveSubview: controlView)
+        self.controlView.addSubview(forward15)
+        self.controlView.bringSubview(toFront: forward15)
         forward15.heightAnchor.constraint(equalToConstant: 40).isActive = true
         forward15.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         forward15.leftAnchor.constraint(equalTo: (playButton.centerXAnchor), constant: 60).isActive = true
         
-        self.topView.insertSubview(forward, aboveSubview: controlView)
+        self.controlView.addSubview(forward)
+        self.controlView.bringSubview(toFront: forward)
         forward.heightAnchor.constraint(equalToConstant: 40).isActive = true
         forward.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         forward.leftAnchor.constraint(equalTo: (playButton.centerXAnchor), constant: 140).isActive = true
         
-        self.topView.insertSubview(backward, aboveSubview: controlView)
+        self.controlView.addSubview(backward)
+        self.controlView.bringSubview(toFront: backward)
         backward.heightAnchor.constraint(equalToConstant: 40).isActive = true
         backward.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         backward.rightAnchor.constraint(equalTo: (playButton.centerXAnchor), constant: -140).isActive = true
         
-        self.topView.addSubview(routePickerView)
+        self.controlView.addSubview(routePickerView)
+        self.controlView.bringSubview(toFront: routePickerView)
         routePickerView.heightAnchor.constraint(equalToConstant: 40).isActive = true
         routePickerView.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         routePickerView.rightAnchor.constraint(equalTo: controlView.rightAnchor, constant: -20).isActive = true
+        
+        controlView.addGestureRecognizer(doubleTapOnTopView)
     }
     
     
@@ -690,15 +693,43 @@ class PlayerViewController: AVPlayerViewController {
             let point = tap.location(in: self.view)
             
             if controlView.bounds.contains(controlView.convert(point, from: self.view)) {
+                print("[Handle Double Tap] invalidate in ctrl view")
                 
                 timerTest.invalidate()
                 enableInteract()
                 
-                print("[Handle Double Tap] invalidate in ctrl view")
-                
                 setTimer()
             }
-        
+            
+            if playButton.bounds.contains(playButton.convert(point, from: self.view)) {
+                print("[Handle Double Tap] PlayPause")
+                playButtonPressed()
+            }
+            
+            if doneButton.bounds.contains(doneButton.convert(point, from: self.view)) {
+                print("[Handle Double Tap] doneButton")
+                doneButtonPressed()
+            }
+            
+            if backward15.bounds.contains(backward15.convert(point, from: self.view)) {
+                print("[Handle Double Tap] Backward15")
+                backward15Pressed()
+            }
+            
+            if backward.bounds.contains(backward.convert(point, from: self.view)) {
+                print("[Handle Double Tap] Backward")
+                backwardPressed()
+            }
+            
+            if forward15.bounds.contains(forward15.convert(point, from: self.view)) {
+                print("[Handle Double Tap] Forward15")
+                forward15Pressed()
+            }
+            
+            if routePickerView.bounds.contains(routePickerView.convert(point, from: self.view)) {
+                print("[Handle Double Tap] routePickerView")
+                airplayButton()
+            }
         }
     }
     
@@ -756,7 +787,7 @@ class PlayerViewController: AVPlayerViewController {
                 timerTest.invalidate()
                 enableInteract()
 
-                print("[Handle Tap] invalidate in ctrl view")
+                print("[Handle Tap] Invalidate in ctrl view")
                 
                 setTimer()
 
@@ -865,7 +896,7 @@ class PlayerViewController: AVPlayerViewController {
             
             self.showPlayDoneButton = true
             
-            self.controlView.alpha = 0.5
+            self.controlView.alpha = 1.0
             self.playButton.alpha = 1.0
             self.doneButton.alpha = 1.0
             self.forward15.alpha = 1.0
@@ -1010,7 +1041,7 @@ class PlayerViewController: AVPlayerViewController {
     }
     
     //MARK: Done button
-    @objc func doneButtonPressed(sender: UIButton) {
+    @objc func doneButtonPressed() {
         
         if doneButton.isEnabled {
 
@@ -1023,7 +1054,7 @@ class PlayerViewController: AVPlayerViewController {
     }
     
     //MARK: Play button
-    @objc func playButtonPressed(sender: UIButton) {
+    @objc func playButtonPressed() {
         
         timerTest.invalidate()
         
@@ -1048,7 +1079,7 @@ class PlayerViewController: AVPlayerViewController {
     }
     
     //MARK: Forward 15 seconds selected
-    @objc func forward15(sender: UIButton) {
+    @objc func forward15Pressed() {
         
         timerTest.invalidate()
         
@@ -1087,7 +1118,7 @@ class PlayerViewController: AVPlayerViewController {
     }
     
     //MARK: Backward 15 seconds selected
-    @objc func backward15(sender: UIButton) {
+    @objc func backward15Pressed() {
         
         timerTest.invalidate()
         
@@ -1122,7 +1153,7 @@ class PlayerViewController: AVPlayerViewController {
     }
     
     //MARK: Forward selected
-    @objc func forward(sender: UIButton) {
+    @objc func forwardPressed() {
         
         timerTest.invalidate()
         
@@ -1169,7 +1200,7 @@ class PlayerViewController: AVPlayerViewController {
     }
     
     //MARK: Backward selected
-    @objc func backward(sender: UIButton) {
+    @objc func backwardPressed() {
         
         timerTest.invalidate()
         
@@ -1222,7 +1253,7 @@ class PlayerViewController: AVPlayerViewController {
         return
     }
     
-    @objc func airplayButton(sender: UIButton) {
+    @objc func airplayButton() {
 
         print("[Airplay] airplayButtonPressed")
     
