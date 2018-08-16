@@ -72,13 +72,13 @@ class PlayerViewController: AVPlayerViewController {
         return routepickerview
     }()
     
-    let controlView: IgnoreTouchView = {
+    let controlView: UIImageView = {
         
-        let controlview = IgnoreTouchView(image: UIImage(named: "PLAYER BG"))
+        let controlview = UIImageView(image: UIImage(named: "PLAYER BG"))
         controlview.translatesAutoresizingMaskIntoConstraints = false
         controlview.alpha = 0.5
 
-        //        TODO: controlview.addBlurEffect()
+//        TODO: controlview.addBlurEffect()
 
         let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.regular)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
@@ -92,7 +92,13 @@ class PlayerViewController: AVPlayerViewController {
         return controlview
     }()
     
-    let topView: UIView = {
+    let topView: IgnoreTouchView = {
+        let topview = IgnoreTouchView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.height, height: UIScreen.main.bounds.width))
+        topview.backgroundColor = UIColor.clear
+        return topview
+    }()
+    
+    let topView2: UIView = {
         let topview = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.height, height: UIScreen.main.bounds.width))
         topview.backgroundColor = UIColor.clear
         return topview
@@ -193,21 +199,6 @@ class PlayerViewController: AVPlayerViewController {
         return button
     }()
     
-    //MARK: Airplay button init
-    lazy var airplay: UIButton = {
-        
-        let button = UIButton(type: .system)
-        
-        button.contentEdgeInsets = UIEdgeInsets(top: 9, left: 9, bottom: 9, right: 9)
-        
-        button.setImage(UIImage(named: "AIRPLAY"), for: .normal)
-        button.tintColor = UIColor.white
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(airplayButton(sender:)), for: UIControlEvents.touchUpInside)  //TODO: Airplay function
-        
-        return button
-    }()
-    
     func setupUI() {
         
         self.navigationController?.setNavigationBarHidden(true, animated: true)
@@ -219,69 +210,68 @@ class PlayerViewController: AVPlayerViewController {
         let doubleTapOnTopView = UITapGestureRecognizer(target: self, action: #selector(PlayerViewController.handleDoubleTap))
         doubleTapOnTopView.numberOfTapsRequired = 2
         
-        tapOnTopView.require(toFail: doubleTapOnTopView)
-        
-        contentOverlayView?.addGestureRecognizer(tapOnTopView)
-        topView.addGestureRecognizer(tapOnTopView)
-        controlView.addGestureRecognizer(doubleTapOnTopView)
-        
-//        topView.addGestureRecognizer(doubleTapOnTopView)
+//        contentOverlayView?.isUserInteractionEnabled = false
+//        
+//        self.topView.addSubview(topView2)
+//        topView2.centerXAnchor.constraint(equalTo: topView.centerXAnchor).isActive = true
+//        topView2.centerYAnchor.constraint(equalTo: topView.centerYAnchor).isActive = true
 
-        self.contentOverlayView?.addSubview(activityIndicatorView)
+        self.topView.addSubview(activityIndicatorView)
         activityIndicatorView.centerXAnchor.constraint(equalTo: (contentOverlayView?.centerXAnchor)!).isActive = true
         activityIndicatorView.centerYAnchor.constraint(equalTo: (contentOverlayView?.centerYAnchor)!).isActive = true
         
         
-        self.contentOverlayView?.insertSubview(controlView, aboveSubview: topView)
+        self.topView.insertSubview(controlView, aboveSubview: topView)
         controlView.alpha = 0.5
         controlView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         controlView.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 20).isActive = true
         controlView.centerXAnchor.constraint(equalTo: (contentOverlayView?.centerXAnchor)!).isActive = true
         
+        controlView.addGestureRecognizer(doubleTapOnTopView)
         
-        self.contentOverlayView?.insertSubview(playButton, aboveSubview: controlView)
+        topView.addGestureRecognizer(tapOnTopView)
+        topView.addGestureRecognizer(doubleTapOnTopView)
+        
+        tapOnTopView.require(toFail: doubleTapOnTopView)
+        
+        self.topView.insertSubview(playButton, aboveSubview: controlView)
         playButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         playButton.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         playButton.centerXAnchor.constraint(equalTo: (contentOverlayView?.centerXAnchor)!).isActive = true
         
         
-        self.contentOverlayView?.insertSubview(doneButton, aboveSubview: controlView)
+        self.topView.insertSubview(doneButton, aboveSubview: controlView)
         doneButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         doneButton.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         doneButton.leftAnchor.constraint(equalTo: (controlView.leftAnchor), constant: 20).isActive = true
         
-        self.contentOverlayView?.insertSubview(backward15, aboveSubview: controlView)
+        self.topView.insertSubview(backward15, aboveSubview: controlView)
         backward15.heightAnchor.constraint(equalToConstant: 40).isActive = true
         backward15.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         backward15.rightAnchor.constraint(equalTo: (playButton.centerXAnchor), constant: -60).isActive = true
         
         
-        self.contentOverlayView?.insertSubview(forward15, aboveSubview: controlView)
+        self.topView.insertSubview(forward15, aboveSubview: controlView)
         forward15.heightAnchor.constraint(equalToConstant: 40).isActive = true
         forward15.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         forward15.leftAnchor.constraint(equalTo: (playButton.centerXAnchor), constant: 60).isActive = true
         
-        self.contentOverlayView?.insertSubview(forward, aboveSubview: controlView)
+        self.topView.insertSubview(forward, aboveSubview: controlView)
         forward.heightAnchor.constraint(equalToConstant: 40).isActive = true
         forward.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         forward.leftAnchor.constraint(equalTo: (playButton.centerXAnchor), constant: 140).isActive = true
         
-        self.contentOverlayView?.insertSubview(backward, aboveSubview: controlView)
+        self.topView.insertSubview(backward, aboveSubview: controlView)
         backward.heightAnchor.constraint(equalToConstant: 40).isActive = true
         backward.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         backward.rightAnchor.constraint(equalTo: (playButton.centerXAnchor), constant: -140).isActive = true
         
-//        self.contentOverlayView?.insertSubview(airplay, aboveSubview: controlView)
-//        airplay.heightAnchor.constraint(equalToConstant: 40).isActive = true
-//        airplay.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
-//        airplay.rightAnchor.constraint(equalTo: (controlView.rightAnchor), constant: -20).isActive = true
-        
-        self.contentOverlayView?.addSubview(routePickerView)
+        self.topView.addSubview(routePickerView)
         routePickerView.heightAnchor.constraint(equalToConstant: 40).isActive = true
         routePickerView.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         routePickerView.rightAnchor.constraint(equalTo: controlView.rightAnchor, constant: -20).isActive = true
-        
     }
+    
     
     func exitVideoPlayer() {
         
@@ -316,7 +306,7 @@ class PlayerViewController: AVPlayerViewController {
         checkPortrait.sync {
 
             if UIApplication.shared.statusBarOrientation.isPortrait == false {
-                print("changing to portrait")
+                print("[Screen Orientation] changing to portrait")
                 AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
             }
         }
@@ -466,64 +456,65 @@ class PlayerViewController: AVPlayerViewController {
     }
     @objc func didEnterBackground() {
         
-        print("[Remote] Enter background")
-        
         let beginRemoteControl = DispatchQueue(label: "beginRemoteControl")
         
-        beginRemoteControl.sync {
-            
-            print("[Remote] Begin syncing")
-            
-            self.player = nil
-            
-            UIApplication.shared.beginReceivingRemoteControlEvents()
-            self.becomeFirstResponder()
-            
-            var nowPlayingInfo = [String: Any]()
-            nowPlayingInfo[MPMediaItemPropertyTitle] = "Eric Workout"
-            
-            if let image = UIImage(named: "iTunesArtwork") {
-                nowPlayingInfo[MPMediaItemPropertyArtwork] =
-                    MPMediaItemArtwork(boundsSize: image.size) { size in
-                        return image
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        
+            beginRemoteControl.sync {
+                
+                print("[Remote] Enter background + Begin syncing")
+                
+                self.player = nil
+                
+                UIApplication.shared.beginReceivingRemoteControlEvents()
+                self.becomeFirstResponder()
+                
+                var nowPlayingInfo = [String: Any]()
+                nowPlayingInfo[MPMediaItemPropertyTitle] = "Eric Workout"
+                
+                if let image = UIImage(named: "iTunesArtwork") {
+                    nowPlayingInfo[MPMediaItemPropertyArtwork] =
+                        MPMediaItemArtwork(boundsSize: image.size) { size in
+                            return image
+                    }
                 }
-            }
-            
-            MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
-            
-            
-            // Get the shared MPRemoteCommandCenter
-            let commandCenter = MPRemoteCommandCenter.shared()
-            
-            commandCenter.playCommand.isEnabled = true
-//            commandCenter.playCommand.addTarget(self, action: #selector(playRemote))
+                
+                MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+                
+                
+                // Get the shared MPRemoteCommandCenter
+                let commandCenter = MPRemoteCommandCenter.shared()
+                
+                commandCenter.playCommand.isEnabled = true
+    //            commandCenter.playCommand.addTarget(self, action: #selector(playRemote))
 
-            commandCenter.playCommand.addTarget(handler: { (event) in    // Begin playing the current track
+                commandCenter.playCommand.addTarget(handler: { (event) in    // Begin playing the current track
+                    
+                    if self.queuePlayer.rate == 0 {
+                        self.queuePlayer.play()
+                        print("[Remote] play")
+                    }
+                    
+                    return MPRemoteCommandHandlerStatus.success})
                 
-                if self.queuePlayer.rate == 0 {
-                    self.queuePlayer.play()
-                    print("[Remote] play")
-                }
+                commandCenter.skipForwardCommand.isEnabled = true
+                commandCenter.skipForwardCommand.addTarget(self, action: #selector(self.forward15Remote))
                 
-                return MPRemoteCommandHandlerStatus.success})
-            
-            commandCenter.skipForwardCommand.isEnabled = true
-            commandCenter.skipForwardCommand.addTarget(self, action: #selector(forward15Remote))
-            
-            commandCenter.skipBackwardCommand.isEnabled = true
-            commandCenter.skipBackwardCommand.addTarget(self, action: #selector(backward15Remote))
-            
-            commandCenter.pauseCommand.isEnabled = true
-//            commandCenter.pauseCommand.addTarget(self, action: #selector(pauseRemote))
-            
-            commandCenter.pauseCommand.addTarget(handler: { (event) in    // Begin playing the current track
+                commandCenter.skipBackwardCommand.isEnabled = true
+                commandCenter.skipBackwardCommand.addTarget(self, action: #selector(self.backward15Remote))
                 
-                if self.queuePlayer.rate > 0 {
-                    self.queuePlayer.pause()
-                    print("[Remote] pause")
-                }
-                return MPRemoteCommandHandlerStatus.success})
-        }
+                commandCenter.pauseCommand.isEnabled = true
+    //            commandCenter.pauseCommand.addTarget(self, action: #selector(pauseRemote))
+                
+                commandCenter.pauseCommand.addTarget(handler: { (event) in    // Begin playing the current track
+                    
+                    if self.queuePlayer.rate > 0 {
+                        self.queuePlayer.pause()
+                        print("[Remote] pause")
+                    }
+                    return MPRemoteCommandHandlerStatus.success})
+            }
+//        }
     }
     
     @objc func willEnterForeground() {
@@ -582,7 +573,7 @@ class PlayerViewController: AVPlayerViewController {
             
             let localURL = documentsURL.appendingPathComponent(videoName)
 
-            // Download to the local filesystem
+            // Download to the local system
             downloadTask1.child(videoName).write(toFile: localURL) { url, error in
                 if let error = error {
                     
@@ -606,12 +597,6 @@ class PlayerViewController: AVPlayerViewController {
             let localURL = documentsURL.appendingPathComponent(videoName)
             
             let item1 = AVPlayerItem(url: localURL)
-            
-//            item1.addObserver(self, forKeyPath: "loadedTimeRanges", options: NSKeyValueObservingOptions.new, context: nil)
-//            item1.addObserver(self, forKeyPath: "playbackBufferEmpty", options: NSKeyValueObservingOptions.new, context: nil)
-//            item1.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: NSKeyValueObservingOptions.new, context: nil)
-//            item1.addObserver(self, forKeyPath: "playbackBufferFull", options: NSKeyValueObservingOptions.new, context: nil)
-//            item1.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions.new, context: nil)
             
             self.queuePlayer.insert(item1, after: nil)
             self.listVideos.append(item1)
@@ -668,7 +653,6 @@ class PlayerViewController: AVPlayerViewController {
         queuePlayer.removeAllItems()
         
         for index in 0...numberOfWorkout {
-            
             let videoName = workoutCode + String(random[index]) + ".mp4"  // get random workout label
             
             downloadQueue.sync {
@@ -678,23 +662,43 @@ class PlayerViewController: AVPlayerViewController {
 
         self.player? = self.queuePlayer
         
+        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
+        
+        self.player = self.queuePlayer
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
+        NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.queuePlayer.currentItem)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(audioInterruptionHandle), name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
+
+        
         self.player?.play()
     }
     
     @objc func handleDoubleTap(tap: UIGestureRecognizer) {
         
-        print("double Tap")
+        print("[Handle Double Tap] double Tap")
         
         if tap.state == UIGestureRecognizerState.ended {
             
             let point = tap.location(in: self.view)
             
-//            topView.hitTest(point, with: UIGestureRecognizer)
-            
             if controlView.bounds.contains(controlView.convert(point, from: self.view)) {
                 
-                print("In control View: Do nothing")
+                timerTest.invalidate()
+                enableInteract()
+                
+                print("[Handle Double Tap] invalidate in ctrl view")
+                
+                setTimer()
             }
+        
         }
     }
     
@@ -729,7 +733,7 @@ class PlayerViewController: AVPlayerViewController {
 
             if checkInView(points: arrayPointButton) == false && self.topView.bounds.contains(pointInTopView) && !(self.controlView.bounds.contains(pointInCtrlView)) && self.showPlayDoneButton {
 
-                print("[handleTap] Tap is inside topView -> Disappear")
+                print("[Handle Tap] Tap is inside topView -> Disappear")
                 
                 disableHighlighted()
                 disappearAnimationControl.startAnimation()
@@ -741,18 +745,18 @@ class PlayerViewController: AVPlayerViewController {
                 timerTest.invalidate()
                 enableInteract()
 
-                print("[handleTap] Tap is inside topView -> Reappear")
+                print("[Handle Tap] Tap is inside topView -> Reappear")
             
                 reappearAnimationControl.startAnimation()
                 
                 setTimer()
                 
-            } else if checkInView(points: arrayPointButton) == true && self.topView.bounds.contains(pointInTopView) && self.showPlayDoneButton == true {
+            } else if (checkInView(points: arrayPointButton) == true) || (self.topView.bounds.contains(pointInTopView) && self.showPlayDoneButton == true) {
                 
                 timerTest.invalidate()
                 enableInteract()
 
-                print("invalidate in ctrl view")
+                print("[Handle Tap] invalidate in ctrl view")
                 
                 setTimer()
 
@@ -791,9 +795,8 @@ class PlayerViewController: AVPlayerViewController {
         self.forward15.isEnabled = true
         self.forward.isEnabled = true
         self.routePickerView.isUserInteractionEnabled = true
-        self.airplay.isEnabled = true
         
-        print("enable interact")
+        print("[Handle Tap] enable interact")
     }
     
     @objc func disableInteract() {
@@ -805,9 +808,8 @@ class PlayerViewController: AVPlayerViewController {
         self.forward15.isEnabled = false
         self.forward.isEnabled = false
         self.routePickerView.isUserInteractionEnabled = false
-        self.airplay.isEnabled = false
         
-        print("disable interact")
+        print("[Handle Tap] disable interact")
     }
     
     func disableHighlighted() {
@@ -818,7 +820,6 @@ class PlayerViewController: AVPlayerViewController {
         self.backward.adjustsImageWhenHighlighted = false
         self.forward15.adjustsImageWhenHighlighted = false
         self.forward.adjustsImageWhenHighlighted = false
-        self.airplay.adjustsImageWhenHighlighted = false
     }
     
     @objc func initHiddenAuto() {
@@ -835,7 +836,7 @@ class PlayerViewController: AVPlayerViewController {
         disappearAnimationControl.isUserInteractionEnabled = false
         disappearAnimationControl.startAnimation()
         
-        print("disappear auto")
+        print("[Handle Tap] disappear auto")
 
     }
     
@@ -852,7 +853,6 @@ class PlayerViewController: AVPlayerViewController {
             self.backward15.alpha = 0.0
             self.forward.alpha = 0.0
             self.backward.alpha = 0.0
-            self.airplay.alpha = 0.0
             self.routePickerView.alpha = 0.0
         }
     }
@@ -872,7 +872,6 @@ class PlayerViewController: AVPlayerViewController {
             self.backward15.alpha = 1.0
             self.forward.alpha = 1.0
             self.backward.alpha = 1.0
-            self.airplay.alpha = 1.0
             self.routePickerView.alpha = 1.0
         }
         return
@@ -925,34 +924,17 @@ class PlayerViewController: AVPlayerViewController {
         super.viewDidAppear(animated)
         
         self.player?.play()
-//
-//        UIApplication.shared.beginReceivingRemoteControlEvents()
-//        self.becomeFirstResponder()
-//
-//        MPNowPlayingInfoCenter.default().nowPlayingInfo = [MPMediaItemPropertyTitle: "Eric Workout [ViewDidLoad]"]
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
-        
-        self.player = self.queuePlayer
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
-        NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.queuePlayer.currentItem)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(audioInterruptionHandle), name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
-
+    
         self.showsPlaybackControls = false
 
         setTimer()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
+        NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.queuePlayer.currentItem)
 
     }
 
@@ -994,11 +976,11 @@ class PlayerViewController: AVPlayerViewController {
             
             if player?.status == .readyToPlay {
 
-                print("ready to play")
+                print("[Notification] ready to play")
                 
                 if playerPlaying {
                     
-                    print("playing")
+                    print("[Notification] playing")
                     player?.play()
                 }
             }
@@ -1011,17 +993,18 @@ class PlayerViewController: AVPlayerViewController {
             
             activityIndicatorView.startAnimating()
 
-            print("playbackBufferEmpty")
+            print("[Notification] playbackBufferEmpty")
 
         case "playbackLikelyToKeepUp":
             activityIndicatorView.stopAnimating()
-            print("playbackLikelyToKeepUp")
+            print("[Notification] playbackLikelyToKeepUp")
 
         case "playbackBufferFull":
             activityIndicatorView.stopAnimating()
-            print("playbackBufferFull")
+            print("[Notification] playbackBufferFull")
   
         default:
+            print("[Notification] Haven't setup")
             return
         }
     }
@@ -1031,7 +1014,7 @@ class PlayerViewController: AVPlayerViewController {
         
         if doneButton.isEnabled {
 
-            print("doneButtonPressed")
+            print("[Done] doneButtonPressed")
         
             exitVideoPlayer()
         }
@@ -1050,12 +1033,12 @@ class PlayerViewController: AVPlayerViewController {
                 self.player?.play()
                 playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
                 playerPlaying = true
-                print("playButtonPressed")
+                print("[Play] playButtonPressed")
             } else {
                 self.player?.pause()
                 playButton.setImage(UIImage(named: "PLAY"), for: .normal)
                 playerPlaying = false
-                print("pauseButtonPressed")
+                print("[Pause] pauseButtonPressed")
             }
         }
         
@@ -1090,7 +1073,7 @@ class PlayerViewController: AVPlayerViewController {
         
             self.player?.seek(to: currentTime + seekDuration)
         
-            print("forward15ButtonPressed")
+            print("[Forward] forward15ButtonPressed")
         
             self.player?.play()
             playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
@@ -1126,7 +1109,7 @@ class PlayerViewController: AVPlayerViewController {
                 self.player?.seek(to: kCMTimeZero)
             }
         
-            print("backward15ButtonPressed")
+            print("[Backward 15] backward15ButtonPressed")
         
             self.player?.play()
             playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
@@ -1159,7 +1142,7 @@ class PlayerViewController: AVPlayerViewController {
                         self.queuePlayer.advanceToNextItem()
                         self.player?.seek(to: kCMTimeZero)
                         
-                        print("forwardButtonPressed")
+                        print("[Forward] forwardButtonPressed")
                         
                         self.player?.play()
                         self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
@@ -1174,7 +1157,7 @@ class PlayerViewController: AVPlayerViewController {
                 }
             }
         
-            print("forwardButtonPressed")
+            print("[Forward] forwardButtonPressed")
         
             self.player?.play()
             self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
@@ -1193,7 +1176,6 @@ class PlayerViewController: AVPlayerViewController {
         if backward.isEnabled {
         
             for item in listVideos {                    // get and insert previous video into queue
-                
                 if item == self.player?.currentItem {
                     
                     let currentIndex = listVideos.index(of: item)
@@ -1209,16 +1191,16 @@ class PlayerViewController: AVPlayerViewController {
                         let newItem = listVideos[moveBackIndex]
                         
                         self.queuePlayer.replaceCurrentItem(with: newItem)
-                        print("replace video successfully")
+                        print("[Backward] replace video successfully")
                         
                         self.player?.pause()
                         
                         self.queuePlayer.insert(currentItem!, after: newItem)
-                        print("inserted curent video")
+                        print("[Backward] inserted curent video")
 
                         self.player?.seek(to: kCMTimeZero)
                         
-                        print("backwardButtonPressed")
+                        print("[Backward] backwardButtonPressed")
                         
                         self.player?.play()
                         self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
@@ -1241,17 +1223,14 @@ class PlayerViewController: AVPlayerViewController {
     }
     
     @objc func airplayButton(sender: UIButton) {
-        
-        if airplay.isEnabled {
-        
-            print("airplayButtonPressed")
-        
-            self.contentOverlayView?.addSubview(routePickerView)
-        
-            routePickerView.heightAnchor.constraint(equalToConstant: 40).isActive = true
-            routePickerView.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
-            routePickerView.rightAnchor.constraint(equalTo: (controlView.rightAnchor), constant: -20).isActive = true
-        }
+
+        print("[Airplay] airplayButtonPressed")
+    
+        self.contentOverlayView?.addSubview(routePickerView)
+    
+        routePickerView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        routePickerView.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
+        routePickerView.rightAnchor.constraint(equalTo: (controlView.rightAnchor), constant: -20).isActive = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -1266,13 +1245,14 @@ class PlayerViewController: AVPlayerViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        UIApplication.shared.endReceivingRemoteControlEvents()
+        
     }
     
     deinit {
         self.player = nil
         self.queuePlayer.removeAllItems()
         NotificationCenter.default.removeObserver(self)
+        UIApplication.shared.endReceivingRemoteControlEvents()
     }
 
     override func didReceiveMemoryWarning() {

@@ -37,9 +37,7 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        print("check Portrait in Table view")
-        
+
         let checkPortraitWorkoutTable = DispatchQueue(label: "checkPortraitWorkoutTable")
         checkPortraitWorkoutTable.sync {
             
@@ -47,23 +45,14 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
                 self.navigationController?.isNavigationBarHidden = false
             }
             
-            print("check Portrait in Table view")
+            print("[Screen Orientation] check Portrait in Table view")
             if UIApplication.shared.statusBarOrientation.isPortrait == false {
-                print("change to Portrait")
+                print("[Screen Orientation] change to Portrait")
                 AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
             }
         }
     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-    }
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-//        tableView.reloadData()
-    }
-    
+
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
         return UIInterfaceOrientation.portrait
     }
@@ -122,7 +111,6 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
 //        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(WorkOutTableViewController.longPressCellHandle))
 //        tableView.addGestureRecognizer(longPress)
         
-//         Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         self.navigationItem.rightBarButtonItem = self.editButtonItem
         self.editButtonItem.tintColor = UIColor.lightGray 
     }
@@ -150,11 +138,7 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return workOutVideos.count
     }
-
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-
-    }
-    
+ 
     override func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {
 //        tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
     }
@@ -193,12 +177,7 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         // Return false if you do not want the specified item to be editable.
         return true
     }
-    
-    override func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
-//        tableView.reloadRows(at: [indexPath!], with: .automatic)
-//        tableView.updateConstraints()
-    }
-    
+
     // Override to handle actions in cell touch
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // initialization code
@@ -210,10 +189,6 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         print(workoutLabel)
     }
 
-//    override func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
-//        tableView.reloadRows(at: [indexPath!], with: UITableViewRowAnimation.automatic)
-//    }
-    
     func alertOnDefaultWorkouts() {
         
         let alertView = UIAlertController(title: "Error", message: "Cannot delete default", preferredStyle: UIAlertControllerStyle.alert)
@@ -246,12 +221,8 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
                 
                 print(self.workOutVideos[indexPath.row].name + " deleted")
                 
-//                tableView.beginUpdates()
-                
                 self.workOutVideos.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .fade)
-                
-//                tableView.endUpdates()
                 
             } else {
                 
@@ -268,7 +239,6 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         
         if self.isEditing {
             self.setEditing(false, animated: true)
-            //TODO: Done button still shows after go back from Add Workout
         }
     }
     

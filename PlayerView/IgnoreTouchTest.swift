@@ -10,13 +10,27 @@ import Foundation
 import UIKit
 import AVKit
 
-class IgnoreTouchView : UIImageView {
+class IgnoreTouchView : UIView {
     
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        let hitView = super.hitTest(point, with: event)
-        if hitView == self {
-            return nil
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+
+//        for gesture: UIGestureRecognizer in self.gestureRecognizers! {
+//
+//            if gesture.numberOfTouches == 2 && gesture.state == .ended {
+//               return false
+//            }
+//        }
+//        return true
+    
+        for view: UIView in self.subviews {
+
+            let point: CGPoint = view.convert(point, from: self)
+            if view.point(inside: point, with: event) {
+                return true
+            }
         }
-        return hitView
+        
+        
+        return false
     }
 }
