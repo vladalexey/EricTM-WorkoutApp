@@ -35,6 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
             let _ = try AVAudioSession.sharedInstance().setActive(true)
+            print("[Remote] Set audio session Playback + setActive")
         } catch let error as NSError {
             print("an error occurred when audio session category.\n \(error)")
         }

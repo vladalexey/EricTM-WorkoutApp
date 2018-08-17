@@ -138,10 +138,6 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return workOutVideos.count
     }
- 
-    override func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {
-//        tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
-    }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
@@ -165,7 +161,6 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.backgroundColor = UIColor.backgroundColor
-
     }
     
     override func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
@@ -185,8 +180,6 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         myIndex = indexPath.row
         workoutLabel = workOutVideos[indexPath.row].workoutLabel
         performSegue(withIdentifier: "VideoPlayer", sender: self)
-        print(listWorkOut)
-        print(workoutLabel)
     }
 
     func alertOnDefaultWorkouts() {

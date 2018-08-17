@@ -10,7 +10,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "WorkoutTableView/WorkOutTableViewController.swift"
-            timestampString = "556018339.497576"
+            timestampString = "556087944.446411"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "80"
@@ -26,12 +26,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "WorkoutTableView/WorkOutTableViewController.swift"
-            timestampString = "556018339.497892"
+            timestampString = "556087944.4469121"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "241"
             endingLineNumber = "241"
-            landmarkName = "exitEditModeIfTrue()"
+            landmarkName = "prepare(for:sender:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -42,7 +42,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "WorkoutTableView/WorkOutTableViewController.swift"
-            timestampString = "556018339.4979531"
+            timestampString = "556087944.447196"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "249"
@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PlayerView/PlayerViewController.swift"
-            timestampString = "556085526.705614"
+            timestampString = "556175312.673033"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "487"
-            endingLineNumber = "487"
+            startingLineNumber = "495"
+            endingLineNumber = "495"
             landmarkName = "didEnterBackground()"
             landmarkType = "7">
          </BreakpointContent>
@@ -74,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PlayerView/PlayerViewController.swift"
-            timestampString = "556085526.706502"
+            timestampString = "556175312.673382"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "493"
-            endingLineNumber = "493"
+            startingLineNumber = "501"
+            endingLineNumber = "501"
             landmarkName = "didEnterBackground()"
             landmarkType = "7">
             <Locations>
@@ -90,12 +90,12 @@
                   moduleName = "EricTM"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/PhanQuan_CVA/Documents/GitHub/EricTM/PlayerView/PlayerViewController.swift"
-                  timestampString = "556018339.765496"
+                  timestampString = "556171469.2861691"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "491"
-                  endingLineNumber = "491"
-                  offsetFromSymbolStart = "1413">
+                  startingLineNumber = "502"
+                  endingLineNumber = "502"
+                  offsetFromSymbolStart = "1800">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
@@ -105,12 +105,12 @@
                   moduleName = "EricTM"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/PhanQuan_CVA/Documents/GitHub/EricTM/PlayerView/PlayerViewController.swift"
-                  timestampString = "556018339.768773"
+                  timestampString = "556171469.287901"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "493"
-                  endingLineNumber = "493"
-                  offsetFromSymbolStart = "28">
+                  startingLineNumber = "504"
+                  endingLineNumber = "504"
+                  offsetFromSymbolStart = "32">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -122,12 +122,44 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PlayerView/PlayerViewController.swift"
-            timestampString = "556085526.7072099"
+            timestampString = "556175312.67362"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "445"
             endingLineNumber = "445"
             landmarkName = "backward15Remote()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PlayerView/PlayerViewController.swift"
+            timestampString = "556175312.673865"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "994"
+            endingLineNumber = "994"
+            landmarkName = "remoteControlReceived(with:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PlayerView/PlayerViewController.swift"
+            timestampString = "556175312.6741149"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "998"
+            endingLineNumber = "998"
+            landmarkName = "remoteControlReceived(with:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

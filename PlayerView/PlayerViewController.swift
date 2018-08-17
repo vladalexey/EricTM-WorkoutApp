@@ -467,6 +467,14 @@ class PlayerViewController: AVPlayerViewController {
                 
                 print("[Remote] Enter background + Begin syncing")
                 
+                do {
+                    try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+                    let _ = try AVAudioSession.sharedInstance().setActive(true)
+                    print("[Remote] Set audio session Playback + setActive")
+                } catch let error as NSError {
+                    print("an error occurred when audio session category.\n \(error)")
+                }
+                
                 self.player = nil
                 
                 UIApplication.shared.beginReceivingRemoteControlEvents()
@@ -969,34 +977,42 @@ class PlayerViewController: AVPlayerViewController {
 
     }
 
-//    override func remoteControlReceived(with event: UIEvent?) {
-//
-//        print("received Event")
-//
-//        if let event = event {
-//            if event.type == .remoteControl {
-//
-//                switch event.subtype {
-//
-//                case .remoteControlTogglePlayPause:
-//                    if Double((self.player?.rate)!) > 0.0 {
-//                        self.player?.pause()
-//                    } else {
-//                        self.player?.play()
-//                    }
-//
-//                case .remoteControlPlay:
-//                    self.player?.play()
-//
-//                case .remoteControlPause:
-//                    self.player?.pause()
-//
-//                default:
-//                    print("haven't setup")
-//                }
-//            }
-//        }
-//    }
+    override func remoteControlReceived(with event: UIEvent?) {
+
+        if let event = event {
+            
+            if event.type == .remoteControl {
+
+                print("[Remote Received] Event \(event)")
+                
+                switch event.subtype {
+
+                case .remoteControlPlay:
+                    print("[Remote Received] Play")
+                    playButtonPressed()
+
+                case .remoteControlPause:
+                    print("[Remote Received] Pause")
+                    playButtonPressed()
+
+                case .remoteControlNextTrack:
+                    print("[Remote Received] Forward")
+                    forward.isEnabled = true
+                    forwardPressed()
+                    forward.isEnabled = false
+                    
+                case .remoteControlPreviousTrack:
+                    print("[Remote Received] Backward")
+                    backward.isEnabled = true
+                    backwardPressed()
+                    backward.isEnabled = false
+                    
+                default:
+                    print("[Remote Received] haven't setup")
+                }
+            }
+        }
+    }
 
     //MARK: Observe changes in AVPlayer
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
