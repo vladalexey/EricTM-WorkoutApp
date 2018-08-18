@@ -25,6 +25,7 @@ let global = Global()
 class PlayerViewController: AVPlayerViewController {
     
     var timerTest = Timer()
+    var sendMetadataTimer = Timer()
     
     var videoReference: StorageReference {
         return Storage.storage().reference()
@@ -457,11 +458,34 @@ class PlayerViewController: AVPlayerViewController {
         }
         print("[Remote] backward15")
     }
+    
+    @objc func setNowPlayingInfo() {
+        
+        var nowPlayingInfo = [String: Any]()
+        nowPlayingInfo[MPMediaItemPropertyTitle] = "Eric Workout"
+        
+        if let image = UIImage(named: "iTunesArtwork") {
+            nowPlayingInfo[MPMediaItemPropertyArtwork] =
+                MPMediaItemArtwork(boundsSize: image.size) { size in
+                    return image
+            }
+        }
+        
+        guard let currentVideo = self.queuePlayer.currentItem
+            else {return}
+        
+        nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = currentVideo.currentTime().seconds
+        nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = currentVideo.duration.seconds
+        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = player?.rate
+        
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+    }
+    
     @objc func didEnterBackground() {
         
-        let beginRemoteControl = DispatchQueue(label: "beginRemoteControl")
+        sendMetadataTimer = Timer.scheduledTimer(timeInterval: TimeInterval(0.5), target: self, selector: #selector(setNowPlayingInfo), userInfo: nil, repeats: true)
         
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        let beginRemoteControl = DispatchQueue(label: "beginRemoteControl")
         
             beginRemoteControl.sync {
                 
@@ -479,19 +503,6 @@ class PlayerViewController: AVPlayerViewController {
                 
                 UIApplication.shared.beginReceivingRemoteControlEvents()
                 self.becomeFirstResponder()
-                
-                var nowPlayingInfo = [String: Any]()
-                nowPlayingInfo[MPMediaItemPropertyTitle] = "Eric Workout"
-                
-                if let image = UIImage(named: "iTunesArtwork") {
-                    nowPlayingInfo[MPMediaItemPropertyArtwork] =
-                        MPMediaItemArtwork(boundsSize: image.size) { size in
-                            return image
-                    }
-                }
-                
-                MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
-                
                 
                 // Get the shared MPRemoteCommandCenter
                 let commandCenter = MPRemoteCommandCenter.shared()
@@ -525,7 +536,8 @@ class PlayerViewController: AVPlayerViewController {
                     }
                     return MPRemoteCommandHandlerStatus.success})
             }
-//        }
+        
+        sendMetadataTimer.fire()
     }
     
     @objc func willEnterForeground() {
@@ -547,6 +559,9 @@ class PlayerViewController: AVPlayerViewController {
             playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
             playerPlaying = true
         }
+        
+        sendMetadataTimer.invalidate()
+
     }
     
     func getVideos(videoName: String) {
@@ -1299,7 +1314,6 @@ class PlayerViewController: AVPlayerViewController {
         self.player = nil
         self.queuePlayer.removeAllItems()
         NotificationCenter.default.removeObserver(self)
-        UIApplication.shared.endReceivingRemoteControlEvents()
     }
 
     override func didReceiveMemoryWarning() {

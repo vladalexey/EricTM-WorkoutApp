@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PlayerView/PlayerViewController.swift"
-            timestampString = "556175312.673033"
+            timestampString = "556256810.739293"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "495"
-            endingLineNumber = "495"
+            startingLineNumber = "511"
+            endingLineNumber = "511"
             landmarkName = "didEnterBackground()"
             landmarkType = "7">
          </BreakpointContent>
@@ -74,59 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PlayerView/PlayerViewController.swift"
-            timestampString = "556175312.673382"
+            timestampString = "556256810.73973"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "501"
-            endingLineNumber = "501"
-            landmarkName = "didEnterBackground()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in EricTM.PlayerViewController.didEnterBackground() -&gt; ()"
-                  moduleName = "EricTM"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/PhanQuan_CVA/Documents/GitHub/EricTM/PlayerView/PlayerViewController.swift"
-                  timestampString = "556171469.2861691"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "502"
-                  endingLineNumber = "502"
-                  offsetFromSymbolStart = "1800">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (__ObjC.MPRemoteCommandEvent) -&gt; __C.MPRemoteCommandHandlerStatus in closure #1 () -&gt; () in EricTM.PlayerViewController.didEnterBackground() -&gt; ()"
-                  moduleName = "EricTM"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/PhanQuan_CVA/Documents/GitHub/EricTM/PlayerView/PlayerViewController.swift"
-                  timestampString = "556171469.287901"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "504"
-                  endingLineNumber = "504"
-                  offsetFromSymbolStart = "32">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PlayerView/PlayerViewController.swift"
-            timestampString = "556175312.67362"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "445"
-            endingLineNumber = "445"
+            startingLineNumber = "446"
+            endingLineNumber = "446"
             landmarkName = "backward15Remote()"
             landmarkType = "7">
          </BreakpointContent>
@@ -138,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PlayerView/PlayerViewController.swift"
-            timestampString = "556175312.673865"
+            timestampString = "556256810.740009"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "994"
-            endingLineNumber = "994"
+            startingLineNumber = "1006"
+            endingLineNumber = "1006"
             landmarkName = "remoteControlReceived(with:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -154,11 +106,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PlayerView/PlayerViewController.swift"
-            timestampString = "556175312.6741149"
+            timestampString = "556256810.740291"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "998"
-            endingLineNumber = "998"
+            startingLineNumber = "1010"
+            endingLineNumber = "1010"
             landmarkName = "remoteControlReceived(with:)"
             landmarkType = "7">
          </BreakpointContent>
