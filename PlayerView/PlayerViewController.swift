@@ -26,6 +26,7 @@ class PlayerViewController: AVPlayerViewController {
     
     var timerTest = Timer()
     var sendMetadataTimer = Timer()
+    var nowPlayingInfo = [String: Any]()
     
     var videoReference: StorageReference {
         return Storage.storage().reference()
@@ -384,11 +385,13 @@ class PlayerViewController: AVPlayerViewController {
     
     @objc func playRemote() {
         self.queuePlayer.play()
+        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = 1.0
         print("[Remote] play")
     }
     
     @objc func pauseRemote() {
         self.queuePlayer.pause()
+        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = 0.0
         print("[Remote] pause")
         
     }
@@ -460,8 +463,7 @@ class PlayerViewController: AVPlayerViewController {
     }
     
     @objc func setNowPlayingInfo() {
-        
-        var nowPlayingInfo = [String: Any]()
+    
         nowPlayingInfo[MPMediaItemPropertyTitle] = "Eric Workout"
         
         if let image = UIImage(named: "iTunesArtwork") {
@@ -476,14 +478,14 @@ class PlayerViewController: AVPlayerViewController {
         
         nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = currentVideo.currentTime().seconds
         nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = currentVideo.duration.seconds
-        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = player?.rate
+        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = self.queuePlayer.rate
         
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }
     
     @objc func didEnterBackground() {
         
-        sendMetadataTimer = Timer.scheduledTimer(timeInterval: TimeInterval(0.5), target: self, selector: #selector(setNowPlayingInfo), userInfo: nil, repeats: true)
+        sendMetadataTimer = Timer.scheduledTimer(timeInterval: TimeInterval(0.1), target: self, selector: #selector(setNowPlayingInfo), userInfo: nil, repeats: true)
         
         let beginRemoteControl = DispatchQueue(label: "beginRemoteControl")
         
