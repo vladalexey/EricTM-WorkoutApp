@@ -481,6 +481,8 @@ class PlayerViewController: AVPlayerViewController {
         nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = self.queuePlayer.rate
         
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+        
+        
     }
     
     @objc func didEnterBackground() {
@@ -537,6 +539,8 @@ class PlayerViewController: AVPlayerViewController {
                         print("[Remote] pause")
                     }
                     return MPRemoteCommandHandlerStatus.success})
+                
+                commandCenter.changePlaybackPositionCommand.isEnabled = false  // disable user interaction to change    
             }
         
         sendMetadataTimer.fire()
