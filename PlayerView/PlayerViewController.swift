@@ -540,7 +540,7 @@ class PlayerViewController: AVPlayerViewController {
                     }
                     return MPRemoteCommandHandlerStatus.success})
                 
-                commandCenter.changePlaybackPositionCommand.isEnabled = false  // disable user interaction to change    
+                commandCenter.changePlaybackPositionCommand.isEnabled = false  // disable user interaction to change
             }
         
         sendMetadataTimer.fire()
@@ -793,33 +793,45 @@ class PlayerViewController: AVPlayerViewController {
 
             if checkInView(points: arrayPointButton) == false && self.topView.bounds.contains(pointInTopView) && !(self.controlView.bounds.contains(pointInCtrlView)) && self.showPlayDoneButton {
 
-                print("[Handle Tap] Tap is inside topView -> Disappear")
+                let disableInteractManualQueue = DispatchQueue(label: "disableInteractManualQueue")
                 
-                disableHighlighted()
-                disappearAnimationControl.startAnimation()
+                disableInteractManualQueue.sync {
+                    print("[Handle Tap] Tap is inside topView -> Disappear")
+                    
+                    disableHighlighted()
+                    disappearAnimationControl.startAnimation()
 
-                timerTest.invalidate()
+                    timerTest.invalidate()
+                }
 
             } else if (self.topView.bounds.contains(pointInTopView)) && self.showPlayDoneButton != true {
                 
-                timerTest.invalidate()
-                enableInteract()
-
-                print("[Handle Tap] Tap is inside topView -> Reappear")
-            
-                reappearAnimationControl.startAnimation()
+                let enableInteractQueue = DispatchQueue(label: "enableInteractQueue")
                 
-                setTimer()
+                enableInteractQueue.sync {
+                    timerTest.invalidate()
+                    enableInteract()
+
+                    print("[Handle Tap] Tap is inside topView -> Reappear")
+                
+                    reappearAnimationControl.startAnimation()
+                    
+                    setTimer()
+                }
                 
             } else if (checkInView(points: arrayPointButton) == true) || (self.topView.bounds.contains(pointInTopView) && self.showPlayDoneButton == true) {
                 
-                timerTest.invalidate()
-                enableInteract()
-
-                print("[Handle Tap] Invalidate in ctrl view")
+                let disableInteractQueue = DispatchQueue(label: "disableInteractQueue")
                 
-                setTimer()
-
+                disableInteractQueue.sync {
+                    
+                    timerTest.invalidate()
+                    enableInteract()
+                    
+                    print("[Handle Tap] Invalidate in ctrl view")
+                    
+                    setTimer()
+                }
             }
         }
     }
@@ -884,19 +896,24 @@ class PlayerViewController: AVPlayerViewController {
     
     @objc func initHiddenAuto() {
         
-        disableInteract()
-        disableHighlighted()
+        let disableInteractAutoQueue = DispatchQueue(label: "disableInteractAutoQueue")
+        
+        disableInteractAutoQueue.sync {
+        
+            disableInteract()
+            disableHighlighted()
 
-        let disappearAnimationControl = UIViewPropertyAnimator(duration: 0.25, curve: .easeInOut) {
+            let disappearAnimationControl = UIViewPropertyAnimator(duration: 0.25, curve: .easeInOut) {
+                
+                self.toggleHidden()
+                self.disableHighlighted()
+            }
             
-            self.toggleHidden()
-            self.disableHighlighted()
+            disappearAnimationControl.isUserInteractionEnabled = false
+            disappearAnimationControl.startAnimation()
+            
+            print("[Handle Tap] disappear auto")
         }
-        
-        disappearAnimationControl.isUserInteractionEnabled = false
-        disappearAnimationControl.startAnimation()
-        
-        print("[Handle Tap] disappear auto")
 
     }
     
