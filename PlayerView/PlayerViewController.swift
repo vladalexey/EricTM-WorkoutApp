@@ -687,6 +687,8 @@ class PlayerViewController: AVPlayerViewController {
         getRandomList()
         queuePlayer.removeAllItems()
         
+        //        getVideos(videoName: workoutCode + "WarmUp.mp4") // TODO: Uncomment when finalize uploading
+        
         for index in 0...numberOfWorkout {
             let videoName = workoutCode + String(random[index]) + ".mp4"  // get random workout label
             
@@ -694,6 +696,8 @@ class PlayerViewController: AVPlayerViewController {
                 getVideos(videoName: videoName) //should change to specific workoutCode when uploaded encoded videos
             }
         }
+        
+        //        getVideos(videoName: workoutCode + "Stretch.mp4") // TODO: Uncomment when finalize uploading videos
 
         self.player = self.queuePlayer
         
@@ -1333,11 +1337,6 @@ class PlayerViewController: AVPlayerViewController {
         NotificationCenter.default.removeObserver(self)
     
         checkPortrait()
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
     }
     
     deinit {
