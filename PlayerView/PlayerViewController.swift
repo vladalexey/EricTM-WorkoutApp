@@ -43,6 +43,9 @@ class PlayerViewController: AVPlayerViewController {
     var playerPlaying: Bool = true
     var showPlayDoneButton: Bool = true
     
+    var disappearAnimationControl = UIViewPropertyAnimator()
+    var reappearAnimationControl = UIViewPropertyAnimator()
+    
     var queuePlayer = AVQueuePlayer()
     var listVideos = [AVPlayerItem]()
     
@@ -692,7 +695,7 @@ class PlayerViewController: AVPlayerViewController {
             }
         }
 
-        self.player? = self.queuePlayer
+        self.player = self.queuePlayer
         
         NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
         
@@ -701,8 +704,6 @@ class PlayerViewController: AVPlayerViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
-        
-        self.player = self.queuePlayer
         
         NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
         NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.queuePlayer.currentItem)
@@ -765,17 +766,19 @@ class PlayerViewController: AVPlayerViewController {
     @objc func handleTap(tap: UIGestureRecognizer) {
         
         if tap.state == UIGestureRecognizerState.ended {
-          
-            let disappearAnimationControl = UIViewPropertyAnimator(duration: 0.25, curve: .easeInOut) {
-
+            
+            disappearAnimationControl = UIViewPropertyAnimator(duration: 0.4, curve: .easeInOut) {
+                
                 self.toggleHidden()
             }
             
-            let reappearAnimationControl = UIViewPropertyAnimator(duration: 0.25, curve: .easeInOut) {
-                
+            disappearAnimationControl.isInterruptible = true
+            
+            reappearAnimationControl = UIViewPropertyAnimator(duration: 0.4, curve: .easeInOut) {
                 self.toggleAppear()
-                
             }
+            
+            disappearAnimationControl.isInterruptible = true
 
             let point = tap.location(in: self.view)
 
@@ -790,6 +793,9 @@ class PlayerViewController: AVPlayerViewController {
             let pointInBackward15 = self.backward15.convert(point, from: self.view)
             
             let arrayPointButton = [pointInPlayView, pointInDoneView, pointInForward, pointInForward15, pointInBackward, pointInBackward15]
+            
+            disappearAnimationControl.isReversed = false
+            reappearAnimationControl.isReversed = false
 
             if checkInView(points: arrayPointButton) == false && self.topView.bounds.contains(pointInTopView) && !(self.controlView.bounds.contains(pointInCtrlView)) && self.showPlayDoneButton {
 
@@ -797,29 +803,37 @@ class PlayerViewController: AVPlayerViewController {
                 
                 disableInteractManualQueue.sync {
                     print("[Handle Tap] Tap is inside topView -> Disappear")
-                    
+                    timerTest.invalidate()
+                    disableInteract()
                     disableHighlighted()
                     disappearAnimationControl.startAnimation()
-
-                    timerTest.invalidate()
                 }
 
-            } else if (self.topView.bounds.contains(pointInTopView)) && self.showPlayDoneButton != true {
+            } else if ((self.topView.bounds.contains(pointInTopView)) && self.showPlayDoneButton != true) || disappearAnimationControl.fractionComplete > 0.0 {
                 
                 let enableInteractQueue = DispatchQueue(label: "enableInteractQueue")
                 
                 enableInteractQueue.sync {
-                    timerTest.invalidate()
-                    enableInteract()
-
-                    print("[Handle Tap] Tap is inside topView -> Reappear")
-                
-                    reappearAnimationControl.startAnimation()
                     
+                    timerTest.invalidate()
+                    
+                    if disappearAnimationControl.isRunning {
+                        
+                        disappearAnimationControl.stopAnimation(false)
+                        disappearAnimationControl.isReversed = true
+                        disappearAnimationControl.finishAnimation(at: UIViewAnimatingPosition.start)
+                        
+                        print("[Handle Tap] Tap is inside topView -> Reappear")
+                    } else {
+                        print("[Handle Tap] Tap is inside topView -> Appear")
+                        reappearAnimationControl.startAnimation()
+                    }
+                    
+                    enableInteract()
                     setTimer()
                 }
                 
-            } else if (checkInView(points: arrayPointButton) == true) || (self.topView.bounds.contains(pointInTopView) && self.showPlayDoneButton == true) {
+            } else if ((checkInView(points: arrayPointButton) == true) || (self.topView.bounds.contains(pointInTopView)) && self.showPlayDoneButton == true) {
                 
                 let disableInteractQueue = DispatchQueue(label: "disableInteractQueue")
                 
@@ -827,6 +841,15 @@ class PlayerViewController: AVPlayerViewController {
                     
                     timerTest.invalidate()
                     enableInteract()
+                    
+                    if disappearAnimationControl.isRunning {
+                        
+                        disappearAnimationControl.stopAnimation(false)
+                        disappearAnimationControl.isReversed = true
+                        disappearAnimationControl.finishAnimation(at: UIViewAnimatingPosition.start)
+                        
+                        print("[Handle Tap] Tap is inside topView -> Reappear")
+                    }
                     
                     print("[Handle Tap] Invalidate in ctrl view")
                     
@@ -867,8 +890,7 @@ class PlayerViewController: AVPlayerViewController {
         self.forward15.isEnabled = true
         self.forward.isEnabled = true
         self.routePickerView.isUserInteractionEnabled = true
-        
-        print("[Handle Tap] enable interact")
+
     }
     
     @objc func disableInteract() {
@@ -881,77 +903,63 @@ class PlayerViewController: AVPlayerViewController {
         self.forward.isEnabled = false
         self.routePickerView.isUserInteractionEnabled = false
         
-        print("[Handle Tap] disable interact")
     }
     
     func disableHighlighted() {
         
-        self.doneButton.adjustsImageWhenHighlighted = false
-        self.playButton.adjustsImageWhenHighlighted = false
-        self.backward15.adjustsImageWhenHighlighted = false
-        self.backward.adjustsImageWhenHighlighted = false
-        self.forward15.adjustsImageWhenHighlighted = false
-        self.forward.adjustsImageWhenHighlighted = false
+        self.doneButton.tintAdjustmentMode = .normal
+        self.playButton.tintAdjustmentMode = .normal
+        self.backward15.tintAdjustmentMode = .normal
+        self.backward.tintAdjustmentMode = .normal
+        self.forward15.tintAdjustmentMode = .normal
+        self.forward.tintAdjustmentMode = .normal
     }
     
     @objc func initHiddenAuto() {
         
-        let disableInteractAutoQueue = DispatchQueue(label: "disableInteractAutoQueue")
+        disableHighlighted()
+        disableInteract()
         
-        disableInteractAutoQueue.sync {
-        
-            disableInteract()
-            disableHighlighted()
-
-            let disappearAnimationControl = UIViewPropertyAnimator(duration: 0.25, curve: .easeInOut) {
-                
-                self.toggleHidden()
-                self.disableHighlighted()
-            }
+        disappearAnimationControl = UIViewPropertyAnimator(duration: 0.4, curve: .easeInOut) {
             
-            disappearAnimationControl.isUserInteractionEnabled = false
-            disappearAnimationControl.startAnimation()
-            
-            print("[Handle Tap] disappear auto")
+            self.toggleHidden()
         }
-
+        
+        disappearAnimationControl.isInterruptible = true
+        
+        disappearAnimationControl.startAnimation()
+        
+        print("[Handle Tap] Disappear Auto")
     }
     
     func toggleHidden() {
         
-        if showPlayDoneButton == true {
-            
-            self.showPlayDoneButton = false
-            
-            self.controlView.alpha = 0.0
-            self.playButton.alpha = 0.0
-            self.doneButton.alpha = 0.0
-            self.forward15.alpha = 0.0
-            self.backward15.alpha = 0.0
-            self.forward.alpha = 0.0
-            self.backward.alpha = 0.0
-            self.routePickerView.alpha = 0.0
-        }
+        self.showPlayDoneButton = false
+        
+        self.controlView.alpha = 0.0
+        self.playButton.alpha = 0.0
+        self.doneButton.alpha = 0.0
+        self.forward15.alpha = 0.0
+        self.backward15.alpha = 0.0
+        self.forward.alpha = 0.0
+        self.backward.alpha = 0.0
+        self.routePickerView.alpha = 0.0
     }
     
     func toggleAppear() {
-    
-        if showPlayDoneButton == false {
-            
-            enableInteract()
-            
-            self.showPlayDoneButton = true
-            
-            self.controlView.alpha = 1.0
-            self.playButton.alpha = 1.0
-            self.doneButton.alpha = 1.0
-            self.forward15.alpha = 1.0
-            self.backward15.alpha = 1.0
-            self.forward.alpha = 1.0
-            self.backward.alpha = 1.0
-            self.routePickerView.alpha = 1.0
-        }
-        return
+
+        enableInteract()
+        
+        self.showPlayDoneButton = true
+        
+        self.controlView.alpha = 1.0
+        self.playButton.alpha = 1.0
+        self.doneButton.alpha = 1.0
+        self.forward15.alpha = 1.0
+        self.backward15.alpha = 1.0
+        self.forward.alpha = 1.0
+        self.backward.alpha = 1.0
+        self.routePickerView.alpha = 1.0
     }
     
     @objc func playerDidPlayToEnd() {
@@ -979,6 +987,7 @@ class PlayerViewController: AVPlayerViewController {
             if let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt {
                 let options = AVAudioSessionInterruptionOptions(rawValue: optionsValue)
                 if options.contains(.shouldResume) {
+                    
                     // Interruption Ended - playback should resume
                     self.queuePlayer.play()
                 } else {
@@ -995,6 +1004,7 @@ class PlayerViewController: AVPlayerViewController {
             selector    : #selector(initHiddenAuto),
             userInfo    : nil,
             repeats     : false)
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -1012,7 +1022,6 @@ class PlayerViewController: AVPlayerViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
         NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.queuePlayer.currentItem)
-
     }
 
     override func remoteControlReceived(with event: UIEvent?) {
@@ -1126,9 +1135,7 @@ class PlayerViewController: AVPlayerViewController {
                 print("[Pause] pauseButtonPressed")
             }
         }
-        
         setTimer()
-        
         return
     }
     
