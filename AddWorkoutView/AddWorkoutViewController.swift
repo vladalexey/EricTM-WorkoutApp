@@ -9,7 +9,7 @@
 import UIKit
 
 protocol DataSentDelegate {
-    func userDidEnterData(nameWorkout: String, lengthWorkout: String, workoutLabel: String)
+    func userDidEnterData(nameWorkout: String, lengthWorkout: String, workoutLabel: String, isDefault: Bool, isDownloaded: Dictionary<VideoExercise,Bool>)
 }
 
 class AddWorkoutViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
@@ -132,18 +132,16 @@ class AddWorkoutViewController: UIViewController, UIPickerViewDelegate, UIPicker
     @objc func saveWorkoutDone() {
         
         if delegate != nil {
-            print("custom workout non nil")
-            if nameWorkoutInput.text != "" && lengthWorkoutPicker != nil {
-                print("name not nil")
-                delegate?.userDidEnterData(nameWorkout: nameWorkoutInput.text!, lengthWorkout: pickerData[lengthWorkoutPicker.selectedRow(inComponent: 0)], workoutLabel: workoutLabels[0]) //TODO: Change workoutLabel to appropriate code in Personalize
+            print("[Save New Workout] Custom workout non nil")
+            if nameWorkoutInput.text!.isEmpty == false && lengthWorkoutPicker != nil {
+
+                delegate?.userDidEnterData(nameWorkout: nameWorkoutInput.text!, lengthWorkout: pickerData[lengthWorkoutPicker.selectedRow(inComponent: 0)], workoutLabel: workoutLabels[0], isDefault: false, isDownloaded: [:]) //TODO: Change workoutLabel to appropriate code in Personalize
                 print(lengthWorkoutPicker.selectedRow(inComponent: 0))
                 dismiss(animated: true, completion: nil)
+            } else {
+                print("[Save New Workout] Error Name Input" )
             }
-        } else {
-            print("error: no name input")
-            return
         }
-        
     }
     
     func setCancelButton() {
@@ -154,7 +152,7 @@ class AddWorkoutViewController: UIViewController, UIPickerViewDelegate, UIPicker
     }
     
     @objc func cancel() {
-        print("cancel add workout")
+        print("[Save New Workout] Cancel add workout")
         dismiss(animated: true, completion: nil)
     }
 }

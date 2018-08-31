@@ -17,7 +17,7 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     
     //MARK: Properties
     
-    var workOutVideos = [WorkOutVideo]()
+//    var workOutVideos = [WorkOutVideo]()
     
     var playerController = AVPlayerViewController()
     var player:AVPlayer?
@@ -29,7 +29,7 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     var videoCount = 0
     var myIndex = 0
     
-    var listWorkOut = ["Full", "Upper", "Lower"]
+    var listWorkOut = ["Full", "Upper", "Lower", "Abs"]
     var workoutLabel = String()
     var workoutCode = String()
 
@@ -94,22 +94,9 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         loadDefaultWOV()
         
         tableView.allowsSelectionDuringEditing = false
-        
-//        DispatchQueue.main.async {
-//            self.tableView.reloadData()
-//
-//            self.tableView.setNeedsLayout()
-//            self.tableView.layoutIfNeeded()
-//
-//            self.tableView.reloadData()
-//        }
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
-        
-        // enter Edit mode by long press in cell
-//        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(WorkOutTableViewController.longPressCellHandle))
-//        tableView.addGestureRecognizer(longPress)
         
         self.navigationItem.rightBarButtonItem = self.editButtonItem
         self.editButtonItem.tintColor = UIColor.lightGray 
@@ -136,7 +123,7 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return workOutVideos.count
+        return global.workOutVideos.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -145,11 +132,11 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         let cellIdentifier = "WorkOutTableViewCell"
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? WorkOutTableViewCell else {
-            fatalError("The dequeued cell is not an instance of WorkOutTableViewCell.")
+            fatalError("[Loading Cell] The dequeued cell is not an instance of WorkOutTableViewCell.")
         }
         
         // Fetches the appropriate workout for the data source layout.
-        let workOutVideo = workOutVideos[indexPath.row]
+        let workOutVideo = global.workOutVideos[indexPath.row]
         
         cell.nameLabel.text = workOutVideo.name.uppercased()
         cell.photoImageView.image = workOutVideo.image
@@ -178,8 +165,41 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         // initialization code
         
         myIndex = indexPath.row
-        workoutLabel = workOutVideos[indexPath.row].workoutLabel
+        workoutLabel = global.workOutVideos[indexPath.row].workoutLabel
         performSegue(withIdentifier: "VideoPlayer", sender: self)
+    }
+    
+    func checkFileAvailableLocal(nameFileToCheck: String) -> Bool {
+        
+        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
+        let url = NSURL(fileURLWithPath: path)
+        if let pathComponent = url.appendingPathComponent(nameFileToCheck) {
+            
+            let filePath = pathComponent.path
+            let fileManager = FileManager.default
+            if fileManager.fileExists(atPath: filePath) {
+                print("FILE AVAILABLE")
+                return true
+                
+            } else {
+                print("FILE NOT AVAILABLE")
+                return false
+            }
+        } else {
+            print("FILE PATH NOT AVAILABLE")
+            return false
+        }
+    }
+    
+    func listFilesFromDocumentsFolder() -> [String]?
+    {
+        let fileMngr = FileManager.default;
+        
+        // Full path to documents directory
+        let docs = fileMngr.urls(for: .documentDirectory, in: .userDomainMask)[0].path
+        
+        // List all contents of directory and return as [String] OR nil if failed
+        return try? fileMngr.contentsOfDirectory(atPath:docs)
     }
 
     func alertOnDefaultWorkouts() {
@@ -191,7 +211,7 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
             
             alertView.dismiss(animated: true, completion: nil)
             
-            print("OK")
+            print("[Table Editing] OK")
         }
         
         alertView.addAction(okAction)
@@ -199,22 +219,75 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         self.present(alertView, animated: true, completion: nil)
     }
     
+    func deleteContentFromLocal(fileNameToDelete: String) {
+        
+        var filePath = ""
+        
+        // Fine documents directory on device
+        let dirs : [String] = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.allDomainsMask, true)
+        
+        if dirs.count > 0 {
+            let dir = dirs[0] //documents directory
+            filePath = dir.appendingFormat("/" + fileNameToDelete)
+            print("[Remove Content] Local path = \(filePath)")
+            
+        } else {
+            print("[Remove Content] Could not find local directory to store file")
+            return
+        }
+        
+        
+        do {
+            let fileManager = FileManager.default
+            
+            // Check if file exists
+            if fileManager.fileExists(atPath: filePath) {
+                // Delete file
+                try fileManager.removeItem(atPath: filePath)
+            } else {
+                print("[Remove Content] File does not exist")
+            }
+            
+        }
+        catch let error as NSError {
+            print("[Remove Content] An error took place: \(error)")
+        }
+    }
+    
+    func checkAvailableOtherWorkout(itemToCheck: VideoExercise, indexWorkOutVideo: Int) -> Bool {
+        
+        var numberCheck = 0
+        
+        for videoExercise in global.workOutVideos[indexWorkOutVideo].isDownloaded.keys {
+            for (belongToWorkout, check) in videoExercise.containIn {
+                if check { numberCheck += 1}        // count number of workouts the exercise belongs to
+                if numberCheck > 1 {             // if more than one, not safe to delete
+                    
+                    videoExercise.containIn[belongToWorkout] = false       // should not belong to this exercise but still available offline for video playing until deleted
+                    return true
+                }
+            }
+        }
+        
+        return false
+    }
+    
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
         let edit = UITableViewRowAction(style: .normal, title: "Edit") { action, index in
-            print("Edit content")
+            print("[Table Editing] Edit content")
             
         }
         edit.backgroundColor = .lightGray
         
         let remove = UITableViewRowAction(style: .normal, title: "Remove") { action, index in
-            print("remove button tapped")
+            print("[Table Editing] Remove button")
             
-            if (self.workOutVideos[indexPath.row].name != "FULL BODY") && (self.workOutVideos[indexPath.row].name != "UPPER BODY") && (self.workOutVideos[indexPath.row].name != "LOWER BODY") {
+            if global.workOutVideos[indexPath.row].isDefault == false {
                 
-                print(self.workOutVideos[indexPath.row].name + " deleted")
+                print("[Table Editing]" + global.workOutVideos[indexPath.row].name + " deleted")
                 
-                self.workOutVideos.remove(at: indexPath.row)
+                global.workOutVideos.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .fade)
                 
             } else {
@@ -225,7 +298,23 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         }
         remove.backgroundColor = .red
         
-        return [remove, edit]
+        let removeDownload = UITableViewRowAction(style: .normal, title: "Remove Local") { action, index in
+            
+            print("[Table Editing] Remove Download button")
+            
+            //Check if file name available in other workouts
+            
+            for (item, hasDownloaded) in global.workOutVideos[indexPath.row].isDownloaded {
+                
+//                if self.checkAvailableOtherWorkout(itemToCheck: item, indexWorkOutVideo: indexPath.row) == false && hasDownloaded { // if not available and already downloaded in other workouts -> Safe to delete
+                
+                    guard let nameFileToDelete = item.name else {return}
+                    self.deleteContentFromLocal(fileNameToDelete: nameFileToDelete)
+//                }
+            }
+        }
+        
+        return [removeDownload, remove, edit]
     }
     
     func exitEditModeIfTrue() {
@@ -242,7 +331,7 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
             exitEditModeIfTrue()
             
             if UIApplication.shared.statusBarOrientation.isPortrait == false {
-                print("change to Portrait")
+                print("[Screen Rotation] Change to Portrait")
                 AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
             }
             
@@ -260,21 +349,24 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
             
             let destVC = segue.destination as? PlayerViewController
             
-            if workoutLabel == "Upper" {
+            print("[Remove Content] \(global.workOutVideos[myIndex].isDownloaded)")
+            
+            switch workoutLabel {
+            case "Upper":
                 workoutCode = "Upper"
-                destVC?.workoutCode = self.workoutCode
-                print(destVC?.workoutCode)
-                
-            } else if workoutLabel == "Lower" {
+            case "Lower":
                 workoutCode = "Lower"
-                destVC?.workoutCode = self.workoutCode
-                print(destVC?.workoutCode)
-                
-            } else if workoutLabel == "Full" {
+            case "Full":
                 workoutCode = "Full"
-                destVC?.workoutCode = self.workoutCode
-                print(destVC?.workoutCode)
+            case "Abs":
+                workoutCode = "Abs_Loop_Demo_" //TODO: Change back to Abs when finish testing
+                print(workoutCode)
+            default:
+                return
             }
+            
+            destVC?.workoutCode = self.workoutCode
+            destVC?.myIndex = self.myIndex
 
         }
     }
@@ -286,13 +378,17 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
             
             // Delete the row from the data source
             
-            self.workOutVideos.remove(at: indexPath.row)
-            
-//            tableView.beginUpdates()
-            tableView.deleteRows(at: [indexPath], with: .fade)
-//            tableView.endUpdates()
-            
-//            tableView.updateConstraints()
+            if global.workOutVideos[indexPath.row].isDefault == false {
+                
+                print("[Table Editing]" + global.workOutVideos[indexPath.row].name + " deleted")
+                
+                global.workOutVideos.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+                
+            } else {
+                
+                self.alertOnDefaultWorkouts()
+            }
         }
         if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
@@ -304,17 +400,14 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     // Override to support rearranging the table view.
     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
         
-        let videoWorkout = workOutVideos[fromIndexPath.row]
+        let videoWorkout = global.workOutVideos[fromIndexPath.row]
         let listLabel = listWorkOut[fromIndexPath.row]
         
-        
-        workOutVideos.remove(at: fromIndexPath.row)
+        global.workOutVideos.remove(at: fromIndexPath.row)
         listWorkOut.remove(at: fromIndexPath.row)
         
-        workOutVideos.insert(videoWorkout, at: to.row)
+        global.workOutVideos.insert(videoWorkout, at: to.row)
         listWorkOut.insert(listLabel, at: to.row)
-        
-//        tableView.updateConstraints()
         
         print(listWorkOut)
         
@@ -329,42 +422,62 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     
     //MARK: Private Methods
     
-    func userDidEnterData(nameWorkout: String, lengthWorkout: String, workoutLabel: String) {    //delegate function for add custom workout
+    func userDidEnterData(nameWorkout: String, lengthWorkout: String, workoutLabel: String, isDefault: Bool, isDownloaded: Dictionary<VideoExercise, Bool>) {    //delegate function for add custom workout
         
-        if nameWorkout != "" && lengthWorkout != "" && workoutLabel != "" {
+        if nameWorkout.isEmpty == false && lengthWorkout != "" && workoutLabel.isEmpty == false {
             
-            let newWorkout = WorkOutVideo(name: nameWorkout, length: lengthWorkout, workoutLabel: workoutLabel)
-            let newIndex = IndexPath(row: workOutVideos.count, section: 0)
-            workOutVideos.append(newWorkout!)
+            let newIndex = IndexPath(row: global.workOutVideos.count, section: 0)
+            
+            guard let newWorkout = WorkOutVideo(name: nameWorkout, length: lengthWorkout, workoutLabel: workoutLabel, isDefault: isDefault, isDownloaded: isDownloaded)
+                else {
+                    print("[Add Workout] Error in adding workout in AddWorkoutController")
+                    return
+            }
+            global.workOutVideos.append(newWorkout)
             listWorkOut.append(nameWorkout)
-            
-//            tableView.beginUpdates()
             tableView.insertRows(at: [newIndex], with: .bottom)
-//            tableView.endUpdates()
-            
-//            tableView.updateConstraints()
-
             print(listWorkOut)
-        } 
+        }
     }
 
     
     //MARK: Load workout sessions
     private func loadDefaultWOV() {
+        
+        let listItems = listFilesFromDocumentsFolder()
+        
+        var listFullItems = [WorkOutVideo:Bool]()
+        var listLowerItems = [WorkOutVideo:Bool]()
+        var listUpperItems = [WorkOutVideo:Bool]()
+        
+
+        for item in listItems! {
+            for workoutVideo in global.workOutVideos {
+                for videoExercise in workoutVideo.isDownloaded.keys {
+                    if videoExercise.name == item {
+                        
+                    }
+                }
+            }
+        } // TODO: Load all downloaded videos and categorize videos to its proper workout
       
-        guard let wov1 = WorkOutVideo(name: "FULL BODY", length: "45 minutes", workoutLabel: "Full") else {
+        guard let wov1 = WorkOutVideo(name: "FULL BODY", length: "45 minutes", workoutLabel: "Full", isDefault: true, isDownloaded: [:]) else {
             fatalError("Error")
         }
         
-        guard let wov2 = WorkOutVideo(name: "UPPER BODY", length: "45 minutes", workoutLabel: "Upper") else {
+        guard let wov2 = WorkOutVideo(name: "UPPER BODY", length: "45 minutes", workoutLabel: "Upper", isDefault: true, isDownloaded: [:]) else {
             fatalError("Error")
         }
         
-        guard let wov3 = WorkOutVideo(name: "LOWER BODY", length: "45 minutes", workoutLabel: "Lower") else {
+        guard let wov3 = WorkOutVideo(name: "LOWER BODY", length: "45 minutes", workoutLabel: "Lower", isDefault: true, isDownloaded: [:]) else {
             fatalError("Error")
         }
         
-        workOutVideos += [wov1, wov2, wov3]
+        guard let wov4 = WorkOutVideo(name: "ABS", length: "45 minutes", workoutLabel: "Abs", isDefault: true, isDownloaded: [:]) else {
+            fatalError("Error")
+        }
+        
+        global.workOutVideos = [wov1, wov2, wov3, wov4]
     }
 
     //MARK: Setup background interface

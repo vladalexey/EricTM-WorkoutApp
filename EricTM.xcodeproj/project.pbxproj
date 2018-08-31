@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		821799B12112C332009516EA /* IgnoreTouchTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 821799B02112C332009516EA /* IgnoreTouchTest.swift */; };
+		821EF25C21379C9A0032E6A2 /* VideoExercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 821EF25B21379C9A0032E6A2 /* VideoExercise.swift */; };
 		8223CDFE20EA2E9500569D3F /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8223CDFD20EA2E9500569D3F /* PlayerViewController.swift */; };
 		82340FD820DCD6BE003079A2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82340FD720DCD6BE003079A2 /* AppDelegate.swift */; };
 		82340FDD20DCD6BE003079A2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 82340FDB20DCD6BE003079A2 /* Main.storyboard */; };
@@ -19,6 +20,7 @@
 		8256A46B210829C0004F3CF9 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8256A46A210829C0004F3CF9 /* AudioToolbox.framework */; };
 		829FBCB720E0E5070052601F /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 829FBCB620E0E5070052601F /* TabBarViewController.swift */; };
 		82A219D120DF40F900F19132 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 82A219D020DF40F900F19132 /* GoogleService-Info.plist */; };
+		82AF323A21363C9B0064A97D /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82AF323921363C9B0064A97D /* Global.swift */; };
 		82EAC90720EC94B00093386C /* AddWorkoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82EAC90620EC94B00093386C /* AddWorkoutViewController.swift */; };
 		82EF187C21007ED400685FC4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 82EF187B21007ED400685FC4 /* Assets.xcassets */; };
 		82F947182109A2AD00947FEB /* NutritionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F947172109A2AD00947FEB /* NutritionViewController.swift */; };
@@ -30,6 +32,7 @@
 		20F9D56DC0FCA7593D6DE152 /* Pods-EricTM.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EricTM.release.xcconfig"; path = "Pods/Target Support Files/Pods-EricTM/Pods-EricTM.release.xcconfig"; sourceTree = "<group>"; };
 		247DE3C76EB8E08143B09F16 /* Pods-EricTM.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EricTM.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EricTM/Pods-EricTM.debug.xcconfig"; sourceTree = "<group>"; };
 		821799B02112C332009516EA /* IgnoreTouchTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IgnoreTouchTest.swift; sourceTree = "<group>"; };
+		821EF25B21379C9A0032E6A2 /* VideoExercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoExercise.swift; sourceTree = "<group>"; };
 		8223CDFD20EA2E9500569D3F /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
 		82340FD420DCD6BE003079A2 /* EricTM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EricTM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		82340FD720DCD6BE003079A2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -44,6 +47,7 @@
 		8256A46A210829C0004F3CF9 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		829FBCB620E0E5070052601F /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		82A219D020DF40F900F19132 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		82AF323921363C9B0064A97D /* Global.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
 		82EAC90620EC94B00093386C /* AddWorkoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddWorkoutViewController.swift; sourceTree = "<group>"; };
 		82EF187B21007ED400685FC4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		82F947172109A2AD00947FEB /* NutritionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionViewController.swift; sourceTree = "<group>"; };
@@ -75,6 +79,8 @@
 			isa = PBXGroup;
 			children = (
 				82340FED20DCE9C2003079A2 /* WorkOutVideo.swift */,
+				82AF323921363C9B0064A97D /* Global.swift */,
+				821EF25B21379C9A0032E6A2 /* VideoExercise.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -301,8 +307,10 @@
 				82EAC90720EC94B00093386C /* AddWorkoutViewController.swift in Sources */,
 				823876C221099CDC002A8E62 /* PersonalizeViewController.swift in Sources */,
 				82340FD820DCD6BE003079A2 /* AppDelegate.swift in Sources */,
+				82AF323A21363C9B0064A97D /* Global.swift in Sources */,
 				82340FEC20DCE2D0003079A2 /* WorkOutTableViewController.swift in Sources */,
 				82340FEE20DCE9C2003079A2 /* WorkOutVideo.swift in Sources */,
+				821EF25C21379C9A0032E6A2 /* VideoExercise.swift in Sources */,
 				829FBCB720E0E5070052601F /* TabBarViewController.swift in Sources */,
 				82340FEA20DCDBCC003079A2 /* WorkOutTableViewCell.swift in Sources */,
 			);

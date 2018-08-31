@@ -13,15 +13,6 @@ import MediaPlayer
 
 import FirebaseStorage
 
-class Global {
-    
-    var videoName1: String = ""
-    var videoName2: String = ""
-    var videoName3: String = ""
-}
-
-let global = Global()
-
 class PlayerViewController: AVPlayerViewController {
     
     var timerTest = Timer()
@@ -48,9 +39,11 @@ class PlayerViewController: AVPlayerViewController {
     
     var queuePlayer = AVQueuePlayer()
     var listVideos = [AVPlayerItem]()
+
     
     var workoutCode = String()
     var workoutName = String()
+    var myIndex = Int()
     var videoCount = Int()
     var numberOfWorkout = 2 // should change to corresponding numbers of total workouts needed
     
@@ -366,6 +359,8 @@ class PlayerViewController: AVPlayerViewController {
     
     func checkFileAvailableLocal(nameFileToCheck: String) -> Bool {
         
+         //check if file is available local by search name in directory
+        
         let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
         let url = NSURL(fileURLWithPath: path)
         if let pathComponent = url.appendingPathComponent(nameFileToCheck) {
@@ -373,15 +368,15 @@ class PlayerViewController: AVPlayerViewController {
             let filePath = pathComponent.path
             let fileManager = FileManager.default
             if fileManager.fileExists(atPath: filePath) {
-                print("FILE AVAILABLE")
+                print("[Check Local] FILE AVAILABLE")
                 return true
 
             } else {
-                print("FILE NOT AVAILABLE")
+                print("[Check Local] FILE NOT AVAILABLE")
                 return false
             }
         } else {
-            print("FILE PATH NOT AVAILABLE")
+            print("[Check Local] FILE PATH NOT AVAILABLE")
             return false
         }
     }
@@ -410,7 +405,7 @@ class PlayerViewController: AVPlayerViewController {
                 let seekDuration = CMTimeMake(15, 1)
                 let currentTime: CMTime = (self.queuePlayer.currentItem!.currentTime())
                 
-                if currentTime + seekDuration > (self.queuePlayer.currentItem!.duration) && !(self.queuePlayer.currentItem! === listVideos[2]) {
+                if currentTime + seekDuration > (self.queuePlayer.currentItem!.duration) && !(self.queuePlayer.currentItem! === listVideos[listVideos.count - 1]) {
                     
                     self.queuePlayer.pause()
                     self.queuePlayer.advanceToNextItem()
@@ -425,7 +420,7 @@ class PlayerViewController: AVPlayerViewController {
                 let seekDuration = CMTimeMake(15, 1)
                 let currentTime: CMTime = (self.queuePlayer.currentItem!.currentTime())
                 
-                if currentTime + seekDuration > (self.queuePlayer.currentItem!.duration) && (self.queuePlayer.currentItem! === listVideos[2]) {
+                if currentTime + seekDuration > (self.queuePlayer.currentItem!.duration) && (self.queuePlayer.currentItem! === listVideos[listVideos.count - 1]) {
                     
                     print("[Remote] Exit video when forward 15")
                     exitVideoPlayer()
@@ -503,7 +498,7 @@ class PlayerViewController: AVPlayerViewController {
                     let _ = try AVAudioSession.sharedInstance().setActive(true)
                     print("[Remote] Set audio session Playback + setActive")
                 } catch let error as NSError {
-                    print("an error occurred when audio session category.\n \(error)")
+                    print("[Remote] An error occurred when audio session category.\n \(error)")
                 }
                 
                 self.player = nil
@@ -573,22 +568,28 @@ class PlayerViewController: AVPlayerViewController {
 
     }
     
-    func getVideos(videoName: String) {
+    func getVideos(videoName: String, numberToDownload: Int) {
         
-        if checkFileAvailableLocal(nameFileToCheck: videoName) == false {
+        var videoExercise = VideoExercise()
+        
+        if checkFileAvailableLocal(nameFileToCheck: videoName) == false {            //check if file is available local by search name in directory
+            
+            videoExercise.name = videoName
             
             // Download video to stream
             videoReference.child(videoName).downloadURL(completion: { (url, error) in
                 if error != nil {
                     
-                    print("Error " + videoName)
+                    print("[Play Video] Error streaming \(error, videoName, numberToDownload)" )
                     self.exitVideoPlayerError()
                     return
                     
                 } else {
                     
+                    videoExercise.serverURL = url!
+                    
                     self.videoCount += 1
-                    print(videoName + String(self.videoCount))
+                    print("[Play Video]" + videoName + String(self.videoCount))
                     
                     let url1: URL = url!
                     let item1 = AVPlayerItem(url: url1)
@@ -612,24 +613,33 @@ class PlayerViewController: AVPlayerViewController {
             downloadTask1.child(videoName).write(toFile: localURL) { url, error in
                 if let error = error {
                     
-                    print(error)
+                    print("[Play Video] Error when downloading to local \(error, videoName, numberToDownload)" )
                     self.exitVideoPlayerError()
-
                     return
                     
                 } else {
-                    print("sucessfully downloaded video 1")
+                    
+                    print("[Play Video] sucessfully downloaded video \(numberToDownload)")
+                    
+                    videoExercise.localURL = localURL
+                    videoExercise.containIn[global.workOutVideos[self.myIndex].name] = true   // add workout name to list of parents
+                    global.workOutVideos[self.myIndex].isDownloaded[videoExercise] = true // add new downloaded video name to list of this workout to allow remove downloaded content later
                 }
             }
             
         //MARK: check available = true video 1
         } else {
             
-            print(videoName)
+            print("[Play Video] successfully loaded video from local \(videoName)")
             
             let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
             
             let localURL = documentsURL.appendingPathComponent(videoName)
+            
+            videoExercise.localURL = localURL
+            videoExercise.containIn[global.workOutVideos[myIndex].name] = true  // add workout name to list of parents
+            global.workOutVideos[self.myIndex].isDownloaded[videoExercise] = true   // add new downloaded video name to list of this workout to allow remove downloaded content later
+            
             
             let item1 = AVPlayerItem(url: localURL)
             
@@ -658,7 +668,7 @@ class PlayerViewController: AVPlayerViewController {
         } while random[0] == rand || random[1] == rand
         
         random.append(rand)
-        print(random)
+        print("[Get Random List] \(random)")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -687,18 +697,24 @@ class PlayerViewController: AVPlayerViewController {
         getRandomList()
         queuePlayer.removeAllItems()
         
-        //        getVideos(videoName: workoutCode + "WarmUp.mp4") // TODO: Uncomment when finalize uploading
+        let downloadQueue = DispatchQueue(label: "DownloadQueue")
         
-        for index in 0...numberOfWorkout {
-            let videoName = workoutCode + String(random[index]) + ".mp4"  // get random workout label
-            
-            downloadQueue.sync {
-                getVideos(videoName: videoName) //should change to specific workoutCode when uploaded encoded videos
+        downloadQueue.async {
+            self.getVideos(videoName: self.workoutCode + "Intro.mp4", numberToDownload: 00) // TODO: Uncomment when finalize uploading
+        }
+        
+        downloadQueue.async {
+            for index in 0...self.numberOfWorkout {
+                let videoName = self.workoutCode + String(self.random[index]) + ".mp4"  // get random workout label
+                
+                self.getVideos(videoName: videoName, numberToDownload: index) //should change to specific workoutCode when uploaded encoded videos
             }
         }
         
-        //        getVideos(videoName: workoutCode + "Stretch.mp4") // TODO: Uncomment when finalize uploading videos
-
+        downloadQueue.async {
+            self.getVideos(videoName: self.workoutCode + "Outtro.mp4", numberToDownload: 00) // TODO: Uncomment when finalize uploading videos
+        }
+        
         self.player = self.queuePlayer
         
         NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
@@ -1040,23 +1056,19 @@ class PlayerViewController: AVPlayerViewController {
 
                 case .remoteControlPlay:
                     print("[Remote Received] Play")
-                    playButtonPressed()
+                    playRemote()
 
                 case .remoteControlPause:
                     print("[Remote Received] Pause")
-                    playButtonPressed()
+                    pauseRemote()
 
                 case .remoteControlNextTrack:
                     print("[Remote Received] Forward")
-                    forward.isEnabled = true
-                    forwardPressed()
-                    forward.isEnabled = false
+                    forward15Remote()
                     
                 case .remoteControlPreviousTrack:
                     print("[Remote Received] Backward")
-                    backward.isEnabled = true
-                    backwardPressed()
-                    backward.isEnabled = false
+                    backward15Remote()
                     
                 default:
                     print("[Remote Received] haven't setup")
@@ -1090,7 +1102,6 @@ class PlayerViewController: AVPlayerViewController {
         case "playbackBufferEmpty":
             
             activityIndicatorView.startAnimating()
-
             print("[Notification] playbackBufferEmpty")
 
         case "playbackLikelyToKeepUp":
@@ -1102,7 +1113,6 @@ class PlayerViewController: AVPlayerViewController {
             print("[Notification] playbackBufferFull")
   
         default:
-            print("[Notification] Haven't setup")
             return
         }
     }
@@ -1156,7 +1166,7 @@ class PlayerViewController: AVPlayerViewController {
             let seekDuration = CMTimeMake(15, 1)
             let currentTime: CMTime = (self.player?.currentTime())!
         
-            if currentTime + seekDuration > (self.player?.currentItem?.duration)! && !(self.player?.currentItem === listVideos[2]) {
+            if currentTime + seekDuration > (self.player?.currentItem?.duration)! && !(self.player?.currentItem == listVideos[listVideos.count - 1]) {
                 
                 self.player?.pause()
                 self.queuePlayer.advanceToNextItem()
@@ -1164,7 +1174,10 @@ class PlayerViewController: AVPlayerViewController {
                 self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
                 
                 return
+            } else if currentTime + seekDuration > (self.player?.currentItem?.duration)! && (self.player?.currentItem == listVideos[listVideos.count - 1]) {
                 
+                self.player?.pause()
+                self.exitVideoPlayer()
             }
         
             self.player?.seek(to: currentTime + seekDuration)
@@ -1233,7 +1246,7 @@ class PlayerViewController: AVPlayerViewController {
                     let currentIndex = listVideos.index(of: item)
                     print(currentIndex!)
                     
-                    if currentIndex! < 2 {
+                    if currentIndex! < listVideos.count - 1 {
                         
                         self.queuePlayer.advanceToNextItem()
                         self.player?.seek(to: kCMTimeZero)
@@ -1245,7 +1258,7 @@ class PlayerViewController: AVPlayerViewController {
                         
                         return
                         
-                    } else if currentIndex == 2 {
+                    } else if currentIndex == listVideos.count - 1 {
                         
                         exitVideoPlayer()
                         return
@@ -1332,7 +1345,7 @@ class PlayerViewController: AVPlayerViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        self.player = nil
+//        self.player = nil
         self.queuePlayer.removeAllItems()
         NotificationCenter.default.removeObserver(self)
     
@@ -1340,7 +1353,7 @@ class PlayerViewController: AVPlayerViewController {
     }
     
     deinit {
-        self.player = nil
+//        self.player = nil
         self.queuePlayer.removeAllItems()
         NotificationCenter.default.removeObserver(self)
     }

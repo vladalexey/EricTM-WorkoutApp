@@ -12,7 +12,8 @@ import AVFoundation
 
 import Darwin
 
-class WorkOutVideo {
+class WorkOutVideo: Hashable
+{
     
 
     //MARK: Properties
@@ -24,9 +25,24 @@ class WorkOutVideo {
     var image: UIImage?
     var workoutLabel: String
     var background: UIImage? = UIImage(named: "Vignette")
+    
+    var isDefault: Bool
+    var isDownloaded = [VideoExercise:Bool]()
+//    var videoExercise = VideoExercise()
+    
+    var r:Int = 0;
+    var g:Int = 0;
+    var b:Int = 0;
+    var a:Int = 0;
+    
+    var hashValue: Int {
+        get {
+            return "\(r)\(g)\(b)\(a)".hashValue;
+        }
+    }
 
 
-    init?(name: String, length: String, workoutLabel: String) {
+    init?(name: String, length: String, workoutLabel: String, isDefault: Bool, isDownloaded: Dictionary<VideoExercise,Bool>) {
         
         // Initialization should fail if there is no name or if the rating is negative.
         if name.isEmpty {
@@ -45,7 +61,24 @@ class WorkOutVideo {
         self.name = name
         self.workoutLabel = workoutLabel
         self.length = length
-
+        self.isDefault = isDefault
+        self.isDownloaded = isDownloaded
     }
+}
+
+func ==(lhs: WorkOutVideo, rhs: WorkOutVideo) -> Bool{
+    if lhs.r != rhs.r{
+        return false;
+    }
+    if lhs.g != rhs.g{
+        return false;
+    }
+    if lhs.b != rhs.b{
+        return false;
+    }
+    if lhs.a != rhs.a{
+        return false;
+    }
+    return true;
 }
 
