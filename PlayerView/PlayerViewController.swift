@@ -571,7 +571,7 @@ class PlayerViewController: AVPlayerViewController {
         
         let videoName = videoToGet.name
         
-        if checkFileAvailableLocal(nameFileToCheck: videoToGet.name) == false {            //check if file is available local by search name in directory
+        if checkFileAvailableLocal(nameFileToCheck: videoName) == false {            //check if file is available local by search name in directory
             
             // Download video to stream
             videoReference.child(videoName).downloadURL(completion: { (url, error) in
@@ -586,7 +586,7 @@ class PlayerViewController: AVPlayerViewController {
                     videoToGet.serverURL = url!
                     
                     self.videoCount += 1
-                    print("[Play Video]" + videoName + String(self.videoCount))
+//                    print("[Play Video]" + videoName)
                     
                     let url1: URL = url!
                     let item1 = AVPlayerItem(url: url1)
@@ -616,7 +616,7 @@ class PlayerViewController: AVPlayerViewController {
                     
                 } else {
                     
-                    print("[Play Video] sucessfully downloaded video \(numberDownload)")
+//                    print("[Play Video] sucessfully downloaded video \(videoName)")
                     
                     videoToGet.localURL = localURL
                 }
@@ -625,13 +625,13 @@ class PlayerViewController: AVPlayerViewController {
         //MARK: check available = true video 1
         } else {
             
-            print("[Play Video] successfully loaded video from local \(videoName)")
+//            print("[Play Video] successfully loaded video from local \(videoName)")
             
             let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
             
             let localURL = documentsURL.appendingPathComponent(videoName)
             
-            videoToGet.localURL = localURL            
+            videoToGet.localURL = localURL
             
             let item1 = AVPlayerItem(url: localURL)
             
@@ -701,15 +701,20 @@ class PlayerViewController: AVPlayerViewController {
             
             for workout in currentWorkout.containSubworkout {    // get a list of sub-workouts from a Workout and iterate through
                 
-                let rand = Int(arc4random_uniform(4) + 1)
-                
+                let rand = Int(arc4random_uniform(UInt32(workout.contain.count)))
                 self.getVideos(videoToGet: workout.contain[rand], numberDownload: rand)  // randomly get one video for each sub-workout
-                //TODO: if there are more than 1 consecutive sub-workout of same type, make sure they aren't the same
+                print("[Video Player] \(workout.name)")
+                
+                //TODO: if there are more than 1 consecutive sub-workout of same type, make sure the videos aren't duplicated
             }
         }
         
         downloadQueue.async {
             self.getVideos(videoToGet: (global.subWorkoutList[currentWorkout.workoutLabel + "Ending"]?.contain[0])!, numberDownload: 9) // TODO: Uncomment when finalize uploading
+        }
+        
+        downloadQueue.async {
+            print("[List Videos]: \(self.listVideos)")
         }
         
         self.player = self.queuePlayer
@@ -1296,7 +1301,7 @@ class PlayerViewController: AVPlayerViewController {
                         let currentItem = self.player?.currentItem
                         let newItem = listVideos[moveBackIndex]
                         
-                        self.queuePlayer.replaceCurrentItem(with: newItem)
+                        self.queuePlayer.replaceCurrentItem(with: newItem)            //TODO: Implement flexible backward for multiple videos
                         print("[Backward] replace video successfully")
                         
                         self.player?.pause()

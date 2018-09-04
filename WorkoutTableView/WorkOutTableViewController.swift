@@ -456,25 +456,25 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
                                       workoutLabel: "FullBodyUpper",
                                       isDefault: true,
                                       containSubworkout: [global.subWorkoutList["ChestBack"]!,
-                                                 global.subWorkoutList["ChestBack"]!,
-                                                 global.subWorkoutList["Shoulders"]!,
-                                                 global.subWorkoutList["Arms"]!,
-                                                 global.subWorkoutList["GlutesCompound"]!,
-                                                 global.subWorkoutList["AbsdFinisher"]!
+                                                         global.subWorkoutList["ChestBack"]!,
+                                                         global.subWorkoutList["Shoulders"]!,
+                                                         global.subWorkoutList["Arms"]!,
+                                                         global.subWorkoutList["GlutesCompound"]!,
+                                                         global.subWorkoutList["AbsFinisher"]!
             ]) else {
             fatalError("Error")
         }
         
         guard let wov2 = WorkOutVideo(name: "FULL BODY Glutes",
                                       length: "45 minutes",
-                                      workoutLabel: "UpperBodyGlutes",
+                                      workoutLabel: "FullBodyGlutes",
                                       isDefault: true,
                                       containSubworkout: [global.subWorkoutList["GlutesCompound"]!,
-                                                global.subWorkoutList["Glutes"]!,   //TODO: Change to glutescompound/glutesisolation
-                                                global.subWorkoutList["ChestBack"]!,
-                                                global.subWorkoutList["ChestBack"]!,
-                                                global.subWorkoutList["Shoulders"]!,
-                                                global.subWorkoutList["AbsFinisher"]!
+                                                        global.subWorkoutList["Glutes"]!,
+                                                        global.subWorkoutList["ChestBack"]!,
+                                                        global.subWorkoutList["ChestBack"]!,
+                                                        global.subWorkoutList["Shoulders"]!,
+                                                        global.subWorkoutList["AbsFinisher"]!
             ]) else {
             fatalError("Error")
         }
@@ -483,11 +483,11 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
                                       workoutLabel: "UpperBody",
                                       isDefault: true,
                                       containSubworkout: [global.subWorkoutList["ChestBack"]!,
-                                                global.subWorkoutList["ChestBack"]!,
-                                                global.subWorkoutList["ChestBack"]!,
-                                                global.subWorkoutList["Shoulders"]!,
-                                                global.subWorkoutList["Arms"]!,
-                                                global.subWorkoutList["Abs"]!
+                                                        global.subWorkoutList["ChestBack"]!,
+                                                        global.subWorkoutList["ChestBack"]!,
+                                                        global.subWorkoutList["Shoulders"]!,
+                                                        global.subWorkoutList["Arms"]!,
+                                                        global.subWorkoutList["Abs"]!
                                         ]) else {
                                             fatalError("Error")
         }
@@ -496,11 +496,11 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
                                       workoutLabel: "LowerBody",
                                       isDefault: true,
                                       containSubworkout: [global.subWorkoutList["GlutesCompound"]!,
-                                                global.subWorkoutList["GlutesCompound"]!,
-                                                global.subWorkoutList["GlutesCompound"]!,
-                                                global.subWorkoutList["GlutesIsolation"]!,
-                                                global.subWorkoutList["GlutesIsolation"]!,
-                                                global.subWorkoutList["Abs"]!
+                                                        global.subWorkoutList["GlutesCompound"]!,
+                                                        global.subWorkoutList["GlutesCompound"]!,
+                                                        global.subWorkoutList["GlutesIsolation"]!,
+                                                        global.subWorkoutList["GlutesIsolation"]!,
+                                                        global.subWorkoutList["Abs"]!
                                         ]) else {
                                             fatalError("Error")
         }
@@ -509,11 +509,11 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
                                       workoutLabel: "Abs",
                                       isDefault: true,
                                       containSubworkout: [global.subWorkoutList["Abs"]!,
-                                                global.subWorkoutList["Abs"]!,
-                                                global.subWorkoutList["Abs"]!,
-                                                global.subWorkoutList["Abs"]!,
-                                                global.subWorkoutList["Abs"]!,
-                                                global.subWorkoutList["Abs"]!
+                                                            global.subWorkoutList["Abs"]!,
+                                                            global.subWorkoutList["Abs"]!,
+                                                            global.subWorkoutList["Abs"]!,
+                                                            global.subWorkoutList["Abs"]!,
+                                                            global.subWorkoutList["Abs"]!
                                         ]) else {
                                             fatalError("Error")
         }
@@ -521,12 +521,12 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
                                       length: "45 minutes",
                                       workoutLabel: "AbsIntermediate",
                                       isDefault: true,
-                                      containSubworkout: [global.subWorkoutList["AbsIntermediate"]!,
-                                                global.subWorkoutList["AbsIntermediate"]!,
-                                                global.subWorkoutList["AbsIntermediate"]!,
-                                                global.subWorkoutList["AbsIntermediate"]!,
-                                                global.subWorkoutList["AbsIntermediate"]!,
-                                                global.subWorkoutList["AbsIntermediate"]!
+                                      containSubworkout: [  global.subWorkoutList["AbsIntermediate"]!,
+                                                            global.subWorkoutList["AbsIntermediate"]!,
+                                                            global.subWorkoutList["AbsIntermediate"]!,
+                                                            global.subWorkoutList["AbsIntermediate"]!,
+                                                            global.subWorkoutList["AbsIntermediate"]!,
+                                                            global.subWorkoutList["AbsIntermediate"]!
                                         ]) else {
                                             fatalError("Error")
         }
