@@ -28,12 +28,11 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     }
     var videoCount = 0
     var myIndex = 0
-    
-    var listWorkOut = ["Full", "Upper", "Lower", "Abs"]
+
+    var listWorkOut = ["FullBodyUpper", "FullBodyGlutes", "UpperBody", "LowerBody", "Abs", "AbsIntermediate"]
     var workoutLabel = String()
     var workoutCode = String()
 
-    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -254,23 +253,23 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         }
     }
     
-    func checkAvailableOtherWorkout(itemToCheck: VideoExercise, indexWorkOutVideo: Int) -> Bool {
-        
-        var numberCheck = 0
-        
-        for videoExercise in global.workOutVideos[indexWorkOutVideo].isDownloaded.keys {
-            for (belongToWorkout, check) in videoExercise.containIn {
-                if check { numberCheck += 1}        // count number of workouts the exercise belongs to
-                if numberCheck > 1 {             // if more than one, not safe to delete
-                    
-                    videoExercise.containIn[belongToWorkout] = false       // should not belong to this exercise but still available offline for video playing until deleted
-                    return true
-                }
-            }
-        }
-        
-        return false
-    }
+//    func checkAvailableOtherWorkout(itemToCheck: VideoExercise, indexWorkOutVideo: Int) -> Bool {
+//        
+//        var numberCheck = 0
+//        
+//        for videoExercise in global.workOutVideos[indexWorkOutVideo] {
+//            for (belongToWorkout, check) in videoExercise.containIn {
+//                if check { numberCheck += 1}        // count number of workouts the exercise belongs to
+//                if numberCheck > 1 {             // if more than one, not safe to delete
+//                    
+//                    videoExercise.containIn[belongToWorkout] = false       // should not belong to this exercise but still available offline for video playing until deleted
+//                    return true
+//                }
+//            }
+//        }
+//        
+//        return false
+//    }
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
@@ -298,23 +297,23 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         }
         remove.backgroundColor = .red
         
-        let removeDownload = UITableViewRowAction(style: .normal, title: "Remove Local") { action, index in
-            
-            print("[Table Editing] Remove Download button")
-            
-            //Check if file name available in other workouts
-            
-            for (item, hasDownloaded) in global.workOutVideos[indexPath.row].isDownloaded {
-                
-//                if self.checkAvailableOtherWorkout(itemToCheck: item, indexWorkOutVideo: indexPath.row) == false && hasDownloaded { // if not available and already downloaded in other workouts -> Safe to delete
-                
-                    guard let nameFileToDelete = item.name else {return}
-                    self.deleteContentFromLocal(fileNameToDelete: nameFileToDelete)
-//                }
-            }
-        }
+//        let removeDownload = UITableViewRowAction(style: .normal, title: "Remove Local") { action, index in
+//
+//            print("[Table Editing] Remove Download button")
+//
+//            //Check if file name available in other workouts
+//
+//            for (item, hasDownloaded) in global.workOutVideos[indexPath.row].contain {
+//
+////                if self.checkAvailableOtherWorkout(itemToCheck: item, indexWorkOutVideo: indexPath.row) == false && hasDownloaded { // if not available and already downloaded in other workouts -> Safe to delete
+//
+//                    guard let nameFileToDelete = item.name else {return}
+//                    self.deleteContentFromLocal(fileNameToDelete: nameFileToDelete)
+////                }
+//            }
+//        }
         
-        return [removeDownload, remove, edit]
+        return [remove, edit]
     }
     
     func exitEditModeIfTrue() {
@@ -349,21 +348,11 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
             
             let destVC = segue.destination as? PlayerViewController
             
-            print("[Remove Content] \(global.workOutVideos[myIndex].isDownloaded)")
+            print("[Video Playing] \(global.workOutVideos[myIndex].containSubworkout)")
             
-            switch workoutLabel {
-            case "Upper":
-                workoutCode = "Upper"
-            case "Lower":
-                workoutCode = "Lower"
-            case "Full":
-                workoutCode = "Full"
-            case "Abs":
-                workoutCode = "Abs_Loop_Demo_" //TODO: Change back to Abs when finish testing
-                print(workoutCode)
-            default:
-                return
-            }
+            workoutCode = workoutLabel
+            workoutCode = "Abs_Loop_Demo_" //TODO: Change back to Abs when finish testing
+            print(workoutCode)
             
             destVC?.workoutCode = self.workoutCode
             destVC?.myIndex = self.myIndex
@@ -422,13 +411,13 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     
     //MARK: Private Methods
     
-    func userDidEnterData(nameWorkout: String, lengthWorkout: String, workoutLabel: String, isDefault: Bool, isDownloaded: Dictionary<VideoExercise, Bool>) {    //delegate function for add custom workout
+    func userDidEnterData(nameWorkout: String, lengthWorkout: String, workoutLabel: String, isDefault: Bool, containSubworkout: Array<SubWorkoutList>) {    //delegate function for add custom workout
         
         if nameWorkout.isEmpty == false && lengthWorkout != "" && workoutLabel.isEmpty == false {
             
             let newIndex = IndexPath(row: global.workOutVideos.count, section: 0)
             
-            guard let newWorkout = WorkOutVideo(name: nameWorkout, length: lengthWorkout, workoutLabel: workoutLabel, isDefault: isDefault, isDownloaded: isDownloaded)
+            guard let newWorkout = WorkOutVideo(name: nameWorkout, length: lengthWorkout, workoutLabel: workoutLabel, isDefault: isDefault, containSubworkout: containSubworkout)
                 else {
                     print("[Add Workout] Error in adding workout in AddWorkoutController")
                     return
@@ -443,41 +432,108 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     
     //MARK: Load workout sessions
     private func loadDefaultWOV() {
+    
+//        let listItems = listFilesFromDocumentsFolder()
         
-        let listItems = listFilesFromDocumentsFolder()
+//        let userDefaults = UserDefaults.standard
+//
+//        if userDefaults.object(forKey: "UserWorkoutList") != nil {  // check if already saved in userDefault
+//
+//            let userListOfWorkoutsData = userDefaults.object(forKey: "UserWorkoutList") as? Data
+//
+//            guard let userListOfWorkouts = NSKeyedUnarchiver.unarchiveObject(with: userListOfWorkoutsData!) as? Array<WorkOutVideo> else {return}
+//
+//            global.workOutVideos = userListOfWorkouts
+//
+//        } else {
+//
+//            let userListOfWorkoutsData = NSKeyedArchiver.archivedData(withRootObject: global.workOutVideos)
+//            userDefaults.set(userListOfWorkoutsData, forKey: "UserWorkoutList")
+//        }
         
-        var listFullItems = [WorkOutVideo:Bool]()
-        var listLowerItems = [WorkOutVideo:Bool]()
-        var listUpperItems = [WorkOutVideo:Bool]()
-        
-
-        for item in listItems! {
-            for workoutVideo in global.workOutVideos {
-                for videoExercise in workoutVideo.isDownloaded.keys {
-                    if videoExercise.name == item {
-                        
-                    }
-                }
-            }
-        } // TODO: Load all downloaded videos and categorize videos to its proper workout
-      
-        guard let wov1 = WorkOutVideo(name: "FULL BODY", length: "45 minutes", workoutLabel: "Full", isDefault: true, isDownloaded: [:]) else {
+        guard let wov1 = WorkOutVideo(name: "FULL BODY Upper",
+                                      length: "45 minutes",
+                                      workoutLabel: "FullBodyUpper",
+                                      isDefault: true,
+                                      containSubworkout: [global.subWorkoutList["ChestBack"]!,
+                                                 global.subWorkoutList["ChestBack"]!,
+                                                 global.subWorkoutList["Shoulders"]!,
+                                                 global.subWorkoutList["Arms"]!,
+                                                 global.subWorkoutList["GlutesCompound"]!,
+                                                 global.subWorkoutList["AbsdFinisher"]!
+            ]) else {
             fatalError("Error")
         }
         
-        guard let wov2 = WorkOutVideo(name: "UPPER BODY", length: "45 minutes", workoutLabel: "Upper", isDefault: true, isDownloaded: [:]) else {
+        guard let wov2 = WorkOutVideo(name: "FULL BODY Glutes",
+                                      length: "45 minutes",
+                                      workoutLabel: "UpperBodyGlutes",
+                                      isDefault: true,
+                                      containSubworkout: [global.subWorkoutList["GlutesCompound"]!,
+                                                global.subWorkoutList["Glutes"]!,   //TODO: Change to glutescompound/glutesisolation
+                                                global.subWorkoutList["ChestBack"]!,
+                                                global.subWorkoutList["ChestBack"]!,
+                                                global.subWorkoutList["Shoulders"]!,
+                                                global.subWorkoutList["AbsFinisher"]!
+            ]) else {
             fatalError("Error")
         }
-        
-        guard let wov3 = WorkOutVideo(name: "LOWER BODY", length: "45 minutes", workoutLabel: "Lower", isDefault: true, isDownloaded: [:]) else {
-            fatalError("Error")
+        guard let wov3 = WorkOutVideo(name: "UPPER BODY",
+                                      length: "45 minutes",
+                                      workoutLabel: "UpperBody",
+                                      isDefault: true,
+                                      containSubworkout: [global.subWorkoutList["ChestBack"]!,
+                                                global.subWorkoutList["ChestBack"]!,
+                                                global.subWorkoutList["ChestBack"]!,
+                                                global.subWorkoutList["Shoulders"]!,
+                                                global.subWorkoutList["Arms"]!,
+                                                global.subWorkoutList["Abs"]!
+                                        ]) else {
+                                            fatalError("Error")
+        }
+        guard let wov4 = WorkOutVideo(name: "LOWER BODY",
+                                      length: "45 minutes",
+                                      workoutLabel: "LowerBody",
+                                      isDefault: true,
+                                      containSubworkout: [global.subWorkoutList["GlutesCompound"]!,
+                                                global.subWorkoutList["GlutesCompound"]!,
+                                                global.subWorkoutList["GlutesCompound"]!,
+                                                global.subWorkoutList["GlutesIsolation"]!,
+                                                global.subWorkoutList["GlutesIsolation"]!,
+                                                global.subWorkoutList["Abs"]!
+                                        ]) else {
+                                            fatalError("Error")
+        }
+        guard let wov5 = WorkOutVideo(name: "ABS Advance",
+                                      length: "45 minutes",
+                                      workoutLabel: "Abs",
+                                      isDefault: true,
+                                      containSubworkout: [global.subWorkoutList["Abs"]!,
+                                                global.subWorkoutList["Abs"]!,
+                                                global.subWorkoutList["Abs"]!,
+                                                global.subWorkoutList["Abs"]!,
+                                                global.subWorkoutList["Abs"]!,
+                                                global.subWorkoutList["Abs"]!
+                                        ]) else {
+                                            fatalError("Error")
+        }
+        guard let wov6 = WorkOutVideo(name: "ABS Intermediate",
+                                      length: "45 minutes",
+                                      workoutLabel: "AbsIntermediate",
+                                      isDefault: true,
+                                      containSubworkout: [global.subWorkoutList["AbsIntermediate"]!,
+                                                global.subWorkoutList["AbsIntermediate"]!,
+                                                global.subWorkoutList["AbsIntermediate"]!,
+                                                global.subWorkoutList["AbsIntermediate"]!,
+                                                global.subWorkoutList["AbsIntermediate"]!,
+                                                global.subWorkoutList["AbsIntermediate"]!
+                                        ]) else {
+                                            fatalError("Error")
         }
         
-        guard let wov4 = WorkOutVideo(name: "ABS", length: "45 minutes", workoutLabel: "Abs", isDefault: true, isDownloaded: [:]) else {
-            fatalError("Error")
-        }
+        global.workOutVideos = [wov1, wov2, wov3, wov4, wov5, wov6]
         
-        global.workOutVideos = [wov1, wov2, wov3, wov4]
+        
     }
 
     //MARK: Setup background interface

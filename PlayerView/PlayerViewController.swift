@@ -40,13 +40,12 @@ class PlayerViewController: AVPlayerViewController {
     var queuePlayer = AVQueuePlayer()
     var listVideos = [AVPlayerItem]()
 
-    
     var workoutCode = String()
     var workoutName = String()
     var myIndex = Int()
     var videoCount = Int()
     var numberOfWorkout = 2 // should change to corresponding numbers of total workouts needed
-    
+
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
         return UIInterfaceOrientation.landscapeRight
     }
@@ -398,7 +397,7 @@ class PlayerViewController: AVPlayerViewController {
         
         if let currentPlayingItem: AVPlayerItem = self.queuePlayer.currentItem {
             
-            if currentPlayingItem != listVideos[2] {
+            if currentPlayingItem != listVideos[listVideos.count - 1] {
                 
                 print("[Remote] forward 15")
                 
@@ -568,25 +567,23 @@ class PlayerViewController: AVPlayerViewController {
 
     }
     
-    func getVideos(videoName: String, numberToDownload: Int) {
+    func getVideos(videoToGet: VideoExercise, numberDownload: Int) {
         
-        var videoExercise = VideoExercise()
+        let videoName = videoToGet.name
         
-        if checkFileAvailableLocal(nameFileToCheck: videoName) == false {            //check if file is available local by search name in directory
-            
-            videoExercise.name = videoName
+        if checkFileAvailableLocal(nameFileToCheck: videoToGet.name) == false {            //check if file is available local by search name in directory
             
             // Download video to stream
             videoReference.child(videoName).downloadURL(completion: { (url, error) in
                 if error != nil {
                     
-                    print("[Play Video] Error streaming \(error, videoName, numberToDownload)" )
+                    print("[Play Video] Error streaming \(error, videoName, numberDownload)" )
                     self.exitVideoPlayerError()
                     return
                     
                 } else {
                     
-                    videoExercise.serverURL = url!
+                    videoToGet.serverURL = url!
                     
                     self.videoCount += 1
                     print("[Play Video]" + videoName + String(self.videoCount))
@@ -613,17 +610,15 @@ class PlayerViewController: AVPlayerViewController {
             downloadTask1.child(videoName).write(toFile: localURL) { url, error in
                 if let error = error {
                     
-                    print("[Play Video] Error when downloading to local \(error, videoName, numberToDownload)" )
+                    print("[Play Video] Error when downloading to local \(error, videoName, numberDownload)" )
                     self.exitVideoPlayerError()
                     return
                     
                 } else {
                     
-                    print("[Play Video] sucessfully downloaded video \(numberToDownload)")
+                    print("[Play Video] sucessfully downloaded video \(numberDownload)")
                     
-                    videoExercise.localURL = localURL
-                    videoExercise.containIn[global.workOutVideos[self.myIndex].name] = true   // add workout name to list of parents
-                    global.workOutVideos[self.myIndex].isDownloaded[videoExercise] = true // add new downloaded video name to list of this workout to allow remove downloaded content later
+                    videoToGet.localURL = localURL
                 }
             }
             
@@ -636,10 +631,7 @@ class PlayerViewController: AVPlayerViewController {
             
             let localURL = documentsURL.appendingPathComponent(videoName)
             
-            videoExercise.localURL = localURL
-            videoExercise.containIn[global.workOutVideos[myIndex].name] = true  // add workout name to list of parents
-            global.workOutVideos[self.myIndex].isDownloaded[videoExercise] = true   // add new downloaded video name to list of this workout to allow remove downloaded content later
-            
+            videoToGet.localURL = localURL            
             
             let item1 = AVPlayerItem(url: localURL)
             
@@ -697,22 +689,27 @@ class PlayerViewController: AVPlayerViewController {
         getRandomList()
         queuePlayer.removeAllItems()
         
-        let downloadQueue = DispatchQueue(label: "DownloadQueue")
+        let downloadQueue = DispatchQueue.main
+        
+        let currentWorkout = global.workOutVideos[self.myIndex]
         
         downloadQueue.async {
-            self.getVideos(videoName: self.workoutCode + "Intro.mp4", numberToDownload: 00) // TODO: Uncomment when finalize uploading
+            self.getVideos(videoToGet: (global.subWorkoutList[currentWorkout.workoutLabel + "Introduction"]?.contain[0])!, numberDownload: 0) // TODO: Uncomment when finalize uploading
         }
         
         downloadQueue.async {
-            for index in 0...self.numberOfWorkout {
-                let videoName = self.workoutCode + String(self.random[index]) + ".mp4"  // get random workout label
+            
+            for workout in currentWorkout.containSubworkout {    // get a list of sub-workouts from a Workout and iterate through
                 
-                self.getVideos(videoName: videoName, numberToDownload: index) //should change to specific workoutCode when uploaded encoded videos
+                let rand = Int(arc4random_uniform(4) + 1)
+                
+                self.getVideos(videoToGet: workout.contain[rand], numberDownload: rand)  // randomly get one video for each sub-workout
+                //TODO: if there are more than 1 consecutive sub-workout of same type, make sure they aren't the same
             }
         }
         
         downloadQueue.async {
-            self.getVideos(videoName: self.workoutCode + "Outtro.mp4", numberToDownload: 00) // TODO: Uncomment when finalize uploading videos
+            self.getVideos(videoToGet: (global.subWorkoutList[currentWorkout.workoutLabel + "Ending"]?.contain[0])!, numberDownload: 9) // TODO: Uncomment when finalize uploading
         }
         
         self.player = self.queuePlayer
@@ -984,7 +981,7 @@ class PlayerViewController: AVPlayerViewController {
     
     @objc func playerDidPlayToEnd() {
         
-        if self.queuePlayer.currentItem == listVideos[2] || self.player?.currentItem == listVideos[2] {
+        if self.queuePlayer.currentItem == listVideos[listVideos.count - 1] || self.player?.currentItem == listVideos[listVideos.count - 1] {
             
             exitVideoPlayer()
             return
@@ -1244,7 +1241,7 @@ class PlayerViewController: AVPlayerViewController {
                 if item == self.player?.currentItem {
                     
                     let currentIndex = listVideos.index(of: item)
-                    print(currentIndex!)
+                    print("[Forward] CurrentIndex: \(currentIndex!)")
                     
                     if currentIndex! < listVideos.count - 1 {
                         

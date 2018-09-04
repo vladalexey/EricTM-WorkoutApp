@@ -9,7 +9,7 @@
 import UIKit
 
 protocol DataSentDelegate {
-    func userDidEnterData(nameWorkout: String, lengthWorkout: String, workoutLabel: String, isDefault: Bool, isDownloaded: Dictionary<VideoExercise,Bool>)
+    func userDidEnterData(nameWorkout: String, lengthWorkout: String, workoutLabel: String, isDefault: Bool, containSubworkout: Array<SubWorkoutList>)
 }
 
 class AddWorkoutViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
@@ -135,7 +135,7 @@ class AddWorkoutViewController: UIViewController, UIPickerViewDelegate, UIPicker
             print("[Save New Workout] Custom workout non nil")
             if nameWorkoutInput.text!.isEmpty == false && lengthWorkoutPicker != nil {
 
-                delegate?.userDidEnterData(nameWorkout: nameWorkoutInput.text!, lengthWorkout: pickerData[lengthWorkoutPicker.selectedRow(inComponent: 0)], workoutLabel: workoutLabels[0], isDefault: false, isDownloaded: [:]) //TODO: Change workoutLabel to appropriate code in Personalize
+                delegate?.userDidEnterData(nameWorkout: nameWorkoutInput.text!, lengthWorkout: pickerData[lengthWorkoutPicker.selectedRow(inComponent: 0)], workoutLabel: workoutLabels[0], isDefault: false, containSubworkout: []) //TODO: Change workoutLabel to appropriate code in Personalize
                 print(lengthWorkoutPicker.selectedRow(inComponent: 0))
                 dismiss(animated: true, completion: nil)
             } else {

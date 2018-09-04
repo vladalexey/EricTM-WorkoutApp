@@ -12,7 +12,7 @@ import AVFoundation
 
 import Darwin
 
-class WorkOutVideo: Hashable
+class WorkOutVideo: NSObject, NSCoding 
 {
     
 
@@ -27,7 +27,7 @@ class WorkOutVideo: Hashable
     var background: UIImage? = UIImage(named: "Vignette")
     
     var isDefault: Bool
-    var isDownloaded = [VideoExercise:Bool]()
+    var containSubworkout = [SubWorkoutList]()
 //    var videoExercise = VideoExercise()
     
     var r:Int = 0;
@@ -35,16 +35,16 @@ class WorkOutVideo: Hashable
     var b:Int = 0;
     var a:Int = 0;
     
-    var hashValue: Int {
+    override var hashValue: Int {
         get {
             return "\(r)\(g)\(b)\(a)".hashValue;
         }
     }
 
 
-    init?(name: String, length: String, workoutLabel: String, isDefault: Bool, isDownloaded: Dictionary<VideoExercise,Bool>) {
+    init?(name: String, length: String, workoutLabel: String, isDefault: Bool, containSubworkout: Array<SubWorkoutList>) {
         
-        // Initialization should fail if there is no name or if the rating is negative.
+        // Inilization should fail if there is no name or if the rating is negative.
         if name.isEmpty {
             return nil
         }
@@ -62,8 +62,29 @@ class WorkOutVideo: Hashable
         self.workoutLabel = workoutLabel
         self.length = length
         self.isDefault = isDefault
-        self.isDownloaded = isDownloaded
+        self.containSubworkout = containSubworkout
     }
+
+    required init?(coder aDecoder: NSCoder) {
+        self.name = aDecoder.decodeObject(forKey: "name") as! String
+        self.length = aDecoder.decodeObject(forKey: "length") as! String
+        self.image = aDecoder.decodeObject(forKey: "image") as! UIImage
+        self.workoutLabel = aDecoder.decodeObject(forKey: "workoutLabel") as! String
+        self.background = aDecoder.decodeObject(forKey: "background") as! UIImage
+        self.isDefault = aDecoder.decodeBool(forKey: "isDefault")
+        self.containSubworkout = aDecoder.decodeObject(forKey: "containSubworkout") as! Array<SubWorkoutList>
+    }
+
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(self.name, forKey: "name")
+        aCoder.encode(self.length, forKey: "length")
+        aCoder.encode(self.image, forKey: "image")
+        aCoder.encode(self.workoutLabel, forKey: "workoutLabel")
+        aCoder.encode(self.background, forKey: "background")
+        aCoder.encode(self.isDefault, forKey: "isDefault")
+        aCoder.encode(self.containSubworkout, forKey: "containSubworkout")
+    }
+
 }
 
 func ==(lhs: WorkOutVideo, rhs: WorkOutVideo) -> Bool{

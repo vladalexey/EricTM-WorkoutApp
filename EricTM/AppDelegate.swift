@@ -100,6 +100,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        
+        // Saving workoutList into UserDefault storage in phone
+        let userDefaults = UserDefaults.standard
+        userDefaults.set(global.workOutVideos, forKey: "UserWorkoutList")
     }
     
     //MARK: Set locked portrait mode for all screen

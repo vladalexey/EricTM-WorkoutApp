@@ -1,23 +1,22 @@
 //
-//  VideoExercise.swift
+//  SubWorkoutList.swift
 //  EricTM
 //
-//  Created by Phan Quân on 8/30/18.
+//  Created by Phan Quân on 9/3/18.
 //  Copyright © 2018 Phan Quân. All rights reserved.
 //
 
 import Foundation
 import UIKit
 
-class VideoExercise: Hashable {
+class SubWorkoutList: Hashable {
     
-    var localURL: URL?
-    var serverURL: URL?
-    var name: String
-//    var containIn = Dictionary<String,Bool>()
+    var name = Array<String>()
+    var contain = Array<VideoExercise>()
     
-    init(name: String) {
+    init(name: Array<String>, contain: Array<VideoExercise>) {
         self.name = name
+        self.contain = contain
     }
     
     var r:Int = 0;
@@ -32,7 +31,7 @@ class VideoExercise: Hashable {
     }
 }
 
-func ==(lhs: VideoExercise, rhs: VideoExercise) -> Bool{
+func ==(lhs: SubWorkoutList, rhs: SubWorkoutList) -> Bool{
     if lhs.r != rhs.r{
         return false;
     }
@@ -47,4 +46,3 @@ func ==(lhs: VideoExercise, rhs: VideoExercise) -> Bool{
     }
     return true;
 }
-
