@@ -41,14 +41,13 @@ class WorkOutVideo: NSObject, NSCoding
         }
     }
 
-
     init?(name: String, length: String, workoutLabel: String, isDefault: Bool, containSubworkout: Array<SubWorkoutList>) {
         
         // Inilization should fail if there is no name or if the rating is negative.
         if name.isEmpty {
             return nil
         }
-        
+
         for i in 1...15 {
             
             listThumbnails.append(UIImage(named: String(i))!)
@@ -64,15 +63,26 @@ class WorkOutVideo: NSObject, NSCoding
         self.isDefault = isDefault
         self.containSubworkout = containSubworkout
     }
-
-    required init?(coder aDecoder: NSCoder) {
-        self.name = aDecoder.decodeObject(forKey: "name") as! String
-        self.length = aDecoder.decodeObject(forKey: "length") as! String
-        self.image = aDecoder.decodeObject(forKey: "image") as! UIImage
-        self.workoutLabel = aDecoder.decodeObject(forKey: "workoutLabel") as! String
-        self.background = aDecoder.decodeObject(forKey: "background") as! UIImage
-        self.isDefault = aDecoder.decodeBool(forKey: "isDefault")
-        self.containSubworkout = aDecoder.decodeObject(forKey: "containSubworkout") as! Array<SubWorkoutList>
+    
+//    func setUserDefaults() {
+//
+//        let userDefaults = UserDefaults.standard
+//
+//        userDefaults.set(name, forKey: "nameWorkout")
+//    }
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        
+        let userDefaults = UserDefaults.standard
+        
+        let name = aDecoder.decodeObject(forKey: "name") as! String
+        let length = aDecoder.decodeObject(forKey: "length") as! String
+        let image = aDecoder.decodeObject(forKey: "image") as! UIImage
+        let workoutLabel = aDecoder.decodeObject(forKey: "workoutLabel") as! String
+        let background = aDecoder.decodeObject(forKey: "background") as! UIImage
+        let isDefault = aDecoder.decodeBool(forKey: "isDefault")
+        let containSubworkout = aDecoder.decodeObject(forKey: "containSubworkout") as! [SubWorkoutList]
+        self.init(name: name, length: length, workoutLabel: workoutLabel, isDefault: isDefault, containSubworkout: containSubworkout)
     }
 
     func encode(with aCoder: NSCoder) {

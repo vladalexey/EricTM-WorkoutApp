@@ -9,10 +9,10 @@
 import Foundation
 import UIKit
 
-class SubWorkoutList: Hashable {
+class SubWorkoutList: NSObject, NSCoding {
     
-    var name = Array<String>()
-    var contain = Array<VideoExercise>()
+    var name = [String]()
+    var contain = [VideoExercise]()
     
     init(name: Array<String>, contain: Array<VideoExercise>) {
         self.name = name
@@ -24,10 +24,30 @@ class SubWorkoutList: Hashable {
     var b:Int = 0;
     var a:Int = 0;
     
-    var hashValue: Int {
+    override var hashValue: Int {
         get {
             return "\(r)\(g)\(b)\(a)".hashValue;
         }
+    }
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        
+        let userDefaults = UserDefaults.standard
+        
+//        if userDefaults.object(forKey: "nameSubworkout") != nil {
+            let name = aDecoder.decodeObject(forKey: "nameSubworkout") as! [String]
+//        }
+        
+//        if userDefaults.object(forKey: "contain") != nil {
+            let contain = aDecoder.decodeObject(forKey: "contain") as! [VideoExercise]
+//        }
+        
+        self.init(name: name, contain: contain)
+    }
+    
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(self.name, forKey: "nameSubworkout")
+        aCoder.encode(self.contain, forKey: "contain")
     }
 }
 

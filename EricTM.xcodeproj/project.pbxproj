@@ -10,7 +10,10 @@
 		82174565213D2DAC00C7B60E /* SubWorkoutList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82174564213D2DAC00C7B60E /* SubWorkoutList.swift */; };
 		821799B12112C332009516EA /* IgnoreTouchTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 821799B02112C332009516EA /* IgnoreTouchTest.swift */; };
 		821EF25C21379C9A0032E6A2 /* VideoExercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 821EF25B21379C9A0032E6A2 /* VideoExercise.swift */; };
+		82233E652141351700BB8C49 /* AddCustomizeWorkoutTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82233E642141351700BB8C49 /* AddCustomizeWorkoutTableViewController.swift */; };
+		82233E672141359800BB8C49 /* AddCustomizeWorkoutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82233E662141359800BB8C49 /* AddCustomizeWorkoutTableViewCell.swift */; };
 		8223CDFE20EA2E9500569D3F /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8223CDFD20EA2E9500569D3F /* PlayerViewController.swift */; };
+		82321A9D21466DED0042F2C7 /* CheckListVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82321A9C21466DED0042F2C7 /* CheckListVideo.swift */; };
 		82340FD820DCD6BE003079A2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82340FD720DCD6BE003079A2 /* AppDelegate.swift */; };
 		82340FDD20DCD6BE003079A2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 82340FDB20DCD6BE003079A2 /* Main.storyboard */; };
 		82340FE220DCD6BE003079A2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 82340FE020DCD6BE003079A2 /* LaunchScreen.storyboard */; };
@@ -18,6 +21,7 @@
 		82340FEC20DCE2D0003079A2 /* WorkOutTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82340FEB20DCE2D0003079A2 /* WorkOutTableViewController.swift */; };
 		82340FEE20DCE9C2003079A2 /* WorkOutVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82340FED20DCE9C2003079A2 /* WorkOutVideo.swift */; };
 		823876C221099CDC002A8E62 /* PersonalizeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 823876C121099CDC002A8E62 /* PersonalizeViewController.swift */; };
+		8256309A2143750A0090E9FD /* PlayerViewExercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 825630992143750A0090E9FD /* PlayerViewExercise.swift */; };
 		8256A46B210829C0004F3CF9 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8256A46A210829C0004F3CF9 /* AudioToolbox.framework */; };
 		829FBCB720E0E5070052601F /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 829FBCB620E0E5070052601F /* TabBarViewController.swift */; };
 		82A219D120DF40F900F19132 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 82A219D020DF40F900F19132 /* GoogleService-Info.plist */; };
@@ -35,7 +39,10 @@
 		82174564213D2DAC00C7B60E /* SubWorkoutList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubWorkoutList.swift; sourceTree = "<group>"; };
 		821799B02112C332009516EA /* IgnoreTouchTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IgnoreTouchTest.swift; sourceTree = "<group>"; };
 		821EF25B21379C9A0032E6A2 /* VideoExercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoExercise.swift; sourceTree = "<group>"; };
+		82233E642141351700BB8C49 /* AddCustomizeWorkoutTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCustomizeWorkoutTableViewController.swift; sourceTree = "<group>"; };
+		82233E662141359800BB8C49 /* AddCustomizeWorkoutTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCustomizeWorkoutTableViewCell.swift; sourceTree = "<group>"; };
 		8223CDFD20EA2E9500569D3F /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
+		82321A9C21466DED0042F2C7 /* CheckListVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListVideo.swift; sourceTree = "<group>"; };
 		82340FD420DCD6BE003079A2 /* EricTM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EricTM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		82340FD720DCD6BE003079A2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		82340FDC20DCD6BE003079A2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -45,6 +52,7 @@
 		82340FEB20DCE2D0003079A2 /* WorkOutTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkOutTableViewController.swift; sourceTree = "<group>"; };
 		82340FED20DCE9C2003079A2 /* WorkOutVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkOutVideo.swift; sourceTree = "<group>"; };
 		823876C121099CDC002A8E62 /* PersonalizeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalizeViewController.swift; sourceTree = "<group>"; };
+		825630992143750A0090E9FD /* PlayerViewExercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewExercise.swift; sourceTree = "<group>"; };
 		8256A469210829C0004F3CF9 /* EricTM.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EricTM.entitlements; sourceTree = "<group>"; };
 		8256A46A210829C0004F3CF9 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		829FBCB620E0E5070052601F /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
@@ -94,8 +102,9 @@
 				82F947162109A29300947FEB /* NutritionView */,
 				823876C021099C9D002A8E62 /* Personalize */,
 				823876BF21099C8F002A8E62 /* AddWorkoutView */,
+				82563098214374610090E9FD /* PlayerViewExercise */,
 				82CDE7522101DBA500433D15 /* WorkoutTableView */,
-				82CDE7512101DB9000433D15 /* PlayerView */,
+				82CDE7512101DB9000433D15 /* PlayerViewWorkout */,
 				821127E720FEE51700BF39ED /* Model */,
 				82340FD620DCD6BE003079A2 /* EricTM */,
 				82340FD520DCD6BE003079A2 /* Products */,
@@ -131,6 +140,9 @@
 			isa = PBXGroup;
 			children = (
 				82EAC90620EC94B00093386C /* AddWorkoutViewController.swift */,
+				82233E642141351700BB8C49 /* AddCustomizeWorkoutTableViewController.swift */,
+				82233E662141359800BB8C49 /* AddCustomizeWorkoutTableViewCell.swift */,
+				82321A9C21466DED0042F2C7 /* CheckListVideo.swift */,
 			);
 			path = AddWorkoutView;
 			sourceTree = "<group>";
@@ -143,13 +155,21 @@
 			path = Personalize;
 			sourceTree = "<group>";
 		};
-		82CDE7512101DB9000433D15 /* PlayerView */ = {
+		82563098214374610090E9FD /* PlayerViewExercise */ = {
+			isa = PBXGroup;
+			children = (
+				825630992143750A0090E9FD /* PlayerViewExercise.swift */,
+			);
+			path = PlayerViewExercise;
+			sourceTree = "<group>";
+		};
+		82CDE7512101DB9000433D15 /* PlayerViewWorkout */ = {
 			isa = PBXGroup;
 			children = (
 				8223CDFD20EA2E9500569D3F /* PlayerViewController.swift */,
 				821799B02112C332009516EA /* IgnoreTouchTest.swift */,
 			);
-			path = PlayerView;
+			path = PlayerViewWorkout;
 			sourceTree = "<group>";
 		};
 		82CDE7522101DBA500433D15 /* WorkoutTableView */ = {
@@ -307,10 +327,14 @@
 				8223CDFE20EA2E9500569D3F /* PlayerViewController.swift in Sources */,
 				82174565213D2DAC00C7B60E /* SubWorkoutList.swift in Sources */,
 				82F947182109A2AD00947FEB /* NutritionViewController.swift in Sources */,
+				8256309A2143750A0090E9FD /* PlayerViewExercise.swift in Sources */,
+				82233E652141351700BB8C49 /* AddCustomizeWorkoutTableViewController.swift in Sources */,
+				82321A9D21466DED0042F2C7 /* CheckListVideo.swift in Sources */,
 				821799B12112C332009516EA /* IgnoreTouchTest.swift in Sources */,
 				82EAC90720EC94B00093386C /* AddWorkoutViewController.swift in Sources */,
 				823876C221099CDC002A8E62 /* PersonalizeViewController.swift in Sources */,
 				82340FD820DCD6BE003079A2 /* AppDelegate.swift in Sources */,
+				82233E672141359800BB8C49 /* AddCustomizeWorkoutTableViewCell.swift in Sources */,
 				82AF323A21363C9B0064A97D /* Global.swift in Sources */,
 				82340FEC20DCE2D0003079A2 /* WorkOutTableViewController.swift in Sources */,
 				82340FEE20DCE9C2003079A2 /* WorkOutVideo.swift in Sources */,

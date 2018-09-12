@@ -1,20 +1,21 @@
 //
-//  PlayerViewController.swift
+//  PlayerViewExercise.swift
 //  EricTM
 //
-//  Created by Phan Quân on 7/2/18.
+//  Created by Phan Quân on 9/8/18.
 //  Copyright © 2018 Phan Quân. All rights reserved.
 //
 
-import UIKit
 import Foundation
 import AVKit
 import MediaPlayer
 
 import FirebaseStorage
 
-class PlayerViewController: AVPlayerViewController {
-    
+
+class PlayerViewExercise: AVPlayerViewController {
+
+        
     var timerTest = Timer()
     var sendMetadataTimer = Timer()
     var nowPlayingInfo = [String: Any]()
@@ -27,8 +28,6 @@ class PlayerViewController: AVPlayerViewController {
         return Storage.storage().reference()
     }
     
-    var downloadQueue = DispatchQueue(label: "DownloadVideo")
-    
     var random = [Int()]
     
     var playerPlaying: Bool = true
@@ -37,15 +36,14 @@ class PlayerViewController: AVPlayerViewController {
     var disappearAnimationControl = UIViewPropertyAnimator()
     var reappearAnimationControl = UIViewPropertyAnimator()
     
-    var queuePlayer = AVQueuePlayer()
-    var listVideos = [AVPlayerItem]()
-
+    var videoPlayer = AVPlayer()
+    var videoToGet = VideoExercise(name: "")
+    
     var workoutCode = String()
     var workoutName = String()
     var myIndex = Int()
-    var videoCount = Int()
-    var numberOfWorkout = 2 // should change to corresponding numbers of total workouts needed
 
+    
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
         return UIInterfaceOrientation.landscapeRight
     }
@@ -75,10 +73,10 @@ class PlayerViewController: AVPlayerViewController {
         
         let controlview = UIImageView(image: UIImage(named: "PLAYER BG 2"))
         controlview.translatesAutoresizingMaskIntoConstraints = false
-//        controlview.alpha = 0.5
-
-//        controlview.addBlurEffect()
-//        controlview.roundedAllCorner()
+        //        controlview.alpha = 0.5
+        
+        //        controlview.addBlurEffect()
+        //        controlview.roundedAllCorner()
         
         controlview.isUserInteractionEnabled = true
         
@@ -90,11 +88,11 @@ class PlayerViewController: AVPlayerViewController {
         topview.backgroundColor = UIColor.clear
         return topview
     }()
-
+    
     let activityIndicatorView: UIActivityIndicatorView = {
         let aiv = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
         aiv.translatesAutoresizingMaskIntoConstraints = false
-//        aiv.startAnimating()
+        //        aiv.startAnimating()
         return aiv
     }()
     
@@ -113,7 +111,7 @@ class PlayerViewController: AVPlayerViewController {
         button.isUserInteractionEnabled = true
         
         return button
-        }()
+    }()
     
     //MARK: Play button init
     lazy var playButton: UIButton = {
@@ -148,7 +146,7 @@ class PlayerViewController: AVPlayerViewController {
         
         return button
     }()
-
+    
     //MARK: Backward15 button init
     lazy var backward15: UIButton = {
         
@@ -204,19 +202,19 @@ class PlayerViewController: AVPlayerViewController {
         
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         
-//        self.contentOverlayView?.addSubview(topView)
+        //        self.contentOverlayView?.addSubview(topView)
         
         let tapOnTopView = UITapGestureRecognizer(target: self, action: #selector(PlayerViewController.handleTap))
         
         let doubleTapOnTopView = UITapGestureRecognizer(target: self, action: #selector(PlayerViewController.handleDoubleTap))
         doubleTapOnTopView.numberOfTapsRequired = 2
-
+        
         self.contentOverlayView?.addSubview(activityIndicatorView)
         activityIndicatorView.centerXAnchor.constraint(equalTo: (contentOverlayView?.centerXAnchor)!).isActive = true
         activityIndicatorView.centerYAnchor.constraint(equalTo: (contentOverlayView?.centerYAnchor)!).isActive = true
         
         self.contentOverlayView?.addSubview(controlView)
-
+        
         controlView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         controlView.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 20).isActive = true
         controlView.centerXAnchor.constraint(equalTo: (contentOverlayView?.centerXAnchor)!).isActive = true
@@ -285,7 +283,6 @@ class PlayerViewController: AVPlayerViewController {
             
             self.player?.pause()
             self.player = nil
-            self.queuePlayer.removeAllItems()
             
             NotificationCenter.default.removeObserver(self)
             self.toggleHidden()
@@ -304,7 +301,7 @@ class PlayerViewController: AVPlayerViewController {
         let checkPortrait = DispatchQueue(label: "checkPortrait")
         
         checkPortrait.sync {
-
+            
             if UIApplication.shared.statusBarOrientation.isPortrait == false {
                 print("[Screen Orientation] changing to portrait")
                 AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
@@ -324,19 +321,19 @@ class PlayerViewController: AVPlayerViewController {
         print("[Error] Exit video player")
         
         let alertView = UIAlertController(title: "Error", message: "Cannot load videos", preferredStyle: UIAlertControllerStyle.alert)
-
+        
         let okAction = UIAlertAction(title: "Try again", style: UIAlertActionStyle.default) {
             (result : UIAlertAction) -> Void in
-
+            
             print("[Error] OK")
-
+            
             self.navigationController?.popViewController(animated: true)
             self.navigationController?.setNavigationBarHidden(false, animated: true)
         }
-
+        
         alertView.addAction(okAction)
         self.present(alertView, animated: true, completion: nil)
-
+        
         
         let checkPortrait = DispatchQueue(label: "checkPortrait")
         
@@ -358,7 +355,7 @@ class PlayerViewController: AVPlayerViewController {
     
     func checkFileAvailableLocal(nameFileToCheck: String) -> Bool {
         
-         //check if file is available local by search name in directory
+        //check if file is available local by search name in directory
         
         let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
         let url = NSURL(fileURLWithPath: path)
@@ -369,7 +366,7 @@ class PlayerViewController: AVPlayerViewController {
             if fileManager.fileExists(atPath: filePath) {
                 print("[Check Local] FILE AVAILABLE")
                 return true
-
+                
             } else {
                 print("[Check Local] FILE NOT AVAILABLE")
                 return false
@@ -381,13 +378,13 @@ class PlayerViewController: AVPlayerViewController {
     }
     
     @objc func playRemote() {
-        self.queuePlayer.play()
+        self.videoPlayer.play()
         nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = 1.0
         print("[Remote] play")
     }
     
     @objc func pauseRemote() {
-        self.queuePlayer.pause()
+        self.videoPlayer.pause()
         nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = 0.0
         print("[Remote] pause")
         
@@ -395,72 +392,46 @@ class PlayerViewController: AVPlayerViewController {
     
     @objc func forward15Remote() {
         
-        if let currentPlayingItem: AVPlayerItem = self.queuePlayer.currentItem {
-            
-            if currentPlayingItem != listVideos[listVideos.count - 1] {
-                
-                print("[Remote] forward 15")
-                
-                let seekDuration = CMTimeMake(15, 1)
-                let currentTime: CMTime = (self.queuePlayer.currentItem!.currentTime())
-                
-                if currentTime + seekDuration > (self.queuePlayer.currentItem!.duration) && !(self.queuePlayer.currentItem! === listVideos[listVideos.count - 1]) {
-                    
-                    self.queuePlayer.pause()
-                    self.queuePlayer.advanceToNextItem()
-                    self.queuePlayer.play()
-                    self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
-                    
-                    return
-                }
-                
-            } else {
-                
-                let seekDuration = CMTimeMake(15, 1)
-                let currentTime: CMTime = (self.queuePlayer.currentItem!.currentTime())
-                
-                if currentTime + seekDuration > (self.queuePlayer.currentItem!.duration) && (self.queuePlayer.currentItem! === listVideos[listVideos.count - 1]) {
-                    
-                    print("[Remote] Exit video when forward 15")
-                    exitVideoPlayer()
-                    AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
-                    
-                    return
-                }
-            }
+        let seekDuration = CMTimeMake(15, 1)
+        let currentTime: CMTime = (self.videoPlayer.currentItem!.currentTime())
         
-            let seekDuration = CMTimeMake(15, 1)
-            let currentTime: CMTime = (self.queuePlayer.currentItem!.currentTime())
+        if currentTime + seekDuration > (self.videoPlayer.currentItem?.duration)! {
+        
+            print("[Remote] Exit video when forward 15")
+            exitVideoPlayer()
+            AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
             
-            self.queuePlayer.currentItem!.seek(to: currentTime + seekDuration, completionHandler: nil)
-            self.queuePlayer.play()
+        } else {
+            self.videoPlayer.currentItem!.seek(to: currentTime + seekDuration, completionHandler: nil)
+            self.videoPlayer.play()
         }
     }
     
     @objc func backward15Remote() {
         
         let seekDuration = CMTimeMake(15, 1)
-        if let currentItem: AVPlayerItem = self.queuePlayer.currentItem {
+        
+        if let currentItem: AVPlayerItem = self.videoPlayer.currentItem {
             
             let currentTime: CMTime = currentItem.currentTime()
             
             if currentTime - seekDuration > kCMTimeZero {                   // check if remaining time is less than 15 seconds
                 
                 let newTime = currentTime - seekDuration
-                self.queuePlayer.currentItem!.seek(to: newTime, completionHandler: nil)
-                self.queuePlayer.play()
+                self.videoPlayer.currentItem!.seek(to: newTime, completionHandler: nil)
+                self.videoPlayer.play()
                 
             } else {
                 
-                self.queuePlayer.currentItem!.seek(to: kCMTimeZero, completionHandler: nil)
-                self.queuePlayer.play()
+                self.videoPlayer.currentItem!.seek(to: kCMTimeZero, completionHandler: nil)
+                self.videoPlayer.play()
             }
         }
         print("[Remote] backward15")
     }
     
     @objc func setNowPlayingInfo() {
-    
+        
         nowPlayingInfo[MPMediaItemPropertyTitle] = "Eric Workout"
         
         if let image = UIImage(named: "iTunesArtwork") {
@@ -470,12 +441,12 @@ class PlayerViewController: AVPlayerViewController {
             }
         }
         
-        guard let currentVideo = self.queuePlayer.currentItem
+        guard let currentVideo = self.videoPlayer.currentItem
             else {return}
         
         nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = currentVideo.currentTime().seconds
         nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = currentVideo.duration.seconds
-        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = self.queuePlayer.rate
+        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = self.videoPlayer.rate
         
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
         
@@ -488,57 +459,57 @@ class PlayerViewController: AVPlayerViewController {
         
         let beginRemoteControl = DispatchQueue(label: "beginRemoteControl")
         
-            beginRemoteControl.sync {
+        beginRemoteControl.sync {
+            
+            print("[Remote] Enter background + Begin syncing")
+            
+            do {
+                try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+                let _ = try AVAudioSession.sharedInstance().setActive(true)
+                print("[Remote] Set audio session Playback + setActive")
+            } catch let error as NSError {
+                print("[Remote] An error occurred when audio session category.\n \(error)")
+            }
+            
+            self.player = nil
+            
+            UIApplication.shared.beginReceivingRemoteControlEvents()
+            self.becomeFirstResponder()
+            
+            // Get the shared MPRemoteCommandCenter
+            let commandCenter = MPRemoteCommandCenter.shared()
+            
+            commandCenter.playCommand.isEnabled = true
+            //            commandCenter.playCommand.addTarget(self, action: #selector(playRemote))
+            
+            commandCenter.playCommand.addTarget(handler: { (event) in    // Begin playing the current track
                 
-                print("[Remote] Enter background + Begin syncing")
-                
-                do {
-                    try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
-                    let _ = try AVAudioSession.sharedInstance().setActive(true)
-                    print("[Remote] Set audio session Playback + setActive")
-                } catch let error as NSError {
-                    print("[Remote] An error occurred when audio session category.\n \(error)")
+                if self.videoPlayer.rate == 0 {
+                    self.videoPlayer.play()
+                    print("[Remote] play")
                 }
                 
-                self.player = nil
+                return MPRemoteCommandHandlerStatus.success})
+            
+            commandCenter.skipForwardCommand.isEnabled = true
+            commandCenter.skipForwardCommand.addTarget(self, action: #selector(self.forward15Remote))
+            
+            commandCenter.skipBackwardCommand.isEnabled = true
+            commandCenter.skipBackwardCommand.addTarget(self, action: #selector(self.backward15Remote))
+            
+            commandCenter.pauseCommand.isEnabled = true
+            //            commandCenter.pauseCommand.addTarget(self, action: #selector(pauseRemote))
+            
+            commandCenter.pauseCommand.addTarget(handler: { (event) in    // Begin playing the current track
                 
-                UIApplication.shared.beginReceivingRemoteControlEvents()
-                self.becomeFirstResponder()
-                
-                // Get the shared MPRemoteCommandCenter
-                let commandCenter = MPRemoteCommandCenter.shared()
-                
-                commandCenter.playCommand.isEnabled = true
-    //            commandCenter.playCommand.addTarget(self, action: #selector(playRemote))
-
-                commandCenter.playCommand.addTarget(handler: { (event) in    // Begin playing the current track
-                    
-                    if self.queuePlayer.rate == 0 {
-                        self.queuePlayer.play()
-                        print("[Remote] play")
-                    }
-                    
-                    return MPRemoteCommandHandlerStatus.success})
-                
-                commandCenter.skipForwardCommand.isEnabled = true
-                commandCenter.skipForwardCommand.addTarget(self, action: #selector(self.forward15Remote))
-                
-                commandCenter.skipBackwardCommand.isEnabled = true
-                commandCenter.skipBackwardCommand.addTarget(self, action: #selector(self.backward15Remote))
-                
-                commandCenter.pauseCommand.isEnabled = true
-    //            commandCenter.pauseCommand.addTarget(self, action: #selector(pauseRemote))
-                
-                commandCenter.pauseCommand.addTarget(handler: { (event) in    // Begin playing the current track
-                    
-                    if self.queuePlayer.rate > 0 {
-                        self.queuePlayer.pause()
-                        print("[Remote] pause")
-                    }
-                    return MPRemoteCommandHandlerStatus.success})
-                
-                commandCenter.changePlaybackPositionCommand.isEnabled = false  // disable user interaction to change
-            }
+                if self.videoPlayer.rate > 0 {
+                    self.videoPlayer.pause()
+                    print("[Remote] pause")
+                }
+                return MPRemoteCommandHandlerStatus.success})
+            
+            commandCenter.changePlaybackPositionCommand.isEnabled = false  // disable user interaction to change
+        }
         
         sendMetadataTimer.fire()
     }
@@ -551,7 +522,7 @@ class PlayerViewController: AVPlayerViewController {
             print("[Remote] entering foreground + end receiving")
             UIApplication.shared.endReceivingRemoteControlEvents()
             
-            self.player = queuePlayer
+            self.player = videoPlayer
             self.player?.play()
             
             if UIApplication.shared.statusBarOrientation.isLandscape == false {
@@ -564,12 +535,15 @@ class PlayerViewController: AVPlayerViewController {
         }
         
         sendMetadataTimer.invalidate()
-
+        
     }
     
     func getVideos(videoToGet: VideoExercise, numberDownload: Int) {
         
-        let videoName = videoToGet.name
+        var videoName = videoToGet.name
+        
+        videoName = videoName.replacingOccurrences(of: " ", with: "")
+        videoName.append(".mp4")
         
         if checkFileAvailableLocal(nameFileToCheck: videoName) == false {            //check if file is available local by search name in directory
             
@@ -585,8 +559,7 @@ class PlayerViewController: AVPlayerViewController {
                     
                     videoToGet.serverURL = url!
                     
-                    self.videoCount += 1
-//                    print("[Play Video]" + videoName)
+                    //                    print("[Play Video]" + videoName)
                     
                     let url1: URL = url!
                     let item1 = AVPlayerItem(url: url1)
@@ -597,15 +570,14 @@ class PlayerViewController: AVPlayerViewController {
                     item1.addObserver(self, forKeyPath: "playbackBufferFull", options: NSKeyValueObservingOptions.new, context: nil)
                     item1.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions.new, context: nil)
                     
-                    self.queuePlayer.insert(item1, after: nil)
-                    self.listVideos.append(item1)
+                    self.videoPlayer = AVPlayer(playerItem: item1)
                 }
             })
             
             let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
             
             let localURL = documentsURL.appendingPathComponent(videoName)
-
+            
             // Download to the local system
             downloadTask1.child(videoName).write(toFile: localURL) { url, error in
                 if let error = error {
@@ -616,16 +588,16 @@ class PlayerViewController: AVPlayerViewController {
                     
                 } else {
                     
-//                    print("[Play Video] sucessfully downloaded video \(videoName)")
+                    //                    print("[Play Video] sucessfully downloaded video \(videoName)")
                     
                     videoToGet.localURL = localURL
                 }
             }
             
-        //MARK: check available = true video 1
+            //MARK: check available = true video 1
         } else {
             
-//            print("[Play Video] successfully loaded video from local \(videoName)")
+            //            print("[Play Video] successfully loaded video from local \(videoName)")
             
             let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
             
@@ -635,34 +607,14 @@ class PlayerViewController: AVPlayerViewController {
             
             let item1 = AVPlayerItem(url: localURL)
             
-            self.queuePlayer.insert(item1, after: nil)
-            self.listVideos.append(item1)
+            self.videoPlayer = AVPlayer(playerItem: item1)
         }
     }
     
     override var canBecomeFirstResponder: Bool {
         return true
     }
-    
-    func getRandomList() {
-        
-        var rand = Int()
-        random = [Int(arc4random_uniform(4) + 1)] // get random number //change number to actual number of videos on Firebase
-        
-        repeat {
-            rand = Int(arc4random_uniform(4) + 1)  // get random number //change number to actual number of videos on Firebase
-        } while rand == random[0]
-        
-        random.append(rand)
-        
-        repeat {
-            rand = Int(arc4random_uniform(4) + 1)  // get random number //change number to actual number of videos on Firebase
-        } while random[0] == rand || random[1] == rand
-        
-        random.append(rand)
-        print("[Get Random List] \(random)")
-    }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         
         UIApplication.shared.endIgnoringInteractionEvents()
@@ -670,7 +622,6 @@ class PlayerViewController: AVPlayerViewController {
         setupUI()
         
         AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.landscapeRight, andRotateTo: UIInterfaceOrientation.landscapeRight)
-        videoCount = 0
         
         
         //MARK: Get list of local videos
@@ -679,45 +630,23 @@ class PlayerViewController: AVPlayerViewController {
         do {
             let fileURLs = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil)
             // process files
-
+            
         } catch {
             print("Error while enumerating files \(documentsURL.path): \(error.localizedDescription)")
         }
         
-        //MARK: Get randome workout videos
-        
-        getRandomList()
-        queuePlayer.removeAllItems()
+        //MARK: Get video exercise
         
         let downloadQueue = DispatchQueue.main
         
-        let currentWorkout = global.workOutVideos[self.myIndex]
-        
         downloadQueue.async {
-            self.getVideos(videoToGet: (global.subWorkoutList[currentWorkout.workoutLabel + "Introduction"]?.contain[0])!, numberDownload: 0) // TODO: Uncomment when finalize uploading
+           
+            self.getVideos(videoToGet: self.videoToGet, numberDownload: 00)  // randomly get one video for each sub-workout
+            print("[Video Player] \(self.videoToGet.name)")
         }
         
-        downloadQueue.async {
-            
-            for workout in currentWorkout.containSubworkout {    // get a list of sub-workouts from a Workout and iterate through
-                
-                let rand = Int(arc4random_uniform(UInt32(workout.contain.count)))
-                self.getVideos(videoToGet: workout.contain[rand], numberDownload: rand)  // randomly get one video for each sub-workout
-                print("[Video Player] \(workout.name)")
-                
-                //TODO: if there are more than 1 consecutive sub-workout of same type, make sure the videos aren't duplicated
-            }
-        }
         
-        downloadQueue.async {
-            self.getVideos(videoToGet: (global.subWorkoutList[currentWorkout.workoutLabel + "Ending"]?.contain[0])!, numberDownload: 9) // TODO: Uncomment when finalize uploading
-        }
-        
-        downloadQueue.async {
-            print("[List Videos]: \(self.listVideos)")
-        }
-        
-        self.player = self.queuePlayer
+        self.player = self.videoPlayer
         
         NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
         
@@ -728,10 +657,10 @@ class PlayerViewController: AVPlayerViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
-        NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.queuePlayer.currentItem)
+        NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.videoPlayer.currentItem)
         
         NotificationCenter.default.addObserver(self, selector: #selector(audioInterruptionHandle), name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
-
+        
         
         self.player?.play()
     }
@@ -801,9 +730,9 @@ class PlayerViewController: AVPlayerViewController {
             }
             
             disappearAnimationControl.isInterruptible = true
-
+            
             let point = tap.location(in: self.view)
-
+            
             let pointInTopView = self.topView.convert(point, from: self.view)
             let pointInCtrlView = self.controlView.convert(point, from: self.view)
             
@@ -818,9 +747,9 @@ class PlayerViewController: AVPlayerViewController {
             
             disappearAnimationControl.isReversed = false
             reappearAnimationControl.isReversed = false
-
+            
             if checkInView(points: arrayPointButton) == false && self.topView.bounds.contains(pointInTopView) && !(self.controlView.bounds.contains(pointInCtrlView)) && self.showPlayDoneButton {
-
+                
                 let disableInteractManualQueue = DispatchQueue(label: "disableInteractManualQueue")
                 
                 disableInteractManualQueue.sync {
@@ -830,7 +759,7 @@ class PlayerViewController: AVPlayerViewController {
                     disableHighlighted()
                     disappearAnimationControl.startAnimation()
                 }
-
+                
             } else if ((self.topView.bounds.contains(pointInTopView)) && self.showPlayDoneButton != true) || disappearAnimationControl.fractionComplete > 0.0 {
                 
                 let enableInteractQueue = DispatchQueue(label: "enableInteractQueue")
@@ -884,7 +813,7 @@ class PlayerViewController: AVPlayerViewController {
     func checkInView(points: Array<CGPoint>) -> Bool {
         
         for point in points {
-        
+            
             if self.playButton.imageView?.bounds.contains(point) == true {
                 return true
             } else if self.doneButton.imageView?.bounds.contains(point) == true {
@@ -912,7 +841,7 @@ class PlayerViewController: AVPlayerViewController {
         self.forward15.isEnabled = true
         self.forward.isEnabled = true
         self.routePickerView.isUserInteractionEnabled = true
-
+        
     }
     
     @objc func disableInteract() {
@@ -969,7 +898,7 @@ class PlayerViewController: AVPlayerViewController {
     }
     
     func toggleAppear() {
-
+        
         enableInteract()
         
         self.showPlayDoneButton = true
@@ -986,11 +915,7 @@ class PlayerViewController: AVPlayerViewController {
     
     @objc func playerDidPlayToEnd() {
         
-        if self.queuePlayer.currentItem == listVideos[listVideos.count - 1] || self.player?.currentItem == listVideos[listVideos.count - 1] {
-            
-            exitVideoPlayer()
-            return
-        }
+        exitVideoPlayer()
     }
     
     @objc func audioInterruptionHandle(notification: Notification) {
@@ -1003,7 +928,7 @@ class PlayerViewController: AVPlayerViewController {
         
         if type == .began {
             // Interruption began, take appropriate actions
-            self.queuePlayer.pause()
+            self.videoPlayer.pause()
             
         } else if type == .ended {
             if let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt {
@@ -1011,7 +936,7 @@ class PlayerViewController: AVPlayerViewController {
                 if options.contains(.shouldResume) {
                     
                     // Interruption Ended - playback should resume
-                    self.queuePlayer.play()
+                    self.videoPlayer.play()
                 } else {
                     // Interruption Ended - playback should NOT resume
                 }
@@ -1032,38 +957,39 @@ class PlayerViewController: AVPlayerViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        self.player = self.videoPlayer
         self.player?.play()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
+        
         self.showsPlaybackControls = false
-
+        
         setTimer()
         
         NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
-        NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.queuePlayer.currentItem)
+        NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.videoPlayer.currentItem)
     }
-
+    
     override func remoteControlReceived(with event: UIEvent?) {
-
+        
         if let event = event {
             
             if event.type == .remoteControl {
-
+                
                 print("[Remote Received] Event \(event)")
                 
                 switch event.subtype {
-
+                    
                 case .remoteControlPlay:
                     print("[Remote Received] Play")
                     playRemote()
-
+                    
                 case .remoteControlPause:
                     print("[Remote Received] Pause")
                     pauseRemote()
-
+                    
                 case .remoteControlNextTrack:
                     print("[Remote Received] Forward")
                     forward15Remote()
@@ -1078,7 +1004,7 @@ class PlayerViewController: AVPlayerViewController {
             }
         }
     }
-
+    
     //MARK: Observe changes in AVPlayer
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         
@@ -1087,7 +1013,7 @@ class PlayerViewController: AVPlayerViewController {
         case "status":
             
             if player?.status == .readyToPlay {
-
+                
                 print("[Notification] ready to play")
                 
                 if playerPlaying {
@@ -1097,23 +1023,23 @@ class PlayerViewController: AVPlayerViewController {
                 }
             }
             
-//        case "loadedTimeRanges":
-//            activityIndicatorView.stopAnimating()
-//            print("loadedTimeRanges")
-
+            //        case "loadedTimeRanges":
+            //            activityIndicatorView.stopAnimating()
+            //            print("loadedTimeRanges")
+            
         case "playbackBufferEmpty":
             
             activityIndicatorView.startAnimating()
             print("[Notification] playbackBufferEmpty")
-
+            
         case "playbackLikelyToKeepUp":
             activityIndicatorView.stopAnimating()
             print("[Notification] playbackLikelyToKeepUp")
-
+            
         case "playbackBufferFull":
             activityIndicatorView.stopAnimating()
             print("[Notification] playbackBufferFull")
-  
+            
         default:
             return
         }
@@ -1123,9 +1049,9 @@ class PlayerViewController: AVPlayerViewController {
     @objc func doneButtonPressed() {
         
         if doneButton.isEnabled {
-
+            
             print("[Done] doneButtonPressed")
-        
+            
             exitVideoPlayer()
         }
         
@@ -1164,32 +1090,29 @@ class PlayerViewController: AVPlayerViewController {
             self.player?.pause()
             playButton.setImage(UIImage(named: "PLAY"), for: .normal)
             playerPlaying = false
-        
+            
             let seekDuration = CMTimeMake(15, 1)
             let currentTime: CMTime = (self.player?.currentTime())!
-        
-            if currentTime + seekDuration > (self.player?.currentItem?.duration)! && !(self.player?.currentItem == listVideos[listVideos.count - 1]) {
-                
-                self.player?.pause()
-                self.queuePlayer.advanceToNextItem()
-                self.player?.play()
-                self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
-                
-                return
-            } else if currentTime + seekDuration > (self.player?.currentItem?.duration)! && (self.player?.currentItem == listVideos[listVideos.count - 1]) {
-                
-                self.player?.pause()
-                self.exitVideoPlayer()
+            
+            let checkDuration = DispatchQueue.main
+            
+            checkDuration.sync {
+                if currentTime + seekDuration > (self.player?.currentItem?.duration)! {
+                    
+                    self.player?.pause()
+                    self.exitVideoPlayer()
+                    return
+                }
             }
-        
+            
             self.player?.seek(to: currentTime + seekDuration)
-        
+            
             print("[Forward] forward15ButtonPressed")
-        
+            
             self.player?.play()
             playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
             playerPlaying = true
-        
+            
             setTimer()
         }
         
@@ -1203,11 +1126,11 @@ class PlayerViewController: AVPlayerViewController {
         timerTest.invalidate()
         
         if backward15.isEnabled {
-        
+            
             self.player?.pause()
             playButton.setImage(UIImage(named: "PLAY"), for: .normal)
             playerPlaying = false
-        
+            
             let seekDuration = CMTimeMake(15, 1)
             let currentTime: CMTime = (self.player?.currentTime())!
             if currentTime - seekDuration > kCMTimeZero {                   // check if seek duration is less than 15 seconds
@@ -1219,13 +1142,13 @@ class PlayerViewController: AVPlayerViewController {
                 
                 self.player?.seek(to: kCMTimeZero)
             }
-        
+            
             print("[Backward 15] backward15ButtonPressed")
-        
+            
             self.player?.play()
             playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
             playerPlaying = true
-        
+            
             setTimer()
         }
         
@@ -1238,45 +1161,12 @@ class PlayerViewController: AVPlayerViewController {
         timerTest.invalidate()
         
         if forward.isEnabled {
-        
+            
+            //TODO: Play next video in the list exercises
             self.player?.pause()
-        
-            for item in listVideos {                    // get and insert previous video into queue
-                
-                if item == self.player?.currentItem {
-                    
-                    let currentIndex = listVideos.index(of: item)
-                    print("[Forward] CurrentIndex: \(currentIndex!)")
-                    
-                    if currentIndex! < listVideos.count - 1 {
-                        
-                        self.queuePlayer.advanceToNextItem()
-                        self.player?.seek(to: kCMTimeZero)
-                        
-                        print("[Forward] forwardButtonPressed")
-                        
-                        self.player?.play()
-                        self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
-                        
-                        return
-                        
-                    } else if currentIndex == listVideos.count - 1 {
-                        
-                        exitVideoPlayer()
-                        return
-                    }
-                }
-            }
-        
-            print("[Forward] forwardButtonPressed")
-        
-            self.player?.play()
-            self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
-        
-            setTimer()
+            self.exitVideoPlayer()
+            return
         }
-        
-        return
     }
     
     //MARK: Backward selected
@@ -1285,60 +1175,18 @@ class PlayerViewController: AVPlayerViewController {
         timerTest.invalidate()
         
         if backward.isEnabled {
-        
-            for item in listVideos {                    // get and insert previous video into queue
-                if item == self.player?.currentItem {
-                    
-                    let currentIndex = listVideos.index(of: item)
-                    print(currentIndex!)
-                    
-                    if currentIndex! > 0 {
-                        
-                        self.player?.pause()
-                        
-                        let moveBackIndex = currentIndex! - 1
-                    
-                        let currentItem = self.player?.currentItem
-                        let newItem = listVideos[moveBackIndex]
-                        
-                        self.queuePlayer.replaceCurrentItem(with: newItem)            //TODO: Implement flexible backward for multiple videos
-                        print("[Backward] replace video successfully")
-                        
-                        self.player?.pause()
-                        
-                        self.queuePlayer.insert(currentItem!, after: newItem)
-                        print("[Backward] inserted curent video")
-
-                        self.player?.seek(to: kCMTimeZero)
-                        
-                        print("[Backward] backwardButtonPressed")
-                        
-                        self.player?.play()
-                        self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
-                        
-                    } else if currentIndex == 0 {
-                        
-                        self.player?.pause()
-                        
-                        self.player?.seek(to: kCMTimeZero)
-                        
-                        self.player?.play()
-                        self.playButton.setImage(UIImage(named: "PAUSE"), for: .normal)
-                    }
-                }
-            }
-            setTimer()
+            self.player?.pause()
+            self.exitVideoPlayer()
+            return
         }
-        
-        return
     }
     
     @objc func airplayButton() {
-
+        
         print("[Airplay] airplayButtonPressed")
-    
+        
         self.contentOverlayView?.addSubview(routePickerView)
-    
+        
         routePickerView.heightAnchor.constraint(equalToConstant: 40).isActive = true
         routePickerView.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         routePickerView.rightAnchor.constraint(equalTo: (controlView.rightAnchor), constant: -20).isActive = true
@@ -1347,22 +1195,20 @@ class PlayerViewController: AVPlayerViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-//        self.player = nil
-        self.queuePlayer.removeAllItems()
+        self.player = nil
         NotificationCenter.default.removeObserver(self)
-    
+        
         checkPortrait()
     }
     
     deinit {
-//        self.player = nil
-        self.queuePlayer.removeAllItems()
+        self.player = nil
         NotificationCenter.default.removeObserver(self)
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+        
 }

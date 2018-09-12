@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class VideoExercise: Hashable {
+class VideoExercise: NSObject, NSCoding {
     
     var localURL: URL?
     var serverURL: URL?
@@ -25,10 +25,20 @@ class VideoExercise: Hashable {
     var b:Int = 0;
     var a:Int = 0;
     
-    var hashValue: Int {
+    override var hashValue: Int {
         get {
             return "\(r)\(g)\(b)\(a)".hashValue;
         }
+    }
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        
+        let name = aDecoder.decodeObject(forKey: "nameVideoExercise") as! String
+        self.init(name: name)
+    }
+    
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(self.name, forKey: "nameVideoExercise")
     }
 }
 

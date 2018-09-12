@@ -40,6 +40,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("an error occurred when audio session category.\n \(error)")
         }
         
+        
+
+        
         return true
     }
     
@@ -102,8 +105,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         
         // Saving workoutList into UserDefault storage in phone
-        let userDefaults = UserDefaults.standard
-        userDefaults.set(global.workOutVideos, forKey: "UserWorkoutList")
+        
+        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
+        let filePath = path.strings(byAppendingPaths: ["userListOfWorkoutsData"])
+        NSKeyedArchiver.archiveRootObject(global.workOutVideos, toFile: filePath[0])
+        
+//        let userDefaults = UserDefaults.standard
+//
+//        let userListOfWorkoutsData = NSKeyedArchiver.archivedData(withRootObject: global.workOutVideos)
+//        for workoutVideos in global.workOutVideos{
+//           print("[Saving UserDefaults] \(workoutVideos.length)")
+//           print("[Saving UserDefaults] \(workoutVideos.containSubworkout.count)")
+//        }
+//        userDefaults.set(userListOfWorkoutsData, forKey: "UserWorkoutList")
     }
     
     //MARK: Set locked portrait mode for all screen
@@ -231,6 +245,13 @@ extension UIColor
         red: 0.17,
         green: 0.17,
         blue: 0.17,
+        alpha: 1.0
+    )
+    
+    static let backgroundColorCell = UIColor(
+        red: 0.20,
+        green: 0.20,
+        blue: 0.20,
         alpha: 1.0
     )
     
