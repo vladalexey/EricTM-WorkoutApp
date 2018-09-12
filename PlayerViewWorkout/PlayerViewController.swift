@@ -39,6 +39,7 @@ class PlayerViewController: AVPlayerViewController {
     
     var queuePlayer = AVQueuePlayer()
     var listVideos = [AVPlayerItem]()
+    var listObjectVideos = [VideoExercise]()
 
     var workoutCode = String()
     var workoutName = String()
@@ -285,6 +286,8 @@ class PlayerViewController: AVPlayerViewController {
             
             self.player?.pause()
             self.player = nil
+            self.listVideos.removeAll()
+            self.listObjectVideos.removeAll()
             self.queuePlayer.removeAllItems()
             
             NotificationCenter.default.removeObserver(self)
@@ -345,6 +348,10 @@ class PlayerViewController: AVPlayerViewController {
             alertView.dismiss(animated: true, completion: nil)
             
             self.player = nil
+            
+            self.listVideos.removeAll()
+            self.listObjectVideos.removeAll()
+            self.queuePlayer.removeAllItems()
             
             self.navigationController?.popViewController(animated: true)
             self.navigationController?.setNavigationBarHidden(false, animated: true)
@@ -574,6 +581,8 @@ class PlayerViewController: AVPlayerViewController {
         videoName = videoName.replacingOccurrences(of: " ", with: "")
         videoName.append(".mp4")
         
+        self.listObjectVideos.append(videoToGet)
+        
         if checkFileAvailableLocal(nameFileToCheck: videoName) == false {            //check if file is available local by search name in directory
             
             // Download video to stream
@@ -689,9 +698,10 @@ class PlayerViewController: AVPlayerViewController {
             print("Error while enumerating files \(documentsURL.path): \(error.localizedDescription)")
         }
         
-        //MARK: Get randome workout videos
+        //MARK: Prepare to get videos
         
-        getRandomList()
+        self.listVideos.removeAll()
+        self.listObjectVideos.removeAll()
         queuePlayer.removeAllItems()
         
         let downloadQueue = DispatchQueue.global()
@@ -699,7 +709,7 @@ class PlayerViewController: AVPlayerViewController {
         let currentWorkout = global.workOutVideos[self.myIndex]
         
         downloadQueue.sync {
-            self.getVideos(videoToGet: (global.subWorkoutList[currentWorkout.workoutLabel + "Introduction"]?.contain[0])!, numberDownload: 0) // TODO: Uncomment when finalize uploading
+            self.getVideos(videoToGet: (global.subWorkoutList[currentWorkout.workoutLabel + "Introduction"]?.contain[0])!, numberDownload: 0)
         }
         
         downloadQueue.sync {
@@ -708,37 +718,17 @@ class PlayerViewController: AVPlayerViewController {
                 
                 print("[Video Player] \(workout.contain)")
                 var checkDuplicate: Bool = true
-                var rand = Int(arc4random_uniform(UInt32(workout.contain.count)))
+                var rand = Int()
                 
                 repeat {
                     
-                    let checkDuplicateQueue = DispatchQueue(label: "checkDuplicateQueue")
-                    
-                    checkDuplicateQueue.async {
-                        if workout.contain[rand].localURL != nil {
-                            
-                            let videoLocal = AVPlayerItem(url: workout.contain[rand].localURL!)
-                            
-                            for video in self.listVideos {
-                                if videoLocal == video {
-                                    checkDuplicate = false
-                                }
-                            }
-                        }
-                    }
-                    
-                    checkDuplicateQueue.async {
-                        if workout.contain[rand].serverURL != nil {
-                            let videoServer = AVPlayerItem(url: workout.contain[rand].serverURL!)
-                            
-                            for video in self.listVideos {
-                                if videoServer == video {
-                                    checkDuplicate = false
-                                }
-                            }
-                        }
-                    }
                     rand = Int(arc4random_uniform(UInt32(workout.contain.count)))
+
+                    if listObjectVideos.contains(workout.contain[rand]) {
+                        checkDuplicate = false
+                    } else {
+                        checkDuplicate = true
+                    }
                 
                 } while checkDuplicate == false
                 
@@ -751,13 +741,9 @@ class PlayerViewController: AVPlayerViewController {
         }
         
         downloadQueue.sync {
-            self.getVideos(videoToGet: (global.subWorkoutList[currentWorkout.workoutLabel + "Ending"]?.contain[0])!, numberDownload: 9) // TODO: Uncomment when finalize uploading
+            self.getVideos(videoToGet: (global.subWorkoutList[currentWorkout.workoutLabel + "Ending"]?.contain[0])!, numberDownload: 9)
         }
-//        
-//        downloadQueue.sync {
-//            print("[List Videos]: \(self.listVideos)")
-//        }
-//        
+
         self.player = self.queuePlayer
         
         print("[Video Player] \(queuePlayer.items())")
@@ -1391,6 +1377,8 @@ class PlayerViewController: AVPlayerViewController {
         super.viewWillDisappear(animated)
         
 //        self.player = nil
+        self.listVideos.removeAll()
+        self.listObjectVideos.removeAll()
         self.queuePlayer.removeAllItems()
         NotificationCenter.default.removeObserver(self)
     
@@ -1399,6 +1387,8 @@ class PlayerViewController: AVPlayerViewController {
     
     deinit {
 //        self.player = nil
+        self.listVideos.removeAll()
+        self.listObjectVideos.removeAll()
         self.queuePlayer.removeAllItems()
         NotificationCenter.default.removeObserver(self)
     }
