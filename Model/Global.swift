@@ -13,6 +13,8 @@ class Global {
     
     var workOutVideos = [WorkOutVideo]()
     
+    var videoExercises = [VideoExercise]()
+    
     var subWorkoutList = [
         
         "FullBodyUpperIntroduction": SubWorkoutList(name: ["FullBodyIntroduction"], contain: [VideoExercise(name:"Full Body Introduction")]),
@@ -129,6 +131,7 @@ class Global {
                                         
                                         VideoExercise(name:"Full Body Ending"),
                                         VideoExercise(name:"Upper Body Ending"),
+                                        VideoExercise(name:"Lower Body Ending"),
                                         VideoExercise(name:"Abs Ending"),
                                         VideoExercise(name:"AbsIntermediate Ending"),
                                         

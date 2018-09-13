@@ -27,5 +27,13 @@ class AddCustomizeWorkoutTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-
+    
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        if editing {
+            self.downloadCheck.isHidden = true
+        } else {
+            self.downloadCheck.isHidden = false
+        }
+    }
 }

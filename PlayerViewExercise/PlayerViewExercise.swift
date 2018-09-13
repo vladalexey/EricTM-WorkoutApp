@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 import AVKit
 import MediaPlayer
 
@@ -559,7 +560,7 @@ class PlayerViewExercise: AVPlayerViewController {
                     
                     videoToGet.serverURL = url!
                     
-                    //                    print("[Play Video]" + videoName)
+                    print("[Download Video Exercise]" + videoName)
                     
                     let url1: URL = url!
                     let item1 = AVPlayerItem(url: url1)
@@ -588,7 +589,7 @@ class PlayerViewExercise: AVPlayerViewController {
                     
                 } else {
                     
-                    //                    print("[Play Video] sucessfully downloaded video \(videoName)")
+                    print("[Play Video] sucessfully downloaded video \(videoName)")
                     
                     videoToGet.localURL = localURL
                 }
@@ -597,13 +598,11 @@ class PlayerViewExercise: AVPlayerViewController {
             //MARK: check available = true video 1
         } else {
             
-            //            print("[Play Video] successfully loaded video from local \(videoName)")
+            print("[Play Video] successfully loaded video from local \(videoName)")
             
             let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
             
             let localURL = documentsURL.appendingPathComponent(videoName)
-            
-            videoToGet.localURL = localURL
             
             let item1 = AVPlayerItem(url: localURL)
             
@@ -616,7 +615,7 @@ class PlayerViewExercise: AVPlayerViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        
+        super.viewWillAppear(animated)
         UIApplication.shared.endIgnoringInteractionEvents()
         
         setupUI()
@@ -637,30 +636,31 @@ class PlayerViewExercise: AVPlayerViewController {
         
         //MARK: Get video exercise
         
-        let downloadQueue = DispatchQueue.main
+        let downloadQueue = DispatchQueue.global(qos: .utility)
         
-        downloadQueue.async {
+        downloadQueue.sync {
            
             self.getVideos(videoToGet: self.videoToGet, numberDownload: 00)  // randomly get one video for each sub-workout
-            print("[Video Player] \(self.videoToGet.name)")
         }
         
-        
-        self.player = self.videoPlayer
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
-        NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.videoPlayer.currentItem)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(audioInterruptionHandle), name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
-        
+//        downloadQueue.sync {
+            self.player = self.videoPlayer
+            
+            print("[Video Exercise Player] \(self.videoToGet.name)")
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
+            NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.videoPlayer.currentItem)
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(audioInterruptionHandle), name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
+//        }
         
         self.player?.play()
     }
@@ -1195,14 +1195,14 @@ class PlayerViewExercise: AVPlayerViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        self.player = nil
+        self.player?.pause()
         NotificationCenter.default.removeObserver(self)
         
         checkPortrait()
     }
     
     deinit {
-        self.player = nil
+        self.player?.pause()
         NotificationCenter.default.removeObserver(self)
     }
     

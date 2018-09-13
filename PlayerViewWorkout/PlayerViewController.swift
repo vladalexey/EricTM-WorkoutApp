@@ -76,11 +76,7 @@ class PlayerViewController: AVPlayerViewController {
         
         let controlview = UIImageView(image: UIImage(named: "PLAYER BG 2"))
         controlview.translatesAutoresizingMaskIntoConstraints = false
-//        controlview.alpha = 0.5
 
-//        controlview.addBlurEffect()
-//        controlview.roundedAllCorner()
-        
         controlview.isUserInteractionEnabled = true
         
         return controlview
@@ -95,7 +91,6 @@ class PlayerViewController: AVPlayerViewController {
     let activityIndicatorView: UIActivityIndicatorView = {
         let aiv = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
         aiv.translatesAutoresizingMaskIntoConstraints = false
-//        aiv.startAnimating()
         return aiv
     }()
     
@@ -704,46 +699,48 @@ class PlayerViewController: AVPlayerViewController {
         self.listObjectVideos.removeAll()
         queuePlayer.removeAllItems()
         
-        let downloadQueue = DispatchQueue.global()
+        let downloadQueue = DispatchQueue.main
         
         let currentWorkout = global.workOutVideos[self.myIndex]
         
-        downloadQueue.sync {
-            self.getVideos(videoToGet: (global.subWorkoutList[currentWorkout.workoutLabel + "Introduction"]?.contain[0])!, numberDownload: 0)
+        if currentWorkout.isDefault {
+            downloadQueue.async {
+                self.getVideos(videoToGet: (global.subWorkoutList[currentWorkout.workoutLabel + "Introduction"]?.contain[0])!, numberDownload: 0)
+            }
         }
-        
-        downloadQueue.sync {
+        downloadQueue.async {
             
             for workout in currentWorkout.containSubworkout {    // get a list of sub-workouts from a Workout and iterate through
                 
                 print("[Video Player] \(workout.contain)")
                 var checkDuplicate: Bool = true
-                var rand = Int()
+                var rand = Int(arc4random_uniform(UInt32(workout.contain.count)))
                 
-                repeat {
-                    
-                    rand = Int(arc4random_uniform(UInt32(workout.contain.count)))
+                if currentWorkout.isDefault == true { // check for duplicated randomized videos
+                    repeat {
+                        
+                        rand = Int(arc4random_uniform(UInt32(workout.contain.count)))
 
-                    if listObjectVideos.contains(workout.contain[rand]) {
-                        checkDuplicate = false
-                    } else {
-                        checkDuplicate = true
-                    }
-                
-                } while checkDuplicate == false
-                
+                        if self.listObjectVideos.contains(workout.contain[rand]) {
+                            checkDuplicate = false
+                        } else {
+                            checkDuplicate = true
+                        }
+                    
+                    } while checkDuplicate == false
+                }
                 
                 self.getVideos(videoToGet: workout.contain[rand], numberDownload: rand)  // randomly get one video for each sub-workout
                 print("[Video Player] \(workout.name)")
-                
-                //TODO: if there are more than 1 consecutive sub-workout of same type, make sure the videos aren't duplicated
             }
         }
         
-        downloadQueue.sync {
-            self.getVideos(videoToGet: (global.subWorkoutList[currentWorkout.workoutLabel + "Ending"]?.contain[0])!, numberDownload: 9)
+        if currentWorkout.isDefault {
+            downloadQueue.async {
+                self.getVideos(videoToGet: (global.subWorkoutList[currentWorkout.workoutLabel + "Ending"]?.contain[0])!, numberDownload: 9)
+            }
         }
-
+        
         self.player = self.queuePlayer
         
         print("[Video Player] \(queuePlayer.items())")

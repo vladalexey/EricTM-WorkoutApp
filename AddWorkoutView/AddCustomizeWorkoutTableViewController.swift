@@ -8,19 +8,33 @@
 
 import UIKit
 
+protocol DataSentDelegate {
+    func userDidEnterData(newWorkout: WorkOutVideo)
+}
+
 class AddCustomizeWorkoutTableViewController: UITableViewController {
     
+    var workoutTableViewController: WorkOutTableViewController?
+    
     var videoToGet = VideoExercise(name: "")
+    var checkSelected: Bool = false
+    var listSelected = [SubWorkoutList]()
+    
+    lazy var sortButton = UIBarButtonItem(title: "Sort", style: .plain, target: self, action: #selector(AddCustomizeWorkoutTableViewController.sortVideoExercise(_:)))
+    lazy var editButton = UIBarButtonItem(title: "Select", style: .plain, target: self, action: #selector(AddCustomizeWorkoutTableViewController.editButtonPressed(_:)))
     
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         
         if editing {
             tableView.setEditing(true, animated: true)
-            self.editButtonItem.title = "Done"
+            self.editButton.title = "Done"
+            checkSelected = false
+            listSelected = []
+            
         } else {
             tableView.setEditing(false, animated: true)
-            self.editButtonItem.title = "Select"
+            self.editButton.title = "Select"
         }
     }
     
@@ -52,6 +66,19 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
             
             setupBackground()
             
+            let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
+            let filePath = path.strings(byAppendingPaths: ["userListOfVideoExerciseData"])
+            
+            if let userListOfVideoExercises = NSKeyedUnarchiver.unarchiveObject(withFile: filePath[0]) as? [VideoExercise] {
+                if userListOfVideoExercises.count > 0 {
+                    global.videoExercises = userListOfVideoExercises
+                }
+            } else {
+                global.videoExercises = (global.subWorkoutList["AllVideos"]?.contain)!
+                
+                NSKeyedArchiver.archiveRootObject(global.videoExercises, toFile: filePath[0])
+            }
+            
             if (self.navigationController?.navigationBar.isHidden)! {
                 self.navigationController?.isNavigationBarHidden = false
             }
@@ -64,22 +91,38 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
         }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        print("[Video Exercises] \(global.videoExercises)")
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.setEditing(true, animated: true)
+        
+        sortButton.tintColor = UIColor.lightGray
+        editButton.tintColor = UIColor.lightGray
+        self.navigationItem.leftBarButtonItem = sortButton
+        self.navigationItem.rightBarButtonItem = editButton
         
         tableView.estimatedRowHeight = 250
         tableView.rowHeight = UITableViewAutomaticDimension
         
         tableView.allowsMultipleSelectionDuringEditing = true
         
+        
+        
         setupBackground()
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
-        self.navigationItem.rightBarButtonItem = self.editButtonItem
-        self.editButtonItem.title = "Select"
-        self.editButtonItem.tintColor = UIColor.lightGray
+//        self.navigationItem.rightBarButtonItem = self.editButtonItem
+//        self.editButtonItem.title = "Select"
+//        self.editButtonItem.tintColor = UIColor.lightGray
     
 //        self.navigationItem.backBarButtonItem?.tintColor = UIColor.lightGray
     }
@@ -114,24 +157,20 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
     // MARK: - Table view data source
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//
-//        if let cell = tableView.cellForRow(at: indexPath) {
-//            cell.accessoryType = .checkmark
-//            print("Checkmark")
-//        }
+
+        videoToGet = global.videoExercises[indexPath.row]
         
         if tableView.isEditing == false {
-            
-            videoToGet = (global.subWorkoutList["AllVideos"]?.contain[indexPath.row])!
+            print("[Video Exercise] \(videoToGet.name)")
             performSegue(withIdentifier: "PlayerVideoExercise", sender: self)
+            
+        } else {
+            print("[Selecting] True")
+            checkSelected = true
+            let newSubWorkoutList = SubWorkoutList(name: ["UserCustom"], contain: [videoToGet])
+            self.listSelected.append(newSubWorkoutList)
         }
     }
-    
-//    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-//        if let cell = tableView.cellForRow(at: indexPath) {
-//            cell.accessoryType = .none
-//        }
-//    }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
@@ -140,7 +179,7 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return (global.subWorkoutList["AllVideos"]?.contain.count)!
+        return (global.videoExercises.count)
     }
 
     
@@ -151,12 +190,25 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
             fatalError("[Loading Cell] The dequeued cell is not an instance of AddCustomizeWorkoutTableViewCell.")
         }
         
-        let videoExercise = global.subWorkoutList["AllVideos"]?.contain[indexPath.row]
-        
+        let videoExercise = global.videoExercises[indexPath.row]
+        var videoNameFile = videoExercise.name
+        videoNameFile = videoNameFile.replacingOccurrences(of: " ", with: "")
+        videoNameFile.append(".mp4")
         
 //        TODO: add UI elements in storyboard and add init cell accordingly
         
-        cell.nameVideoExercise.text = videoExercise?.name
+        cell.nameVideoExercise.text = videoExercise.name
+        
+        let imageThumbnail = UIImage(named: "Thumbnail")
+        
+        
+        if checkFileAvailableLocal(nameFileToCheck: videoNameFile) {
+            cell.downloadCheck.image = UIImage(named: "Download")
+            cell.smallThumbnail.image = imageThumbnail
+        } else {
+            cell.downloadCheck.image = nil
+            cell.smallThumbnail.image = imageThumbnail?.noir
+        }
         
         let colorView = UIView()
         colorView.backgroundColor = UIColor.backgroundColorCell
@@ -190,13 +242,70 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
 
     // Override to support rearranging the table view.
     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
+        
+        let videoExercise = global.videoExercises[fromIndexPath.row]
+        
+        global.videoExercises.remove(at: fromIndexPath.row)
+        global.videoExercises.insert(videoExercise, at: to.row)
+        
+        print("[Video Exercises] \(global.videoExercises[fromIndexPath.row].name, global.videoExercises[to.row].name)")
     }
 
+    func deleteContentFromLocal(fileNameToDelete: String) {
+        
+        var filePath = ""
+        
+        // Fine documents directory on device
+        let dirs : [String] = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.allDomainsMask, true)
+        
+        if dirs.count > 0 {
+            let dir = dirs[0] //documents directory
+            filePath = dir.appendingFormat("/" + fileNameToDelete)
+            print("[Remove Content] Local path = \(filePath)")
+            
+        } else {
+            print("[Remove Content] Could not find local directory to store file")
+            return
+        }
+        
+        
+        do {
+            let fileManager = FileManager.default
+            
+            // Check if file exists
+            if fileManager.fileExists(atPath: filePath) {
+                // Delete file
+                try fileManager.removeItem(atPath: filePath)
+            } else {
+                print("[Remove Content] File does not exist")
+            }
+            
+        }
+        catch let error as NSError {
+            print("[Remove Content] An error took place: \(error)")
+        }
+    }
+    
 
     // Override to support conditional rearranging of the table view.
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return true
+    }
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        let remove = UITableViewRowAction(style: .normal, title: "Remove") { action, index in
+
+            print("[Table Editing]" + global.videoExercises[indexPath.row].name + " deleted")
+            
+            var nameFileToDelete = global.videoExercises[indexPath.row].name
+            nameFileToDelete = nameFileToDelete.replacingOccurrences(of: " ", with: "")
+            nameFileToDelete.append(".mp4")
+            
+            self.deleteContentFromLocal(fileNameToDelete: nameFileToDelete )
+        }
+        remove.backgroundColor = .red
+        
+        return [remove]
     }
     
     func exitEditModeIfTrue() {
@@ -222,7 +331,134 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
             destVC?.videoToGet = videoToGet
             
         }
+        
+        if segue.identifier == "AddCustomizeWorkout" {
+            
+            exitEditModeIfTrue()
+            
+            if UIApplication.shared.statusBarOrientation.isPortrait == false {
+                print("[Screen Rotation] Change to Portrait")
+                AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
+            }
+            
+            let destVC = segue.destination as? WorkOutTableViewController
+            
+            print("[Add Customized Exercise]")
+            
+            let newIndex = IndexPath(row: global.workOutVideos.count, section: 0)
+            destVC?.tableView.insertRows(at: [newIndex], with: .bottom)
+        }
     }
+    
+    func saveNewWorkout() {
+        
+        let saveNewWorkout = UIAlertController(title: "Create New Workout", message: "", preferredStyle: UIAlertControllerStyle.alert)
+        
+        saveNewWorkout.addTextField(configurationHandler: {textField in
+            textField.placeholder = "Workout Name"
+        })
+        
+        saveNewWorkout.addTextField(configurationHandler: {textField in
+            textField.placeholder = "Subtitle"
+        })
+        
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default) {
+            (result : UIAlertAction) -> Void in
+            
+            saveNewWorkout.dismiss(animated: true, completion: nil)
+            
+            print("[Table Create] Cancel")
+        }
+        
+        saveNewWorkout.addAction(cancelAction)
+        
+        let saveAction = UIAlertAction(title: "Create", style: UIAlertActionStyle.default) {
+            (result : UIAlertAction) -> Void in
+            
+            print("[Table Create] Create")
+            
+            print("[Save New Workout] Custom workout non nil")
+            if let name = saveNewWorkout.textFields?.first?.text {
+                
+                guard let newWorkout = WorkOutVideo(name: name, length: "45'", workoutLabel: "UserCustom", isDefault: false, containSubworkout: self.listSelected) else {
+                    print("[Add Workout] Error in adding workout in AddWorkoutController")
+                    return
+                }
+                
+                global.workOutVideos.append(newWorkout)
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "load"), object: nil) // to notify tableview to reload when done adding workout
+
+                
+                saveNewWorkout.dismiss(animated: true, completion: nil)
+                
+            } else {
+                print("[Save New Workout] Error Name Input" )
+            }
+        }
+        
+        saveNewWorkout.addAction(saveAction)
+        
+        self.present(saveNewWorkout, animated: true, completion: self.exitEditModeIfTrue)
+    }
+    
+    @objc func sortVideoExercise(_ sender:UIBarButtonItem) {
+        //TODO: Sort videos alphabetically/workout
+        print("[Sorting] Pressed")
+        
+        let saveNewWorkout = UIAlertController(title: "Create New Workout", message: "", preferredStyle: UIAlertControllerStyle.alert)
+        
+        let alphabetAction = UIAlertAction(title: "Alphabetically", style: UIAlertActionStyle.default) {
+            (result : UIAlertAction) -> Void in
+            
+            global.videoExercises.sort { $0.name < $1.name}
+            self.tableView.reloadData()
+            
+            saveNewWorkout.dismiss(animated: true, completion: nil)
+            
+            print("[Table Sort] Alphabetically")
+        }
+        
+        saveNewWorkout.addAction(alphabetAction)
+        
+        let workoutAction = UIAlertAction(title: "Workout", style: UIAlertActionStyle.default) {
+            (result : UIAlertAction) -> Void in
+            
+            saveNewWorkout.dismiss(animated: true, completion: nil)
+            
+            print("[Table Sort] Workout")
+        }
+        
+        saveNewWorkout.addAction(workoutAction)
+        
+        self.present(saveNewWorkout, animated: true, completion: nil)
+    }
+    
+    @objc func editButtonPressed(_ sender:UIBarButtonItem) {
+        
+        if self.isEditing == false {
+            self.setEditing(true, animated: true)
+            print("[Editing] Edit")
+            
+        } else {
+            print("[Editing] Done")
+            
+            let saveSelectedWorkout = DispatchWorkItem {
+                if self.checkSelected {
+                    self.saveNewWorkout()
+                }
+            }
+            DispatchQueue.main.async(execute: saveSelectedWorkout)
+            
+            saveSelectedWorkout.notify(queue: DispatchQueue.main) {
+                self.exitEditModeIfTrue()
+            }
+            
+        }
+    }
+    
+    //MARK: Private Methods
+    
 
 
     func setupBackground() {

@@ -7,16 +7,16 @@
 //
 
 import UIKit
-
-protocol DataSentDelegate {
-    func userDidEnterData(nameWorkout: String, lengthWorkout: String, workoutLabel: String, isDefault: Bool, containSubworkout: Array<SubWorkoutList>)
-}
+//
+//protocol DataSentDelegate {
+//    func userDidEnterData(nameWorkout: String, lengthWorkout: String, workoutLabel: String, isDefault: Bool, containSubworkout: Array<SubWorkoutList>)
+//}
 
 class AddWorkoutViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
     //MARK: Properties
     
-    var delegate: DataSentDelegate? = nil
+//    var delegate: DataSentDelegate? = nil
     
     let workoutLabels = ["Full", "Upper", "Lower", "Abs", "Pull", "Push"]
     
@@ -131,17 +131,17 @@ class AddWorkoutViewController: UIViewController, UIPickerViewDelegate, UIPicker
     
     @objc func saveWorkoutDone() {
         
-        if delegate != nil {
-            print("[Save New Workout] Custom workout non nil")
-            if nameWorkoutInput.text!.isEmpty == false && lengthWorkoutPicker != nil {
-
-                delegate?.userDidEnterData(nameWorkout: nameWorkoutInput.text!, lengthWorkout: pickerData[lengthWorkoutPicker.selectedRow(inComponent: 0)], workoutLabel: workoutLabels[0], isDefault: false, containSubworkout: []) //TODO: Change workoutLabel to appropriate code in Personalize
-                print(lengthWorkoutPicker.selectedRow(inComponent: 0))
-                dismiss(animated: true, completion: nil)
-            } else {
-                print("[Save New Workout] Error Name Input" )
-            }
-        }
+//        if delegate != nil {
+//            print("[Save New Workout] Custom workout non nil")
+//            if nameWorkoutInput.text!.isEmpty == false && lengthWorkoutPicker != nil {
+//
+//                delegate?.userDidEnterData(nameWorkout: nameWorkoutInput.text!, lengthWorkout: pickerData[lengthWorkoutPicker.selectedRow(inComponent: 0)], workoutLabel: workoutLabels[0], isDefault: false, containSubworkout: []) //TODO: Change workoutLabel to appropriate code in Personalize
+//                print(lengthWorkoutPicker.selectedRow(inComponent: 0))
+//                dismiss(animated: true, completion: nil)
+//            } else {
+//                print("[Save New Workout] Error Name Input" )
+//            }
+//        }
     }
     
     func setCancelButton() {

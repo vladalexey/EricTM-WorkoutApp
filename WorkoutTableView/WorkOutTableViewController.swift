@@ -13,11 +13,13 @@ import Darwin
 
 import FirebaseStorage
 
-class WorkOutTableViewController: UITableViewController, DataSentDelegate {
+class WorkOutTableViewController: UITableViewController {
     
     //MARK: Properties
     
 //    var workOutVideos = [WorkOutVideo]()
+    
+    var completionHandler:(() -> WorkOutVideo)?
     
     var playerController = AVPlayerViewController()
     var player:AVPlayer?
@@ -98,7 +100,9 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         // self.clearsSelectionOnViewWillAppear = false
         
         self.navigationItem.rightBarButtonItem = self.editButtonItem
-        self.editButtonItem.tintColor = UIColor.lightGray 
+        self.editButtonItem.tintColor = UIColor.lightGray
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(userDidEnterData), name: NSNotification.Name(rawValue: "load"), object: nil) // receice notification to reload tableview
     }
 
     override func didReceiveMemoryWarning() {
@@ -296,22 +300,6 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         }
         remove.backgroundColor = .red
         
-//        let removeDownload = UITableViewRowAction(style: .normal, title: "Remove Local") { action, index in
-//
-//            print("[Table Editing] Remove Download button")
-//
-//            //Check if file name available in other workouts
-//
-//            for (item, hasDownloaded) in global.workOutVideos[indexPath.row].contain {
-//
-////                if self.checkAvailableOtherWorkout(itemToCheck: item, indexWorkOutVideo: indexPath.row) == false && hasDownloaded { // if not available and already downloaded in other workouts -> Safe to delete
-//
-//                    guard let nameFileToDelete = item.name else {return}
-//                    self.deleteContentFromLocal(fileNameToDelete: nameFileToDelete)
-////                }
-//            }
-//        }
-        
         return [remove, edit]
     }
     
@@ -326,17 +314,17 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         
         if segue.identifier == "addWorkout" {
             
-            exitEditModeIfTrue()
-            
-            if UIApplication.shared.statusBarOrientation.isPortrait == false {
-                print("[Screen Rotation] Change to Portrait")
-                AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
-            }
-            
-            let destVC = segue.destination as? UINavigationController
-
-            let AddWorkoutViewController = destVC?.topViewController as! AddWorkoutViewController
-            AddWorkoutViewController.delegate = self
+//            exitEditModeIfTrue()
+//
+//            if UIApplication.shared.statusBarOrientation.isPortrait == false {
+//                print("[Screen Rotation] Change to Portrait")
+//                AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
+//            }
+//
+//            let destVC = segue.destination as? UINavigationController
+//
+//            let AddWorkoutViewController = destVC?.topViewController as! AddWorkoutViewController
+//            AddWorkoutViewController.delegate = self
             
         }
         else if segue.identifier == "VideoPlayer" {
@@ -350,7 +338,6 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
             print("[Video Playing] \(global.workOutVideos[myIndex].containSubworkout)")
             
             workoutCode = workoutLabel
-            workoutCode = "Abs_Loop_Demo_" //TODO: Change back to Abs when finish testing
             print(workoutCode)
             
             destVC?.workoutCode = self.workoutCode
@@ -410,22 +397,14 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
     
     //MARK: Private Methods
     
-    func userDidEnterData(nameWorkout: String, lengthWorkout: String, workoutLabel: String, isDefault: Bool, containSubworkout: Array<SubWorkoutList>) {    //delegate function for add custom workout
-        
-        if nameWorkout.isEmpty == false && lengthWorkout != "" && workoutLabel.isEmpty == false {
-            
-            let newIndex = IndexPath(row: global.workOutVideos.count, section: 0)
-            
-            guard let newWorkout = WorkOutVideo(name: nameWorkout, length: lengthWorkout, workoutLabel: workoutLabel, isDefault: isDefault, containSubworkout: containSubworkout)
-                else {
-                    print("[Add Workout] Error in adding workout in AddWorkoutController")
-                    return
-            }
-            global.workOutVideos.append(newWorkout)
-            listWorkOut.append(nameWorkout)
-            tableView.insertRows(at: [newIndex], with: .bottom)
-            print(listWorkOut)
-        }
+    @objc func userDidEnterData() {    //delegate function for add custom workout
+
+        let newIndex = IndexPath(row: global.workOutVideos.count - 1, section: 0)
+        tableView.beginUpdates()
+        tableView.insertRows(at: [newIndex], with: .bottom)
+        tableView.endUpdates()
+        tableView.reloadData()
+        print(global.workOutVideos.count)
     }
 
     
@@ -438,12 +417,7 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
         let filePath = path.strings(byAppendingPaths: ["userListOfWorkoutsData"])
 
         if let userListOfWorkouts = NSKeyedUnarchiver.unarchiveObject(withFile: filePath[0]) as? [WorkOutVideo] {
-//        if userDefaults.object(forKey: "UserWorkoutList") != nil {  // check if already saved in userDefault
-//
-//            let userListOfWorkoutsData = userDefaults.object(forKey: "UserWorkoutList") as? Data
-//
-//            guard let userListOfWorkouts = NSKeyedUnarchiver.unarchiveObject(with: userListOfWorkoutsData!) as? [WorkOutVideo] else {return}
-//
+
             global.workOutVideos = userListOfWorkouts
             for workoutVideos in global.workOutVideos {
                 print("[Saving UserDefaults] \(workoutVideos.length)")
@@ -537,19 +511,7 @@ class WorkOutTableViewController: UITableViewController, DataSentDelegate {
             let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
             let filePath = path.strings(byAppendingPaths: ["userListOfWorkoutsData"])
             NSKeyedArchiver.archiveRootObject(global.workOutVideos, toFile: filePath[0])
-            
-//            let userListOfWorkoutsData = NSKeyedArchiver.archivedData(withRootObject: global.workOutVideos)
-//            for workoutVideo in global.workOutVideos {
-//                print("[Saving UserDefaults Return Nil] \(workoutVideo.length)")
-//                print("[Saving UserDefaults Return Nil] \(workoutVideo.containSubworkout.count)")
-//            }
-//
-//            userDefaults.set(userListOfWorkoutsData, forKey: "UserWorkoutList")
         }
-        
-        
-        
-        
     }
 
     //MARK: Setup background interface

@@ -107,17 +107,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Saving workoutList into UserDefault storage in phone
         
         let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
-        let filePath = path.strings(byAppendingPaths: ["userListOfWorkoutsData"])
-        NSKeyedArchiver.archiveRootObject(global.workOutVideos, toFile: filePath[0])
+        let filePathWorkoutList = path.strings(byAppendingPaths: ["userListOfWorkoutsData"])
+        NSKeyedArchiver.archiveRootObject(global.workOutVideos, toFile: filePathWorkoutList[0])
         
-//        let userDefaults = UserDefaults.standard
-//
-//        let userListOfWorkoutsData = NSKeyedArchiver.archivedData(withRootObject: global.workOutVideos)
-//        for workoutVideos in global.workOutVideos{
-//           print("[Saving UserDefaults] \(workoutVideos.length)")
-//           print("[Saving UserDefaults] \(workoutVideos.containSubworkout.count)")
-//        }
-//        userDefaults.set(userListOfWorkoutsData, forKey: "UserWorkoutList")
+        let filePathVideoExerciseList = path.strings(byAppendingPaths: ["userListOfVideoExerciseData"])
+        NSKeyedArchiver.archiveRootObject(global.videoExercises, toFile: filePathVideoExerciseList[0])
+
     }
     
     //MARK: Set locked portrait mode for all screen
@@ -226,18 +221,31 @@ extension UIView{
     }
 }
 
-extension UIImageView
-{
-    func addBlurEffect()
-    {
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.regular)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = self.bounds
-        
-        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight] // for supporting device rotation
-        self.sendSubview(toBack: blurEffectView)
+extension UIImage {
+    var noir: UIImage? {
+        let context = CIContext(options: nil)
+        guard let currentFilter = CIFilter(name: "CIPhotoEffectNoir") else { return nil }
+        currentFilter.setValue(CIImage(image: self), forKey: kCIInputImageKey)
+        if let output = currentFilter.outputImage,
+            let cgImage = context.createCGImage(output, from: output.extent) {
+            return UIImage(cgImage: cgImage, scale: scale, orientation: imageOrientation)
+        }
+        return nil
     }
 }
+
+//extension UIImageView
+//{
+//    func addBlurEffect()
+//    {
+//        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.regular)
+//        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+//        blurEffectView.frame = self.bounds
+//
+//        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight] // for supporting device rotation
+//        self.sendSubview(toBack: blurEffectView)
+//    }
+//}
 
 extension UIColor
 {
@@ -249,9 +257,9 @@ extension UIColor
     )
     
     static let backgroundColorCell = UIColor(
-        red: 0.20,
-        green: 0.20,
-        blue: 0.20,
+        red: 0.25,
+        green: 0.25,
+        blue: 0.25,
         alpha: 1.0
     )
     

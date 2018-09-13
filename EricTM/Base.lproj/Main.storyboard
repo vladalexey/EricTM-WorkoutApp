@@ -124,7 +124,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9OY-2W-KPX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1099" y="236"/>
+            <point key="canvasLocation" x="1098.5507246376812" y="235.59782608695653"/>
         </scene>
         <!--Add Workout-->
         <scene sceneID="WIY-Wc-dcD">
@@ -181,7 +181,7 @@
         <!--AV Player View Controller-->
         <scene sceneID="5S3-Zt-M3E">
             <objects>
-                <avPlayerViewController wantsFullScreenLayout="YES" extendedLayoutIncludesOpaqueBars="YES" hidesBottomBarWhenPushed="YES" videoGravity="AVLayerVideoGravityResizeAspect" id="ayv-sC-yyC" customClass="PlayerViewController" customModule="EricTM" customModuleProvider="target" sceneMemberID="viewController"/>
+                <avPlayerViewController wantsFullScreenLayout="YES" extendedLayoutIncludesOpaqueBars="YES" hidesBottomBarWhenPushed="YES" showsPlaybackControls="NO" videoGravity="AVLayerVideoGravityResizeAspect" id="ayv-sC-yyC" customClass="PlayerViewController" customModule="EricTM" customModuleProvider="target" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PEG-eS-rTn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2541" y="236"/>
@@ -189,7 +189,7 @@
         <!--AV Player View Controller-->
         <scene sceneID="UXY-51-aEt">
             <objects>
-                <avPlayerViewController hidesBottomBarWhenPushed="YES" showsPlaybackControls="NO" videoGravity="AVLayerVideoGravityResizeAspect" id="hSa-az-6Bw" customClass="PlayerViewExercise" customModule="EricTM" customModuleProvider="target" sceneMemberID="viewController"/>
+                <avPlayerViewController wantsFullScreenLayout="YES" extendedLayoutIncludesOpaqueBars="YES" hidesBottomBarWhenPushed="YES" showsPlaybackControls="NO" videoGravity="AVLayerVideoGravityResizeAspect" id="hSa-az-6Bw" customClass="PlayerViewExercise" customModule="EricTM" customModuleProvider="target" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TFh-QN-wxv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2541" y="1017"/>
@@ -226,7 +226,7 @@
                                                 <constraint firstAttribute="width" secondItem="44S-vM-sbI" secondAttribute="height" multiplier="16:9" id="3eV-Ae-mGA"/>
                                             </constraints>
                                         </imageView>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Video Name" lineBreakMode="wordWrap" minimumScaleFactor="0.29999999999999999" adjustsLetterSpacingToFitWidth="YES" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DHj-ck-0VX">
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Video Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DHj-ck-0VX">
                                             <rect key="frame" x="104" y="11" width="262" height="14.333333333333336"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
