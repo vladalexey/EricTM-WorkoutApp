@@ -26,8 +26,37 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         
+        var items = [UIBarButtonItem]()
+        
+        let flexibleSpace1 = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let flexibleSpace2 = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        
+        items.append(
+            UIBarButtonItem(title: "CREATE", style: .plain, target: self, action: #selector(saveNewWorkout(_ :)))
+        )
+        
+        items.append(flexibleSpace1)
+        
+        items.append(
+            UIBarButtonItem(title: "DOWNLOAD", style: .plain, target: self, action: #selector(downloadVideo(_ :)))
+        )
+        
+        items.append(flexibleSpace2)
+        
+        items.append(
+            UIBarButtonItem(title: "REMOVE", style: .plain, target: self, action: #selector(removeVideo(_ :)))
+        )
+        
         if editing {
             tableView.setEditing(true, animated: true)
+            
+            self.tabBarController?.tabBar.isHidden = true
+            self.navigationController?.setToolbarHidden(false, animated: true)
+        
+            
+            self.navigationController?.toolbar.items = items
+            self.navigationController?.toolbar.barTintColor = UIColor.backgroundColor
+        
             self.editButton.title = "Done"
             checkSelected = false
             listSelected = []
@@ -35,6 +64,9 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
         } else {
             tableView.setEditing(false, animated: true)
             self.editButton.title = "Select"
+            
+            self.tabBarController?.tabBar.isHidden = false
+            self.navigationController?.setToolbarHidden(true, animated: true)
         }
     }
     
@@ -60,6 +92,34 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        var items = [UIBarButtonItem]()
+        
+        let flexibleSpace1 = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let flexibleSpace2 = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        
+        items.append(
+            UIBarButtonItem(title: "CREATE", style: .plain, target: self, action: #selector(saveNewWorkout(_ :)))
+        )
+        
+        items.append(flexibleSpace1)
+        
+        items.append(
+            UIBarButtonItem(title: "DOWNLOAD", style: .plain, target: self, action: #selector(downloadVideo(_ :)))
+        )
+        
+        items.append(flexibleSpace2)
+        
+        items.append(
+            UIBarButtonItem(title: "REMOVE", style: .plain, target: self, action: #selector(removeVideo(_ :)))
+        )
+        
+        self.tabBarController?.tabBar.isHidden = true
+        self.navigationController?.setToolbarHidden(false, animated: true)
+        
+        
+        self.navigationController?.toolbar.items = items
+        self.navigationController?.toolbar.barTintColor = UIColor.backgroundColor
         
         let checkPortraitWorkoutTable = DispatchQueue(label: "checkPortraitWorkoutTable")
         checkPortraitWorkoutTable.sync {
@@ -102,6 +162,8 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
         super.viewDidLoad()
         
         self.setEditing(true, animated: true)
+        
+        
         
         sortButton.tintColor = UIColor.lightGray
         editButton.tintColor = UIColor.lightGray
@@ -331,82 +393,88 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
             destVC?.videoToGet = videoToGet
             
         }
-        
-        if segue.identifier == "AddCustomizeWorkout" {
-            
-            exitEditModeIfTrue()
-            
-            if UIApplication.shared.statusBarOrientation.isPortrait == false {
-                print("[Screen Rotation] Change to Portrait")
-                AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
-            }
-            
-            let destVC = segue.destination as? WorkOutTableViewController
-            
-            print("[Add Customized Exercise]")
-            
-            let newIndex = IndexPath(row: global.workOutVideos.count, section: 0)
-            destVC?.tableView.insertRows(at: [newIndex], with: .bottom)
-        }
     }
     
-    func saveNewWorkout() {
+    @objc func downloadVideo(_ sender:UIBarButtonItem) {
+        print("[Video Editing] Download ")
+    }
+    
+    @objc func removeVideo(_ sender:UIBarButtonItem) {
+        print("[Video Editing] Remove ")
+    }
+    
+    @objc func saveNewWorkout(_ sender: UIBarButtonItem) {
         
-        let saveNewWorkout = UIAlertController(title: "Create New Workout", message: "", preferredStyle: UIAlertControllerStyle.alert)
-        
-        saveNewWorkout.addTextField(configurationHandler: {textField in
-            textField.placeholder = "Workout Name"
-        })
-        
-        saveNewWorkout.addTextField(configurationHandler: {textField in
-            textField.placeholder = "Subtitle"
-        })
-        
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default) {
-            (result : UIAlertAction) -> Void in
+        let saveSelectedWorkout = DispatchWorkItem {
             
-            saveNewWorkout.dismiss(animated: true, completion: nil)
-            
-            print("[Table Create] Cancel")
-        }
-        
-        saveNewWorkout.addAction(cancelAction)
-        
-        let saveAction = UIAlertAction(title: "Create", style: UIAlertActionStyle.default) {
-            (result : UIAlertAction) -> Void in
-            
-            print("[Table Create] Create")
-            
-            print("[Save New Workout] Custom workout non nil")
-            if let name = saveNewWorkout.textFields?.first?.text {
+            if self.checkSelected {
                 
-                guard let newWorkout = WorkOutVideo(name: name, length: "45'", workoutLabel: "UserCustom", isDefault: false, containSubworkout: self.listSelected) else {
-                    print("[Add Workout] Error in adding workout in AddWorkoutController")
-                    return
+                let saveNewWorkout = UIAlertController(title: "Create New Workout", message: "", preferredStyle: UIAlertControllerStyle.alert)
+            
+                saveNewWorkout.addTextField(configurationHandler: {textField in
+                    textField.placeholder = "Workout Name"
+                })
+                
+                saveNewWorkout.addTextField(configurationHandler: {textField in
+                    textField.placeholder = "Subtitle"
+                })
+                
+                
+                let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default) {
+                    (result : UIAlertAction) -> Void in
+                    
+                    saveNewWorkout.dismiss(animated: true, completion: nil)
+                    
+                    //TODO: Clear check selected
+                    
+                    print("[Table Create] Cancel")
                 }
                 
-                global.workOutVideos.append(newWorkout)
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "load"), object: nil) // to notify tableview to reload when done adding workout
+                saveNewWorkout.addAction(cancelAction)
+                
+                let saveAction = UIAlertAction(title: "Create", style: UIAlertActionStyle.default) {
+                    (result : UIAlertAction) -> Void in
+                    
+                    print("[Table Create] Create")
+                    
+                    print("[Save New Workout] Custom workout non nil")
+                    if let name = saveNewWorkout.textFields?.first?.text {
+                        
+                        guard let newWorkout = WorkOutVideo(name: name, length: "45'", workoutLabel: "UserCustom", isDefault: false, containSubworkout: self.listSelected) else {
+                            print("[Add Workout] Error in adding workout in AddWorkoutController")
+                            return
+                        }
+                        
+                        global.workOutVideos.append(newWorkout)
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "load"), object: nil) // to notify tableview to reload when done adding workout
 
+                        
+                        saveNewWorkout.dismiss(animated: true, completion: nil)
+                        
+                    } else {
+                        print("[Save New Workout] Error Name Input" )
+                    }
+                }
                 
-                saveNewWorkout.dismiss(animated: true, completion: nil)
+                saveNewWorkout.addAction(saveAction)
                 
-            } else {
-                print("[Save New Workout] Error Name Input" )
+                self.present(saveNewWorkout, animated: true, completion: self.exitEditModeIfTrue)
+                
             }
         }
         
-        saveNewWorkout.addAction(saveAction)
-        
-        self.present(saveNewWorkout, animated: true, completion: self.exitEditModeIfTrue)
+        DispatchQueue.main.async(execute: saveSelectedWorkout)
+//
+//        saveSelectedWorkout.notify(queue: DispatchQueue.main) {
+//            self.exitEditModeIfTrue()
+//        }
     }
     
     @objc func sortVideoExercise(_ sender:UIBarButtonItem) {
         //TODO: Sort videos alphabetically/workout
         print("[Sorting] Pressed")
         
-        let saveNewWorkout = UIAlertController(title: "Create New Workout", message: "", preferredStyle: UIAlertControllerStyle.alert)
+        let saveNewWorkout = UIAlertController(title: "Sorting Exercises", message: "", preferredStyle: UIAlertControllerStyle.alert)
         
         let alphabetAction = UIAlertAction(title: "Alphabetically", style: UIAlertActionStyle.default) {
             (result : UIAlertAction) -> Void in
@@ -442,18 +510,7 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
             
         } else {
             print("[Editing] Done")
-            
-            let saveSelectedWorkout = DispatchWorkItem {
-                if self.checkSelected {
-                    self.saveNewWorkout()
-                }
-            }
-            DispatchQueue.main.async(execute: saveSelectedWorkout)
-            
-            saveSelectedWorkout.notify(queue: DispatchQueue.main) {
-                self.exitEditModeIfTrue()
-            }
-            
+            self.setEditing(false, animated: true)
         }
     }
     
@@ -462,8 +519,7 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
 
 
     func setupBackground() {
-        
-        self.tabBarController?.tabBar.isHidden = false
+    
         
         self.navigationController?.navigationBar.layer.shadowColor = UIColor.black.cgColor
         self.navigationController?.navigationBar.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)

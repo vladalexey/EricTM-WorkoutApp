@@ -197,7 +197,7 @@
         <!--Add Customize Workout Table View Controller-->
         <scene sceneID="YfP-Va-jtY">
             <objects>
-                <tableViewController id="FI5-c1-CLC" customClass="AddCustomizeWorkoutTableViewController" customModule="EricTM" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController hidesBottomBarWhenPushed="YES" id="FI5-c1-CLC" customClass="AddCustomizeWorkoutTableViewController" customModule="EricTM" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" indicatorStyle="black" bouncesZoom="NO" dataMode="prototypes" style="plain" allowsSelectionDuringEditing="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="80" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="iYM-xa-s1y">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="687"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -270,7 +270,6 @@
                             <outlet property="delegate" destination="FI5-c1-CLC" id="F3g-UY-cjE"/>
                         </connections>
                     </tableView>
-                    <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <navigationItem key="navigationItem" id="cSw-zT-SuP"/>
                     <connections>
                         <segue destination="hSa-az-6Bw" kind="show" identifier="PlayerVideoExercise" id="dwx-sK-E14"/>
