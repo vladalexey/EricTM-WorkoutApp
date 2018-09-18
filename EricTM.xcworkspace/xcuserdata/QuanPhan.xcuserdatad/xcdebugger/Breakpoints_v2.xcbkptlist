@@ -24,16 +24,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AddWorkoutView/AddCustomizeWorkoutTableViewController.swift"
-            timestampString = "558523410.4833879"
+            timestampString = "558945879.696701"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "513"
-            endingLineNumber = "513"
-            landmarkName = "editButtonPressed(_:)"
+            startingLineNumber = "558"
+            endingLineNumber = "558"
+            landmarkName = "removeVideo(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AddWorkoutView/AddCustomizeWorkoutTableViewController.swift"
+            timestampString = "558945945.446884"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "559"
+            endingLineNumber = "559"
+            landmarkName = "removeVideo(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

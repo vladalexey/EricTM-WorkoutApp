@@ -27,7 +27,7 @@ class PlayerViewController: AVPlayerViewController {
         return Storage.storage().reference()
     }
     
-    var downloadQueue = DispatchQueue(label: "DownloadVideo")
+    let downloadGroupVideos = DispatchGroup()
     
     var random = [Int()]
     
@@ -38,9 +38,9 @@ class PlayerViewController: AVPlayerViewController {
     var reappearAnimationControl = UIViewPropertyAnimator()
     
     var queuePlayer = AVQueuePlayer()
-    var listVideos = [AVPlayerItem]()
+    var listVideos: Array<AVPlayerItem?> = Array(repeating: nil, count: 10)
     var listObjectVideos = [VideoExercise]()
-
+    
     var workoutCode = String()
     var workoutName = String()
     var myIndex = Int()
@@ -569,6 +569,15 @@ class PlayerViewController: AVPlayerViewController {
 
     }
     
+    func insertElementAtIndex(element: AVPlayerItem, index: Int) {
+        
+        if listVideos.count <= index {
+            listVideos.append(element)
+        } else {
+            self.listVideos.insert(element, at: index)
+        }
+    }
+    
     func getVideos(videoToGet: VideoExercise, numberDownload: Int) {
         
         var videoName = videoToGet.name
@@ -592,6 +601,7 @@ class PlayerViewController: AVPlayerViewController {
                     
                     videoToGet.serverURL = url!
                     
+                    
                     self.videoCount += 1
 //                    print("[Play Video]" + videoName)
                     
@@ -604,8 +614,22 @@ class PlayerViewController: AVPlayerViewController {
                     item1.addObserver(self, forKeyPath: "playbackBufferFull", options: NSKeyValueObservingOptions.new, context: nil)
                     item1.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions.new, context: nil)
                     
-                    self.queuePlayer.insert(item1, after: nil)
-                    self.listVideos.append(item1)
+                    let addVideoToQueue = DispatchQueue(label: "addVideoToQueue")
+                    
+                    addVideoToQueue.async {
+                        self.insertElementAtIndex(element: item1, index: numberDownload)
+                    }
+                    
+                    addVideoToQueue.async {
+                        if numberDownload > 0 {
+                            self.queuePlayer.insert(self.listVideos[numberDownload]!, after: self.listVideos[numberDownload - 1])
+                        } else {
+                            self.queuePlayer.insert(self.listVideos[numberDownload]!, after: nil)
+                        }
+                    }
+                    addVideoToQueue.sync {
+                        self.player = self.queuePlayer
+                    }
                 }
             })
             
@@ -642,11 +666,139 @@ class PlayerViewController: AVPlayerViewController {
             
             let item1 = AVPlayerItem(url: localURL)
             
-            self.queuePlayer.insert(item1, after: nil)
-            self.listVideos.append(item1)
+            let addVideoToQueue = DispatchQueue(label: "addVideoToQueue")
+            
+            addVideoToQueue.async {
+                self.insertElementAtIndex(element: item1, index: numberDownload)
+            }
+            
+            addVideoToQueue.async {
+                if numberDownload > 0 {
+                    self.queuePlayer.insert(self.listVideos[numberDownload]!, after: self.listVideos[numberDownload - 1])
+                } else {
+                    self.queuePlayer.insert(self.listVideos[numberDownload]!, after: nil)
+                }
+            }
+            
+            addVideoToQueue.sync {
+                self.player = self.queuePlayer
+            }
         }
         
         print("[List Videos] \(self.listVideos)")
+    }
+    
+    
+    func setupPlayer() {
+        
+        self.player = queuePlayer
+        
+//        print("[Video Player] \(queuePlayer.items())")
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
+        NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.queuePlayer.currentItem)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(audioInterruptionHandle), name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
+        
+        self.player?.play()
+    }
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        var lineNumber = 0  // to get correct order of video in queue
+        
+        self.showsPlaybackControls = false
+        let currentWorkout = global.workOutVideos[self.myIndex]
+        
+        var queueTasks = [DispatchWorkItem]()
+        
+        let downloadPrepration = DispatchWorkItem() {
+            
+            self.listVideos.removeAll()
+            self.listObjectVideos.removeAll()
+            self.queuePlayer.removeAllItems()
+            
+        }
+        
+        let downloadIntro = DispatchWorkItem() {
+            
+            if currentWorkout.isDefault {
+                self.getVideos(videoToGet: (global.subWorkoutList[currentWorkout.workoutLabel + "Introduction"]?.contain[0])!, numberDownload: 0)
+            } else {
+                //                self.downloadGroupVideos.leave()
+            }
+        }
+        
+        let downloadVideos = DispatchWorkItem() {
+            
+            for workout in currentWorkout.containSubworkout {    // get a list of sub-workouts from a Workout and iterate through
+                
+                lineNumber += 1
+//
+//                print("[Video Player] \(workout.contain)")
+                var checkDuplicate: Bool = true
+                var rand = Int(arc4random_uniform(UInt32(workout.contain.count)))
+                
+                if currentWorkout.isDefault == true { // check for duplicated randomized videos
+                    repeat {
+                        
+                        rand = Int(arc4random_uniform(UInt32(workout.contain.count)))
+                        
+                        if self.listObjectVideos.contains(workout.contain[rand]) {
+                            checkDuplicate = false
+                        } else {
+                            checkDuplicate = true
+                        }
+                        
+                    } while checkDuplicate == false
+                }
+                
+                //                self.downloadGroupVideos.enter()  //enter for each video
+                
+                self.getVideos(videoToGet: workout.contain[rand], numberDownload: lineNumber)  // randomly get one video for each sub-workout
+                print("[Video Player] \(workout.name)")
+            }
+        }
+        
+        let downloadEnd = DispatchWorkItem() {
+            
+            if currentWorkout.isDefault {
+                self.getVideos(videoToGet: (global.subWorkoutList[currentWorkout.workoutLabel + "Ending"]?.contain[0])!, numberDownload: lineNumber + 1)
+            } else {
+                //                self.downloadGroupVideos.leave()
+            }
+        }
+        
+        DispatchQueue.global(qos: .userInteractive).sync(execute: downloadPrepration)
+        
+        downloadPrepration.notify(queue: DispatchQueue.global()) {
+            
+            queueTasks.append(contentsOf: [downloadIntro, downloadVideos, downloadEnd])
+            
+            for index in 0...queueTasks.count - 1{
+                
+                let task = queueTasks[index]
+                
+                DispatchQueue.main.sync(execute: task)
+
+            }
+        }
+
+        self.setupPlayer()
+        self.setTimer()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
+        NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.queuePlayer.currentItem)
     }
     
     override var canBecomeFirstResponder: Bool {
@@ -695,71 +847,7 @@ class PlayerViewController: AVPlayerViewController {
         
         //MARK: Prepare to get videos
         
-        self.listVideos.removeAll()
-        self.listObjectVideos.removeAll()
-        queuePlayer.removeAllItems()
         
-        let downloadQueue = DispatchQueue.main
-        
-        let currentWorkout = global.workOutVideos[self.myIndex]
-        
-        if currentWorkout.isDefault {
-            downloadQueue.async {
-                self.getVideos(videoToGet: (global.subWorkoutList[currentWorkout.workoutLabel + "Introduction"]?.contain[0])!, numberDownload: 0)
-            }
-        }
-        downloadQueue.async {
-            
-            for workout in currentWorkout.containSubworkout {    // get a list of sub-workouts from a Workout and iterate through
-                
-                print("[Video Player] \(workout.contain)")
-                var checkDuplicate: Bool = true
-                var rand = Int(arc4random_uniform(UInt32(workout.contain.count)))
-                
-                if currentWorkout.isDefault == true { // check for duplicated randomized videos
-                    repeat {
-                        
-                        rand = Int(arc4random_uniform(UInt32(workout.contain.count)))
-
-                        if self.listObjectVideos.contains(workout.contain[rand]) {
-                            checkDuplicate = false
-                        } else {
-                            checkDuplicate = true
-                        }
-                    
-                    } while checkDuplicate == false
-                }
-                
-                self.getVideos(videoToGet: workout.contain[rand], numberDownload: rand)  // randomly get one video for each sub-workout
-                print("[Video Player] \(workout.name)")
-            }
-        }
-        
-        if currentWorkout.isDefault {
-            downloadQueue.async {
-                self.getVideos(videoToGet: (global.subWorkoutList[currentWorkout.workoutLabel + "Ending"]?.contain[0])!, numberDownload: 9)
-            }
-        }
-        
-        self.player = self.queuePlayer
-        
-        print("[Video Player] \(queuePlayer.items())")
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
-        NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.queuePlayer.currentItem)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(audioInterruptionHandle), name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
-
-        
-        self.player?.play()
     }
     
     @objc func handleDoubleTap(tap: UIGestureRecognizer) {
@@ -1061,17 +1149,8 @@ class PlayerViewController: AVPlayerViewController {
         self.player?.play()
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
     
-        self.showsPlaybackControls = false
-
-        setTimer()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
-        NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.queuePlayer.currentItem)
-    }
-
+    
     override func remoteControlReceived(with event: UIEvent?) {
 
         if let event = event {

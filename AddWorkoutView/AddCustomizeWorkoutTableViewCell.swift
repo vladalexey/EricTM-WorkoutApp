@@ -16,10 +16,13 @@ class AddCustomizeWorkoutTableViewCell: UITableViewCell {
     @IBOutlet weak var downloadCheck: UIImageView!
     @IBOutlet weak var smallThumbnail: UIImageView!
     @IBOutlet weak var nameVideoExercise: UILabel!
+    @IBOutlet weak var downloadVideoButton: LoadingButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
+        self.downloadVideoButton.contentEdgeInsets = UIEdgeInsets(top: 9, left: 9, bottom: 9, right: 9)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -31,9 +34,9 @@ class AddCustomizeWorkoutTableViewCell: UITableViewCell {
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         if editing {
-            self.downloadCheck.isHidden = true
+            self.downloadVideoButton.isHidden = true
         } else {
-            self.downloadCheck.isHidden = false
+            self.downloadVideoButton.isHidden = false
         }
     }
 }

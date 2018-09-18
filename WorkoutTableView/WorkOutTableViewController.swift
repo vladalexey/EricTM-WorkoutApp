@@ -276,31 +276,37 @@ class WorkOutTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
-        let edit = UITableViewRowAction(style: .normal, title: "Edit") { action, index in
-            print("[Table Editing] Edit content")
-            
-        }
-        edit.backgroundColor = .lightGray
+        let currentWorkout = global.workOutVideos[indexPath.row]
         
-        let remove = UITableViewRowAction(style: .normal, title: "Remove") { action, index in
-            print("[Table Editing] Remove button")
-            
-            if global.workOutVideos[indexPath.row].isDefault == false {
+        if currentWorkout.isDefault == false {  //only user created workout can be removed
+            let edit = UITableViewRowAction(style: .normal, title: "Edit") { action, index in
+                print("[Table Editing] Edit content")
                 
-                print("[Table Editing]" + global.workOutVideos[indexPath.row].name + " deleted")
-                
-                global.workOutVideos.remove(at: indexPath.row)
-                tableView.deleteRows(at: [indexPath], with: .fade)
-                
-            } else {
-                
-                self.alertOnDefaultWorkouts()
             }
+            edit.backgroundColor = .lightGray
+            
+            let remove = UITableViewRowAction(style: .normal, title: "Remove") { action, index in
+                print("[Table Editing] Remove button")
+                
+                if global.workOutVideos[indexPath.row].isDefault == false {
+                    
+                    print("[Table Editing]" + global.workOutVideos[indexPath.row].name + " deleted")
+                    
+                    global.workOutVideos.remove(at: indexPath.row)
+                    tableView.deleteRows(at: [indexPath], with: .fade)
+                    
+                } else {
+                    
+                    self.alertOnDefaultWorkouts()
+                }
 
+            }
+            remove.backgroundColor = .red
+            
+            return [remove, edit]
+        } else {
+            return []
         }
-        remove.backgroundColor = .red
-        
-        return [remove, edit]
     }
     
     func exitEditModeIfTrue() {
@@ -335,7 +341,7 @@ class WorkOutTableViewController: UITableViewController {
             
             let destVC = segue.destination as? PlayerViewController
             
-            print("[Video Playing] \(global.workOutVideos[myIndex].containSubworkout)")
+//            print("[Video Playing] \(global.workOutVideos[myIndex].containSubworkout)")
             
             workoutCode = workoutLabel
             print(workoutCode)

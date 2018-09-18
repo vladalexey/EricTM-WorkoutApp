@@ -21,6 +21,7 @@
 		82340FEC20DCE2D0003079A2 /* WorkOutTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82340FEB20DCE2D0003079A2 /* WorkOutTableViewController.swift */; };
 		82340FEE20DCE9C2003079A2 /* WorkOutVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82340FED20DCE9C2003079A2 /* WorkOutVideo.swift */; };
 		823876C221099CDC002A8E62 /* PersonalizeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 823876C121099CDC002A8E62 /* PersonalizeViewController.swift */; };
+		823D0D62214F97EF00AB6090 /* LoadingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 823D0D61214F97EF00AB6090 /* LoadingButton.swift */; };
 		8256309A2143750A0090E9FD /* PlayerViewExercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 825630992143750A0090E9FD /* PlayerViewExercise.swift */; };
 		8256A46B210829C0004F3CF9 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8256A46A210829C0004F3CF9 /* AudioToolbox.framework */; };
 		829FBCB720E0E5070052601F /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 829FBCB620E0E5070052601F /* TabBarViewController.swift */; };
@@ -52,6 +53,7 @@
 		82340FEB20DCE2D0003079A2 /* WorkOutTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkOutTableViewController.swift; sourceTree = "<group>"; };
 		82340FED20DCE9C2003079A2 /* WorkOutVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkOutVideo.swift; sourceTree = "<group>"; };
 		823876C121099CDC002A8E62 /* PersonalizeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalizeViewController.swift; sourceTree = "<group>"; };
+		823D0D61214F97EF00AB6090 /* LoadingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingButton.swift; sourceTree = "<group>"; };
 		825630992143750A0090E9FD /* PlayerViewExercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewExercise.swift; sourceTree = "<group>"; };
 		8256A469210829C0004F3CF9 /* EricTM.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EricTM.entitlements; sourceTree = "<group>"; };
 		8256A46A210829C0004F3CF9 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -92,6 +94,7 @@
 				82AF323921363C9B0064A97D /* Global.swift */,
 				821EF25B21379C9A0032E6A2 /* VideoExercise.swift */,
 				82174564213D2DAC00C7B60E /* SubWorkoutList.swift */,
+				823D0D61214F97EF00AB6090 /* LoadingButton.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -324,6 +327,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				823D0D62214F97EF00AB6090 /* LoadingButton.swift in Sources */,
 				8223CDFE20EA2E9500569D3F /* PlayerViewController.swift in Sources */,
 				82174565213D2DAC00C7B60E /* SubWorkoutList.swift in Sources */,
 				82F947182109A2AD00947FEB /* NutritionViewController.swift in Sources */,

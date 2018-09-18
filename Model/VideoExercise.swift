@@ -40,6 +40,10 @@ class VideoExercise: NSObject, NSCoding {
     func encode(with aCoder: NSCoder) {
         aCoder.encode(self.name, forKey: "nameVideoExercise")
     }
+    
+    func setLocalURL(localURL: URL) {
+        self.localURL = localURL
+    }
 }
 
 func ==(lhs: VideoExercise, rhs: VideoExercise) -> Bool{

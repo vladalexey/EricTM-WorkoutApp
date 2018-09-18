@@ -256,6 +256,13 @@ extension UIColor
         alpha: 1.0
     )
     
+    static let backgroundColorToolbar = UIColor(
+        red: 0.13,
+        green: 0.13,
+        blue: 0.13,
+        alpha: 1.0
+    )
+    
     static let backgroundColorCell = UIColor(
         red: 0.25,
         green: 0.25,
