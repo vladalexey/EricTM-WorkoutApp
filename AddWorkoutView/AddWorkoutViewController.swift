@@ -97,7 +97,7 @@ class AddWorkoutViewController: UIViewController, UIPickerViewDelegate, UIPicker
         
         self.view.backgroundColor = backgroundColor
         navigationController?.navigationBar.barTintColor = backgroundColor // color top bar black
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]  // color top bar text white
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]  // color top bar text white
         
         //MARK: Setting logo on NavBar
         let logoContainer = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 30))
@@ -112,7 +112,7 @@ class AddWorkoutViewController: UIViewController, UIPickerViewDelegate, UIPicker
         imageView.centerYAnchor.constraint(equalTo: logoContainer.centerYAnchor).isActive = true
 
         navigationItem.titleView = logoContainer
-        navigationItem.titleView?.sendSubview(toBack: logoContainer)
+        navigationItem.titleView?.sendSubviewToBack(logoContainer)
         
         self.tabBarController?.tabBar.layer.shadowColor = UIColor.black.cgColor
         self.tabBarController?.tabBar.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)

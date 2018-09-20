@@ -14,6 +14,7 @@ class VideoExercise: NSObject, NSCoding {
     var localURL: URL?
     var serverURL: URL?
     var name: String
+    var duration: String?
 //    var containIn = Dictionary<String,Bool>()
     
     init(name: String) {
@@ -34,15 +35,42 @@ class VideoExercise: NSObject, NSCoding {
     required convenience init?(coder aDecoder: NSCoder) {
         
         let name = aDecoder.decodeObject(forKey: "nameVideoExercise") as! String
+        
         self.init(name: name)
+    
+//        if let _ = NSKeyedUnarchiver.unarchiveObject(withFile: filePath[0]) as? URL {
+        if let localURL = aDecoder.decodeObject(forKey: "localURLVideoExercise") as? URL {
+            if localURL != nil {
+                self.localURL = localURL
+            }
+        }
+        
+//        if let _ = NSKeyedUnarchiver.unarchiveObject(withFile: filePath[0]) as? String {
+        if let duration = aDecoder.decodeObject(forKey: "durationVideoExercise") as? String {
+            if duration != nil {
+                self.duration = duration
+            }
+        }
     }
     
     func encode(with aCoder: NSCoder) {
         aCoder.encode(self.name, forKey: "nameVideoExercise")
+        
+        if self.localURL != nil {
+            aCoder.encode(self.localURL, forKey: "localURLVideoExercise")
+        }
+        
+        if self.duration != nil && self.duration != "" {
+            aCoder.encode(self.duration, forKey: "durationVideoExercise")
+        }
     }
     
     func setLocalURL(localURL: URL) {
         self.localURL = localURL
+    }
+    
+    func setDuration(videoDuration: String) {
+        self.duration = videoDuration
     }
 }
 

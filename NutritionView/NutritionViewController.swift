@@ -20,7 +20,7 @@ class NutritionViewController: UIViewController {
         self.navigationController?.navigationBar.layer.shadowOpacity = 1.0
         
         navigationController?.navigationBar.barTintColor = UIColor.backgroundColor // color top bar black
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]  // color top bar text white
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]  // color top bar text white
         
         //MARK: Setting logo on NavBar
         

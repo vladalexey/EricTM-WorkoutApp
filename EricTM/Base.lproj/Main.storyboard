@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="97A-TD-XhJ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="97A-TD-XhJ">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -236,14 +235,17 @@
                                                 <constraint firstAttribute="width" secondItem="44S-vM-sbI" secondAttribute="height" multiplier="16:9" id="3eV-Ae-mGA"/>
                                             </constraints>
                                         </imageView>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Video Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DHj-ck-0VX">
-                                            <rect key="frame" x="104" y="11" width="232" height="14"/>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" text="Video Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DHj-ck-0VX">
+                                            <rect key="frame" x="103.66666666666667" y="11" width="232.33333333333331" height="14"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="14" id="cL9-eW-upt"/>
+                                            </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IFf-bJ-QcX" customClass="LoadingButton" customModule="EricTM" customModuleProvider="target">
-                                            <rect key="frame" x="344" y="4.3333333333333321" width="50" height="50"/>
+                                            <rect key="frame" x="344" y="5" width="50" height="50"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="50" id="5jM-zL-eJg"/>
                                                 <constraint firstAttribute="height" constant="50" id="JYv-ej-75V"/>
@@ -253,19 +255,37 @@
                                             <size key="titleShadowOffset" width="9" height="9"/>
                                             <state key="normal" image="Download"/>
                                         </button>
+                                        <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="VuX-k0-jhi">
+                                            <rect key="frame" x="103.66666666666667" y="43" width="232.33333333333331" height="2"/>
+                                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="progressTintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="trackTintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </progressView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JaM-bE-y6k" userLabel="Duration">
+                                            <rect key="frame" x="103.66666666666667" y="34.666666666666664" width="232.33333333333331" height="14.333333333333336"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="IFf-bJ-QcX" firstAttribute="leading" secondItem="DHj-ck-0VX" secondAttribute="trailing" constant="8" id="0l8-MM-v2s"/>
+                                        <constraint firstAttribute="trailing" secondItem="VuX-k0-jhi" secondAttribute="trailing" constant="78" id="3bj-WN-dqn"/>
                                         <constraint firstItem="IFf-bJ-QcX" firstAttribute="centerY" secondItem="aVQ-PE-jlR" secondAttribute="centerY" id="7AQ-ea-6Zh"/>
                                         <constraint firstItem="DHj-ck-0VX" firstAttribute="top" secondItem="aVQ-PE-jlR" secondAttribute="topMargin" id="CoT-3a-S3r"/>
                                         <constraint firstItem="44S-vM-sbI" firstAttribute="top" secondItem="aVQ-PE-jlR" secondAttribute="topMargin" id="Erj-fg-Y9p"/>
                                         <constraint firstItem="DHj-ck-0VX" firstAttribute="leading" secondItem="lbh-Uy-yhL" secondAttribute="trailing" constant="16" id="IpB-2H-TWy"/>
+                                        <constraint firstItem="JaM-bE-y6k" firstAttribute="leading" secondItem="lbh-Uy-yhL" secondAttribute="trailing" constant="16" id="Ja8-48-fiZ"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="lbh-Uy-yhL" secondAttribute="bottom" id="Sju-pu-AQe"/>
                                         <constraint firstItem="IFf-bJ-QcX" firstAttribute="trailing" secondItem="aVQ-PE-jlR" secondAttribute="trailingMargin" id="U8U-eh-19l"/>
+                                        <constraint firstAttribute="trailing" secondItem="DHj-ck-0VX" secondAttribute="trailing" constant="78" id="UXS-em-rwr"/>
                                         <constraint firstItem="lbh-Uy-yhL" firstAttribute="top" secondItem="aVQ-PE-jlR" secondAttribute="topMargin" id="Uzp-Tg-w5G"/>
                                         <constraint firstItem="lbh-Uy-yhL" firstAttribute="leading" secondItem="aVQ-PE-jlR" secondAttribute="leadingMargin" id="c3z-ba-hHN"/>
+                                        <constraint firstItem="JaM-bE-y6k" firstAttribute="bottom" secondItem="aVQ-PE-jlR" secondAttribute="bottomMargin" id="e3r-K1-dnr"/>
                                         <constraint firstItem="44S-vM-sbI" firstAttribute="leading" secondItem="aVQ-PE-jlR" secondAttribute="leadingMargin" id="gH6-fp-94s"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="44S-vM-sbI" secondAttribute="bottom" id="ggg-Yc-P2T"/>
+                                        <constraint firstItem="VuX-k0-jhi" firstAttribute="top" secondItem="DHj-ck-0VX" secondAttribute="bottom" constant="18" id="iA4-kO-iWD"/>
+                                        <constraint firstAttribute="trailing" secondItem="JaM-bE-y6k" secondAttribute="trailing" constant="78" id="kpD-AC-xpW"/>
+                                        <constraint firstItem="VuX-k0-jhi" firstAttribute="leading" secondItem="44S-vM-sbI" secondAttribute="trailing" constant="16" id="nzQ-76-FGS"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" red="0.15686274510000001" green="0.15686274510000001" blue="0.15686274510000001" alpha="0.99737799660000004" colorSpace="calibratedRGB"/>
@@ -274,7 +294,9 @@
                                     <outlet property="Vignette" destination="44S-vM-sbI" id="xkQ-DP-pNF"/>
                                     <outlet property="downloadVideoButton" destination="IFf-bJ-QcX" id="ww8-fM-Eh2"/>
                                     <outlet property="nameVideoExercise" destination="DHj-ck-0VX" id="uPD-VL-RlJ"/>
+                                    <outlet property="progressVideoDownload" destination="VuX-k0-jhi" id="e8l-sK-GJz"/>
                                     <outlet property="smallThumbnail" destination="lbh-Uy-yhL" id="aso-0L-3Vt"/>
+                                    <outlet property="videoDuration" destination="JaM-bE-y6k" id="YyL-tH-yLh"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>

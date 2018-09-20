@@ -70,7 +70,7 @@ class WorkOutTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
     
     override func setEditing(_ editing: Bool, animated: Bool) {
@@ -89,7 +89,7 @@ class WorkOutTableViewController: UITableViewController {
         super.viewDidLoad()
     
         tableView.estimatedRowHeight = 300
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
 
         setupBackground()
         loadDefaultWOV()
@@ -111,7 +111,7 @@ class WorkOutTableViewController: UITableViewController {
     }
     
     @objc func longPressCellHandle(gesture: UILongPressGestureRecognizer) {
-        if gesture.state == UIGestureRecognizerState.began {
+        if gesture.state == UIGestureRecognizer.State.began {
             let touchPoint = gesture.location(in: tableView)
             if self.isEditing == false {
                 self.setEditing(true, animated: true)
@@ -206,9 +206,9 @@ class WorkOutTableViewController: UITableViewController {
 
     func alertOnDefaultWorkouts() {
         
-        let alertView = UIAlertController(title: "Error", message: "Cannot delete default", preferredStyle: UIAlertControllerStyle.alert)
+        let alertView = UIAlertController(title: "Error", message: "Cannot delete default", preferredStyle: UIAlertController.Style.alert)
         
-        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) {
+        let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default) {
             (result : UIAlertAction) -> Void in
             
             alertView.dismiss(animated: true, completion: nil)
@@ -353,7 +353,7 @@ class WorkOutTableViewController: UITableViewController {
     }
 
     // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         
         if editingStyle == .delete {
             
@@ -532,7 +532,7 @@ class WorkOutTableViewController: UITableViewController {
         
         self.tableView.backgroundColor = UIColor.backgroundColor
         self.navigationController?.navigationBar.barTintColor = UIColor.backgroundColor // color top bar black
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]  // color top bar text white
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]  // color top bar text white
         
         //MARK: Setting logo on NavBar
         
@@ -548,7 +548,7 @@ class WorkOutTableViewController: UITableViewController {
         imageView.centerYAnchor.constraint(equalTo: logoContainer.centerYAnchor).isActive = true
 
         navigationItem.titleView = logoContainer
-        navigationItem.titleView?.sendSubview(toBack: logoContainer)
+        navigationItem.titleView?.sendSubviewToBack(logoContainer)
         
         self.tabBarController?.tabBar.layer.shadowColor = UIColor.black.cgColor
         self.tabBarController?.tabBar.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)

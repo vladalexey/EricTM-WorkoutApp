@@ -17,6 +17,8 @@ class AddCustomizeWorkoutTableViewCell: UITableViewCell {
     @IBOutlet weak var smallThumbnail: UIImageView!
     @IBOutlet weak var nameVideoExercise: UILabel!
     @IBOutlet weak var downloadVideoButton: LoadingButton!
+    @IBOutlet weak var videoDuration: UILabel!
+    @IBOutlet weak var progressVideoDownload: UIProgressView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

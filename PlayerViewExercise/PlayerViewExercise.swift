@@ -91,7 +91,7 @@ class PlayerViewExercise: AVPlayerViewController {
     }()
     
     let activityIndicatorView: UIActivityIndicatorView = {
-        let aiv = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+        let aiv = UIActivityIndicatorView(style: .whiteLarge)
         aiv.translatesAutoresizingMaskIntoConstraints = false
         //        aiv.startAnimating()
         return aiv
@@ -107,7 +107,7 @@ class PlayerViewExercise: AVPlayerViewController {
         button.setImage(UIImage(named: "X"), for: .normal)
         button.tintColor = UIColor.white
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(doneButtonPressed), for: UIControlEvents.touchUpInside)
+        button.addTarget(self, action: #selector(doneButtonPressed), for: UIControl.Event.touchUpInside)
         
         button.isUserInteractionEnabled = true
         
@@ -124,7 +124,7 @@ class PlayerViewExercise: AVPlayerViewController {
         button.setImage(UIImage(named: "PAUSE"), for: .normal)
         button.tintColor = UIColor.white
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(playButtonPressed), for: UIControlEvents.touchUpInside)
+        button.addTarget(self, action: #selector(playButtonPressed), for: UIControl.Event.touchUpInside)
         
         button.isUserInteractionEnabled = true
         
@@ -141,7 +141,7 @@ class PlayerViewExercise: AVPlayerViewController {
         button.setImage(UIImage(named: "15FORWARD"), for: .normal)
         button.tintColor = UIColor.white
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(forward15Pressed), for: UIControlEvents.touchUpInside)
+        button.addTarget(self, action: #selector(forward15Pressed), for: UIControl.Event.touchUpInside)
         
         button.isUserInteractionEnabled = true
         
@@ -158,7 +158,7 @@ class PlayerViewExercise: AVPlayerViewController {
         button.setImage(UIImage(named: "15BACKWARD"), for: .normal)
         button.tintColor = UIColor.white
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(backward15Pressed), for: UIControlEvents.touchUpInside)
+        button.addTarget(self, action: #selector(backward15Pressed), for: UIControl.Event.touchUpInside)
         
         button.isUserInteractionEnabled = true
         
@@ -175,7 +175,7 @@ class PlayerViewExercise: AVPlayerViewController {
         button.setImage(UIImage(named: "FORWARD"), for: .normal)
         button.tintColor = UIColor.white
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(forwardPressed), for: UIControlEvents.touchUpInside)
+        button.addTarget(self, action: #selector(forwardPressed), for: UIControl.Event.touchUpInside)
         
         button.isUserInteractionEnabled = true
         
@@ -192,7 +192,7 @@ class PlayerViewExercise: AVPlayerViewController {
         button.setImage(UIImage(named: "BACKWARD"), for: .normal)
         button.tintColor = UIColor.white
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(backwardPressed), for: UIControlEvents.touchUpInside)
+        button.addTarget(self, action: #selector(backwardPressed), for: UIControl.Event.touchUpInside)
         
         button.isUserInteractionEnabled = true
         
@@ -226,45 +226,45 @@ class PlayerViewExercise: AVPlayerViewController {
         tapOnTopView.require(toFail: doubleTapOnTopView)
         
         self.controlView.addSubview(playButton)
-        self.controlView.bringSubview(toFront: playButton)
+        self.controlView.bringSubviewToFront(playButton)
         playButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         playButton.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         playButton.centerXAnchor.constraint(equalTo: (contentOverlayView?.centerXAnchor)!).isActive = true
         
         
         self.controlView.addSubview(doneButton)
-        self.controlView.bringSubview(toFront: doneButton)
+        self.controlView.bringSubviewToFront(doneButton)
         doneButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         doneButton.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         doneButton.leftAnchor.constraint(equalTo: (controlView.leftAnchor), constant: 20).isActive = true
         
         self.controlView.addSubview(backward15)
-        self.controlView.bringSubview(toFront: backward15)
+        self.controlView.bringSubviewToFront(backward15)
         backward15.heightAnchor.constraint(equalToConstant: 40).isActive = true
         backward15.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         backward15.rightAnchor.constraint(equalTo: (playButton.centerXAnchor), constant: -60).isActive = true
         
         
         self.controlView.addSubview(forward15)
-        self.controlView.bringSubview(toFront: forward15)
+        self.controlView.bringSubviewToFront(forward15)
         forward15.heightAnchor.constraint(equalToConstant: 40).isActive = true
         forward15.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         forward15.leftAnchor.constraint(equalTo: (playButton.centerXAnchor), constant: 60).isActive = true
         
         self.controlView.addSubview(forward)
-        self.controlView.bringSubview(toFront: forward)
+        self.controlView.bringSubviewToFront(forward)
         forward.heightAnchor.constraint(equalToConstant: 40).isActive = true
         forward.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         forward.leftAnchor.constraint(equalTo: (playButton.centerXAnchor), constant: 140).isActive = true
         
         self.controlView.addSubview(backward)
-        self.controlView.bringSubview(toFront: backward)
+        self.controlView.bringSubviewToFront(backward)
         backward.heightAnchor.constraint(equalToConstant: 40).isActive = true
         backward.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         backward.rightAnchor.constraint(equalTo: (playButton.centerXAnchor), constant: -140).isActive = true
         
         self.controlView.addSubview(routePickerView)
-        self.controlView.bringSubview(toFront: routePickerView)
+        self.controlView.bringSubviewToFront(routePickerView)
         routePickerView.heightAnchor.constraint(equalToConstant: 40).isActive = true
         routePickerView.bottomAnchor.constraint(equalTo: (contentOverlayView?.topAnchor)!, constant: UIScreen.main.bounds.height - 25).isActive = true
         routePickerView.rightAnchor.constraint(equalTo: controlView.rightAnchor, constant: -20).isActive = true
@@ -322,9 +322,9 @@ class PlayerViewExercise: AVPlayerViewController {
         
         print("[Error] Exit video player")
         
-        let alertView = UIAlertController(title: "Error", message: "Cannot load videos", preferredStyle: UIAlertControllerStyle.alert)
+        let alertView = UIAlertController(title: "Error", message: "Cannot load videos", preferredStyle: UIAlertController.Style.alert)
         
-        let okAction = UIAlertAction(title: "Try again", style: UIAlertActionStyle.default) {
+        let okAction = UIAlertAction(title: "Try again", style: UIAlertAction.Style.default) {
             (result : UIAlertAction) -> Void in
             
             print("[Error] OK")
@@ -404,7 +404,7 @@ class PlayerViewExercise: AVPlayerViewController {
     
     @objc func forward15Remote() {
         
-        let seekDuration = CMTimeMake(15, 1)
+        let seekDuration = CMTimeMake(value: 15, timescale: 1)
         let currentTime: CMTime = (self.videoPlayer.currentItem!.currentTime())
         
         if currentTime + seekDuration > (self.videoPlayer.currentItem?.duration)! {
@@ -421,13 +421,13 @@ class PlayerViewExercise: AVPlayerViewController {
     
     @objc func backward15Remote() {
         
-        let seekDuration = CMTimeMake(15, 1)
+        let seekDuration = CMTimeMake(value: 15, timescale: 1)
         
         if let currentItem: AVPlayerItem = self.videoPlayer.currentItem {
             
             let currentTime: CMTime = currentItem.currentTime()
             
-            if currentTime - seekDuration > kCMTimeZero {                   // check if remaining time is less than 15 seconds
+            if currentTime - seekDuration > CMTime.zero {                   // check if remaining time is less than 15 seconds
                 
                 let newTime = currentTime - seekDuration
                 self.videoPlayer.currentItem!.seek(to: newTime, completionHandler: nil)
@@ -435,7 +435,7 @@ class PlayerViewExercise: AVPlayerViewController {
                 
             } else {
                 
-                self.videoPlayer.currentItem!.seek(to: kCMTimeZero, completionHandler: nil)
+                self.videoPlayer.currentItem!.seek(to: CMTime.zero, completionHandler: nil)
                 self.videoPlayer.play()
             }
         }
@@ -476,7 +476,7 @@ class PlayerViewExercise: AVPlayerViewController {
             print("[Remote] Enter background + Begin syncing")
             
             do {
-                try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+                try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category(rawValue: convertFromAVAudioSessionCategory(AVAudioSession.Category.playback)), mode: AVAudioSession.Mode.default)
                 let _ = try AVAudioSession.sharedInstance().setActive(true)
                 print("[Remote] Set audio session Playback + setActive")
             } catch let error as NSError {
@@ -550,6 +550,28 @@ class PlayerViewExercise: AVPlayerViewController {
         
     }
     
+    func getVideoDuration(videoURL: URL) -> String {
+        
+        let duration = AVURLAsset(url: videoURL).duration.seconds
+        let time: String
+
+        time = String(format:"%d:%d",
+                      Int((duration/60).truncatingRemainder(dividingBy: 60)),
+                      Int(duration.truncatingRemainder(dividingBy: 60)))
+        return time
+    }
+    
+    func setDurationForDownloadedVideo(downloadedVideo: VideoExercise, URL: URL) {
+        downloadedVideo.setLocalURL(localURL: URL)
+        downloadedVideo.setDuration(videoDuration: self.getVideoDuration(videoURL: URL))
+        
+        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
+        let filePath = path.strings(byAppendingPaths: ["userListOfVideoExerciseData"])
+        
+        NSKeyedArchiver.archiveRootObject(global.videoExercises, toFile: filePath[0])
+        
+    }
+    
     func getVideos(videoToGet: VideoExercise, numberDownload: Int) {
         
         var videoName = videoToGet.name
@@ -560,7 +582,8 @@ class PlayerViewExercise: AVPlayerViewController {
         if checkFileAvailableLocal(nameFileToCheck: videoName) == false {            //check if file is available local by search name in directory
             
             // Download video to stream
-            self.videoReference.child(videoName).downloadURL(completion: { (url, error) in
+            self.videoReference.child(videoName).downloadURL { (url, error) in
+//            self.videoReference.child(videoName).downloadURL(completion: { (url, error) in
                 if error != nil {
                     
                     print("[Play Video] Error streaming \(error, videoName, numberDownload)" )
@@ -584,16 +607,18 @@ class PlayerViewExercise: AVPlayerViewController {
                         item1.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions.new, context: nil)
                         
                         self.videoPlayer = AVPlayer(playerItem: item1)
+
                     }
                     
                     DispatchQueue.global().async {
                         DispatchQueue.main.async(execute: downloadQueue)
                         downloadQueue.notify(queue: DispatchQueue.main, execute: {  // make sure video player is ready before attach video to it
+                            self.setDurationForDownloadedVideo(downloadedVideo: videoToGet, URL: url!)
                             self.setupPlayer()
                         })
                     }
                 }
-            })
+            }
             
             let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
             
@@ -609,7 +634,7 @@ class PlayerViewExercise: AVPlayerViewController {
                     
                 } else {
                     
-                    videoToGet.setLocalURL(localURL: localURL)
+                    self.setDurationForDownloadedVideo(downloadedVideo: videoToGet, URL: url!)
                     print("[Play Video] sucessfully downloaded video \(videoName)")
                     
                 }
@@ -627,6 +652,8 @@ class PlayerViewExercise: AVPlayerViewController {
             let item1 = AVPlayerItem(url: localURL)
             
             self.videoPlayer = AVPlayer(playerItem: item1)
+            
+            self.setDurationForDownloadedVideo(downloadedVideo: videoToGet, URL: localURL)
         }
     }
     
@@ -636,18 +663,18 @@ class PlayerViewExercise: AVPlayerViewController {
 
         print("[Video Exercise Player] \(self.videoToGet.name)")
 
-        NotificationCenter.default.addObserver(self, selector: #selector(self.didEnterBackground), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(self.willEnterForeground), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.willEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(self.willEnterForeground), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.willEnterForeground), name: UIApplication.didBecomeActiveNotification, object: nil)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(self.didEnterBackground), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.didEnterBackground), name: UIApplication.willResignActiveNotification, object: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(self.playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
         NotificationCenter.default.addObserver(self, selector: #selector(self.playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.videoPlayer.currentItem)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(self.audioInterruptionHandle), name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.audioInterruptionHandle), name: AVAudioSession.interruptionNotification, object: nil)
 
         self.player?.play()
     }
@@ -681,7 +708,7 @@ class PlayerViewExercise: AVPlayerViewController {
         
         print("[Handle Double Tap] double Tap")
         
-        if tap.state == UIGestureRecognizerState.ended {
+        if tap.state == UIGestureRecognizer.State.ended {
             
             let point = tap.location(in: self.view)
             
@@ -728,7 +755,7 @@ class PlayerViewExercise: AVPlayerViewController {
     
     @objc func handleTap(tap: UIGestureRecognizer) {
         
-        if tap.state == UIGestureRecognizerState.ended {
+        if tap.state == UIGestureRecognizer.State.ended {
             
             disappearAnimationControl = UIViewPropertyAnimator(duration: 0.4, curve: .easeInOut) {
                 
@@ -934,7 +961,7 @@ class PlayerViewExercise: AVPlayerViewController {
         
         guard let userInfo = notification.userInfo,
             let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
-            let type = AVAudioSessionInterruptionType(rawValue: typeValue) else {
+            let type = AVAudioSession.InterruptionType(rawValue: typeValue) else {
                 return
         }
         
@@ -944,7 +971,7 @@ class PlayerViewExercise: AVPlayerViewController {
             
         } else if type == .ended {
             if let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt {
-                let options = AVAudioSessionInterruptionOptions(rawValue: optionsValue)
+                let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
                 if options.contains(.shouldResume) {
                     
                     // Interruption Ended - playback should resume
@@ -985,18 +1012,18 @@ class PlayerViewExercise: AVPlayerViewController {
             
         self.player = videoPlayer
         
-        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: UIApplication.didBecomeActiveNotification, object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: UIApplication.willResignActiveNotification, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
         NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.videoPlayer.currentItem)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(audioInterruptionHandle), name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(audioInterruptionHandle), name: AVAudioSession.interruptionNotification, object: nil)
         
         self.player?.play()
 
@@ -1125,7 +1152,7 @@ class PlayerViewExercise: AVPlayerViewController {
             playButton.setImage(UIImage(named: "PLAY"), for: .normal)
             playerPlaying = false
             
-            let seekDuration = CMTimeMake(15, 1)
+            let seekDuration = CMTimeMake(value: 15, timescale: 1)
             let currentTime: CMTime = (self.player?.currentTime())!
             
             let checkDuration = DispatchQueue.main
@@ -1165,16 +1192,16 @@ class PlayerViewExercise: AVPlayerViewController {
             playButton.setImage(UIImage(named: "PLAY"), for: .normal)
             playerPlaying = false
             
-            let seekDuration = CMTimeMake(15, 1)
+            let seekDuration = CMTimeMake(value: 15, timescale: 1)
             let currentTime: CMTime = (self.player?.currentTime())!
-            if currentTime - seekDuration > kCMTimeZero {                   // check if seek duration is less than 15 seconds
+            if currentTime - seekDuration > CMTime.zero {                   // check if seek duration is less than 15 seconds
                 
                 let newTime = currentTime - seekDuration
                 self.player?.seek(to: newTime)
                 
             } else {
                 
-                self.player?.seek(to: kCMTimeZero)
+                self.player?.seek(to: CMTime.zero)
             }
             
             print("[Backward 15] backward15ButtonPressed")
@@ -1245,4 +1272,9 @@ class PlayerViewExercise: AVPlayerViewController {
         // Dispose of any resources that can be recreated.
     }
         
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromAVAudioSessionCategory(_ input: AVAudioSession.Category) -> String {
+	return input.rawValue
 }
