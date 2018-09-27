@@ -85,6 +85,8 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        
         let checkPortraitWorkoutTable = DispatchQueue(label: "checkPortraitWorkoutTable")
 
         checkPortraitWorkoutTable.sync {
@@ -97,31 +99,11 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
                 AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
             }
         }
-        
-        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
-        let filePath = path.strings(byAppendingPaths: ["userListOfVideoExerciseData"])
-        
-        if let userListOfVideoExercises = NSKeyedUnarchiver.unarchiveObject(withFile: filePath[0]) as? [VideoExercise] {
-            if userListOfVideoExercises.count > 0 {
-                global.videoExercises = userListOfVideoExercises
-            } else {
-                global.videoExercises = (global.subWorkoutList["AllVideos"]?.contain)!
-                
-                NSKeyedArchiver.archiveRootObject(global.videoExercises, toFile: filePath[0])
-            }
-        } else {
-            global.videoExercises = (global.subWorkoutList["AllVideos"]?.contain)!
-            
-            NSKeyedArchiver.archiveRootObject(global.videoExercises, toFile: filePath[0])
-        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        tableView.reloadData()
     }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -141,10 +123,12 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
             self.setEditing(false, animated: true)
         }
         
-        DispatchQueue.main.async(execute: setupBackgroundDispatch)
-
+        DispatchQueue.global().async {
+            self.loadDataFromLocal()
+            DispatchQueue.main.async(execute: setupBackgroundDispatch)
+        }
+        
         setupBackgroundDispatch.notify(queue: DispatchQueue.main) {
-            
             self.tableView.reloadData()
         }
 
@@ -364,10 +348,12 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
             global.videoExercises[indexPath.row].localURL = nil
             global.videoExercises[indexPath.row].duration = ""
             
-            let doneRemoving = UIAlertController(title: "Remove Exercises Successfully", message: "", preferredStyle: UIAlertController.Style.alert)
-            doneRemoving.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+//            let doneRemoving = UIAlertController(title: "Remove Exercises Successfully", message: "", preferredStyle: UIAlertController.Style.alert)
+//            doneRemoving.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+//            self.present(doneRemoving, animated: true, completion: self.exitEditModeIfTrue)
+            
             tableView.reloadData()
-            self.present(doneRemoving, animated: true, completion: self.exitEditModeIfTrue)
+            self.exitEditModeIfTrue
             
         }
         remove.backgroundColor = .red
@@ -742,5 +728,24 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
         self.tabBarController?.tabBar.layer.shadowOpacity = 0.3
         
         self.tabBarController?.tabBar.barTintColor = UIColor.backgroundColor
+    }
+    
+    func loadDataFromLocal() {
+        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
+        let filePath = path.strings(byAppendingPaths: ["userListOfVideoExerciseData"])
+        
+        if let userListOfVideoExercises = NSKeyedUnarchiver.unarchiveObject(withFile: filePath[0]) as? [VideoExercise] {
+            if userListOfVideoExercises.count > 0 {
+                global.videoExercises = userListOfVideoExercises
+            } else {
+                global.videoExercises = (global.subWorkoutList["AllVideos"]?.contain)!
+                
+                NSKeyedArchiver.archiveRootObject(global.videoExercises, toFile: filePath[0])
+            }
+        } else {
+            global.videoExercises = (global.subWorkoutList["AllVideos"]?.contain)!
+            
+            NSKeyedArchiver.archiveRootObject(global.videoExercises, toFile: filePath[0])
+        }
     }
 }
