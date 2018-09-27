@@ -53,17 +53,15 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="MLx-qr-J9G" firstAttribute="leading" relation="lessThanOrEqual" secondItem="Ara-FY-5Cm" secondAttribute="leading" constant="345" id="0Pe-nZ-UIq"/>
-                                                <constraint firstItem="MLx-qr-J9G" firstAttribute="top" relation="lessThanOrEqual" secondItem="Ara-FY-5Cm" secondAttribute="top" constant="181" id="0e5-Wu-oR7"/>
                                                 <constraint firstAttribute="trailing" secondItem="BCB-cy-KRg" secondAttribute="trailing" id="AaV-wy-qCP"/>
                                                 <constraint firstItem="BCB-cy-KRg" firstAttribute="leading" secondItem="Ara-FY-5Cm" secondAttribute="leading" id="AyY-B4-UHZ"/>
                                                 <constraint firstItem="Hha-60-uwu" firstAttribute="top" secondItem="Ara-FY-5Cm" secondAttribute="top" id="Bf1-df-CMN"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="MLx-qr-J9G" secondAttribute="bottom" id="K37-U2-8Q3"/>
+                                                <constraint firstItem="Hha-60-uwu" firstAttribute="bottomMargin" secondItem="MLx-qr-J9G" secondAttribute="bottom" id="K37-U2-8Q3"/>
                                                 <constraint firstAttribute="trailing" secondItem="Hha-60-uwu" secondAttribute="trailing" id="T1M-0Z-nkg"/>
                                                 <constraint firstAttribute="bottom" secondItem="BCB-cy-KRg" secondAttribute="bottom" id="b5r-K8-uYa"/>
                                                 <constraint firstAttribute="width" secondItem="Ara-FY-5Cm" secondAttribute="height" multiplier="187:105" id="db4-9H-gAw"/>
                                                 <constraint firstItem="Hha-60-uwu" firstAttribute="leading" secondItem="Ara-FY-5Cm" secondAttribute="leading" id="pCt-Nn-y52"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="MLx-qr-J9G" secondAttribute="trailing" id="tWp-R2-nwu"/>
+                                                <constraint firstItem="Hha-60-uwu" firstAttribute="trailingMargin" secondItem="MLx-qr-J9G" secondAttribute="trailing" id="tWp-R2-nwu"/>
                                                 <constraint firstItem="BCB-cy-KRg" firstAttribute="top" secondItem="Ara-FY-5Cm" secondAttribute="top" id="x1N-6F-eVR"/>
                                                 <constraint firstAttribute="bottom" secondItem="Hha-60-uwu" secondAttribute="bottom" id="xKr-w5-PUb"/>
                                             </constraints>
@@ -206,9 +204,9 @@
         <!--Add Customize Workout Table View Controller-->
         <scene sceneID="YfP-Va-jtY">
             <objects>
-                <tableViewController hidesBottomBarWhenPushed="YES" id="FI5-c1-CLC" customClass="AddCustomizeWorkoutTableViewController" customModule="EricTM" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="FI5-c1-CLC" customClass="AddCustomizeWorkoutTableViewController" customModule="EricTM" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" indicatorStyle="black" bouncesZoom="NO" dataMode="prototypes" style="plain" allowsSelectionDuringEditing="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="80" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="iYM-xa-s1y">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="687"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="623"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -228,8 +226,9 @@
                                                 <constraint firstAttribute="width" secondItem="lbh-Uy-yhL" secondAttribute="height" multiplier="16:9" id="IuJ-P7-OGJ"/>
                                             </constraints>
                                         </imageView>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" image="Vignette" translatesAutoresizingMaskIntoConstraints="NO" id="44S-vM-sbI">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" image="Thumbnail" translatesAutoresizingMaskIntoConstraints="NO" id="44S-vM-sbI">
                                             <rect key="frame" x="20" y="11" width="67.666666666666671" height="38"/>
+                                            <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="38" id="1On-y1-7c6"/>
                                                 <constraint firstAttribute="width" secondItem="44S-vM-sbI" secondAttribute="height" multiplier="16:9" id="3eV-Ae-mGA"/>
@@ -240,7 +239,7 @@
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="14" id="cL9-eW-upt"/>
                                             </constraints>
-                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
@@ -264,7 +263,7 @@
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JaM-bE-y6k" userLabel="Duration">
                                             <rect key="frame" x="103.66666666666667" y="34.666666666666664" width="232.33333333333331" height="14.333333333333336"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -305,6 +304,7 @@
                             <outlet property="delegate" destination="FI5-c1-CLC" id="F3g-UY-cjE"/>
                         </connections>
                     </tableView>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" id="cSw-zT-SuP"/>
                     <connections>
                         <segue destination="hSa-az-6Bw" kind="show" identifier="PlayerVideoExercise" id="dwx-sK-E14"/>

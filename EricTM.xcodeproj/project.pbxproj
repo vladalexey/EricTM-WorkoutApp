@@ -134,9 +134,9 @@
 			isa = PBXGroup;
 			children = (
 				8256A469210829C0004F3CF9 /* EricTM.entitlements */,
-				82A219D020DF40F900F19132 /* GoogleService-Info.plist */,
 				82340FD720DCD6BE003079A2 /* AppDelegate.swift */,
 				829FBCB620E0E5070052601F /* TabBarViewController.swift */,
+				82A219D020DF40F900F19132 /* GoogleService-Info.plist */,
 				82EF187B21007ED400685FC4 /* Assets.xcassets */,
 				82340FDB20DCD6BE003079A2 /* Main.storyboard */,
 				82340FE020DCD6BE003079A2 /* LaunchScreen.storyboard */,

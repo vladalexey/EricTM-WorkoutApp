@@ -328,6 +328,25 @@ class PlayerViewController: AVPlayerViewController {
             (result : UIAlertAction) -> Void in
 
             print("[Error] OK")
+            
+            self.player = nil
+            
+            self.listVideos.removeAll()
+            self.listObjectVideos.removeAll()
+            self.queuePlayer.removeAllItems()
+            
+            let checkPortrait = DispatchQueue(label: "checkPortrait")
+            
+            checkPortrait.sync {
+
+                self.navigationController?.popViewController(animated: true)
+                self.navigationController?.setNavigationBarHidden(false, animated: true)
+                
+                if UIApplication.shared.statusBarOrientation.isPortrait == false {
+                    print("[Error] exit changing to Portrait")
+                    AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
+                }
+            }
 
             self.navigationController?.popViewController(animated: true)
             self.navigationController?.setNavigationBarHidden(false, animated: true)
@@ -336,27 +355,6 @@ class PlayerViewController: AVPlayerViewController {
         alertView.addAction(okAction)
         self.present(alertView, animated: true, completion: nil)
 
-        
-        let checkPortrait = DispatchQueue(label: "checkPortrait")
-        
-        checkPortrait.sync {
-            
-            alertView.dismiss(animated: true, completion: nil)
-            
-            self.player = nil
-            
-            self.listVideos.removeAll()
-            self.listObjectVideos.removeAll()
-            self.queuePlayer.removeAllItems()
-            
-            self.navigationController?.popViewController(animated: true)
-            self.navigationController?.setNavigationBarHidden(false, animated: true)
-            
-            if UIApplication.shared.statusBarOrientation.isPortrait == false {
-                print("[Error] exit changing to Portrait")
-                AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
-            }
-        }
     }
     
     func checkFileAvailableLocal(nameFileToCheck: String) -> Bool {
@@ -580,27 +578,38 @@ class PlayerViewController: AVPlayerViewController {
     
     func getVideoDuration(videoURL: URL) -> String {
         
-        //        let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        //        let videoURL = documentDirectory.appendingPathComponent(videoName)
         let duration = AVURLAsset(url: videoURL).duration.seconds
-        //        print(duration)
         let time: String
-        //        if duration > 3600 {
-        //            time = String(format:"%dh %dm %ds",
-        //                          Int(duration/3600),
-        //                          Int((duration/60).truncatingRemainder(dividingBy: 60)),
-        //                          Int(duration.truncatingRemainder(dividingBy: 60)))
-        //        } else {
+ 
         time = String(format:"%d:%d",
                       Int((duration/60).truncatingRemainder(dividingBy: 60)),
                       Int(duration.truncatingRemainder(dividingBy: 60)))
-        //        }
         return time
     }
     
-    func getVideos(videoToGet: VideoExercise, numberDownload: Int) {
+    func setDurationForDownloadedVideo(downloadedVideo: VideoExercise, URL: URL) {
+        
+        let saveArchive = DispatchWorkItem() {
+            downloadedVideo.setLocalURL(localURL: URL)
+            downloadedVideo.setDuration(videoDuration: self.getVideoDuration(videoURL: URL))
+        }
+        
+        DispatchQueue.global().async(execute: saveArchive)
+        saveArchive.notify(queue: DispatchQueue.global()) {
+            let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
+            let filePath = path.strings(byAppendingPaths: ["userListOfVideoExerciseData"])
+            
+            NSKeyedArchiver.archiveRootObject(global.videoExercises, toFile: filePath[0])
+            
+            for video in global.videoExercises { print("[SetDuration] \(String(describing: video.duration))")}
+        }
+    }
+    
+    func getVideos(videoToGet: VideoExercise, numberDownload: Int, numberOfVideo: Int) {
         
         var videoName = videoToGet.name
+        
+        
         
         videoName = videoName.replacingOccurrences(of: " ", with: "")
         videoName.append(".mp4")
@@ -631,8 +640,6 @@ class PlayerViewController: AVPlayerViewController {
                         item1.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: NSKeyValueObservingOptions.new, context: nil)
                         item1.addObserver(self, forKeyPath: "playbackBufferFull", options: NSKeyValueObservingOptions.new, context: nil)
                         item1.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions.new, context: nil)
-                        
-                        videoToGet.setDuration(videoDuration: self.getVideoDuration(videoURL: url!))
                         
                         self.listVideos.replaceSubrange(numberDownload...numberDownload, with: [item1])
                         
@@ -673,8 +680,9 @@ class PlayerViewController: AVPlayerViewController {
                     }
                     
                     DispatchQueue.global().async {
-                        DispatchQueue.main.sync(execute: downloadQueue)
+                        DispatchQueue.main.async(execute: downloadQueue)
                         downloadQueue.notify(queue: DispatchQueue.main, execute: {  // make sure video player is ready before attach video to it
+                            
                             self.setupPlayer()
                         })
                     }
@@ -684,6 +692,8 @@ class PlayerViewController: AVPlayerViewController {
             let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
             
             let localURL = documentsURL.appendingPathComponent(videoName)
+            
+            
             
             // Download to the local system
             self.downloadTask1.child(videoName).write(toFile: localURL) { url, error in
@@ -695,8 +705,12 @@ class PlayerViewController: AVPlayerViewController {
                     
                 } else {
                     
-                    videoToGet.setLocalURL(localURL: localURL)
-                    videoToGet.setDuration(videoDuration: self.getVideoDuration(videoURL: localURL))
+                    var videoToSetDuration = VideoExercise(name: "")
+                    
+                    if numberOfVideo != 0 && numberOfVideo != global.workOutVideos[self.myIndex].containSubworkout.count + 1 {
+                        videoToSetDuration = global.workOutVideos[self.myIndex].containSubworkout[numberDownload - 1].contain[numberOfVideo] }
+                    
+                    self.setDurationForDownloadedVideo(downloadedVideo: videoToSetDuration, URL: url!)
                     print("[Play Video] sucessfully downloaded video \(videoName)")
                     
                 }
@@ -713,14 +727,16 @@ class PlayerViewController: AVPlayerViewController {
             
             let item1 = AVPlayerItem(url: localURL)
             
-            videoToGet.setDuration(videoDuration: self.getVideoDuration(videoURL: localURL))
+            let videoToSetDuration = VideoExercise(name: "")
+            
+            self.setDurationForDownloadedVideo(downloadedVideo: videoToSetDuration, URL: localURL)
             
             self.listVideos.replaceSubrange(numberDownload...numberDownload, with: [item1])
             
             if self.queuePlayer.items().count > 0 {
                 if numberDownload == 0 {
                     
-                    //                            self.listVideos.append(item1)
+//                  self.listVideos.append(item1)
                     
                     let firstVideo = self.queuePlayer.items().first
                     self.queuePlayer.insert(item1, after: firstVideo)
@@ -784,15 +800,13 @@ class PlayerViewController: AVPlayerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        var lineNumber = 0  // to get correct order of video in queue
-        
-        self.player?.addObserver(self, forKeyPath: "TimeControlStatus", options: NSKeyValueObservingOptions.new, context: nil)
+        self.player?.addObserver(self, forKeyPath: "reasonForWaitingToPlay", options: NSKeyValueObservingOptions.new, context: nil)
         
         self.showsPlaybackControls = false
         let currentWorkout = global.workOutVideos[self.myIndex]
         
         if currentWorkout.isDefault {
-            self.getVideos(videoToGet: (global.subWorkoutList[currentWorkout.workoutLabel + "Introduction"]?.contain[0])!, numberDownload: 0)
+            self.getVideos(videoToGet: (global.subWorkoutList[currentWorkout.workoutLabel + "Introduction"]?.contain[0])!, numberDownload: 0, numberOfVideo: 0)
         }
         
         for workoutIndex in 0...currentWorkout.containSubworkout.count - 1 {    // get a list of sub-workouts from a Workout and iterate through
@@ -819,12 +833,12 @@ class PlayerViewController: AVPlayerViewController {
             }
             
             
-            self.getVideos(videoToGet: workout.contain[rand], numberDownload: workoutIndex + 1)  // randomly get one video for each sub-workout
+            self.getVideos(videoToGet: workout.contain[rand], numberDownload: workoutIndex + 1, numberOfVideo: rand)  // randomly get one video for each sub-workout
             print("[Video Player] \(workout.name)")
         }
         
         if currentWorkout.isDefault {
-            self.getVideos(videoToGet: (global.subWorkoutList[currentWorkout.workoutLabel + "Ending"]?.contain[0])!, numberDownload: currentWorkout.containSubworkout.count + 1)
+            self.getVideos(videoToGet: (global.subWorkoutList[currentWorkout.workoutLabel + "Ending"]?.contain[0])!, numberDownload: currentWorkout.containSubworkout.count + 1, numberOfVideo: 0)
         }
 
 
@@ -839,24 +853,6 @@ class PlayerViewController: AVPlayerViewController {
         return true
     }
     
-    func getRandomList() {
-        
-        var rand = Int()
-        random = [Int(arc4random_uniform(4) + 1)] // get random number //change number to actual number of videos on Firebase
-        
-        repeat {
-            rand = Int(arc4random_uniform(4) + 1)  // get random number //change number to actual number of videos on Firebase
-        } while rand == random[0]
-        
-        random.append(rand)
-        
-        repeat {
-            rand = Int(arc4random_uniform(4) + 1)  // get random number //change number to actual number of videos on Firebase
-        } while random[0] == rand || random[1] == rand
-        
-        random.append(rand)
-        print("[Get Random List] \(random)")
-    }
     
     override func viewWillAppear(_ animated: Bool) {
         
@@ -1523,7 +1519,7 @@ class PlayerViewController: AVPlayerViewController {
         self.listObjectVideos.removeAll()
         self.queuePlayer.removeAllItems()
         NotificationCenter.default.removeObserver(self)
-    
+        
         checkPortrait()
     }
     

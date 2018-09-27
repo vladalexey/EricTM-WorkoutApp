@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import FirebaseStorage
 import AVKit
 
 protocol DataSentDelegate {
@@ -27,6 +28,9 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
     }
     
     lazy var sortButton = UIBarButtonItem(title: "Sort", style: .plain, target: self, action: #selector(AddCustomizeWorkoutTableViewController.sortVideoExercise(_:)))
+    
+    lazy var saveButton = UIBarButtonItem(title: "Create", style: .plain, target: self, action: #selector(AddCustomizeWorkoutTableViewController.saveNewWorkout(_:)))
+    
     lazy var editButton = UIBarButtonItem(title: "Select", style: .plain, target: self, action: #selector(AddCustomizeWorkoutTableViewController.editButtonPressed(_:)))
     
     let activityIndicatorView: UIActivityIndicatorView = {
@@ -39,48 +43,10 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         
-        var items = [UIBarButtonItem]()
-        
-        let flexibleSpace1 = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let flexibleSpace2 = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        
-        let createButton = UIBarButtonItem(title: "Create", style: .plain, target: self, action: #selector(saveNewWorkout(_ :)))
-        createButton.tintColor = UIColor.lightGray
-        createButton.setTitleTextAttributes([NSAttributedString.Key.strokeColor: UIColor.white], for: .selected)
-        
-//        let downloadButton = UIBarButtonItem(title: "Download", style: .plain, target: self, action: #selector(saveNewWorkout(_ :)))
-//        downloadButton.tintColor = UIColor.lightGray
-//        downloadButton.setTitleTextAttributes([NSAttributedStringKey.strokeColor: UIColor.white], for: .selected)
-        
-        let removeButton = UIBarButtonItem(title: "Remove", style: .plain, target: self, action: #selector(removeVideo(_:)))
-        removeButton.tintColor = UIColor.lightGray
-        removeButton.setTitleTextAttributes([NSAttributedString.Key.strokeColor: UIColor.white], for: .selected)
-        
-//        items.append(flexibleSpace1)
-        
-        items.append(createButton)
-        
-//        items.append(downloadButton)
-        
-        items.append(flexibleSpace2)
-        
-        items.append(removeButton)
-        
-//        items.append(flexibleSpace2)
-        
         if editing {
             tableView.setEditing(true, animated: true)
-            
-            self.tabBarController?.tabBar.isHidden = true
-            self.navigationController?.setToolbarHidden(false, animated: true)
-
-//            self.navigationController?.toolbar.translatesAutoresizingMaskIntoConstraints = false
-//            self.navigationController?.toolbar.sizeThatFits(CGSize(width: view.frame.width, height: 100))
-            self.navigationController?.toolbar.heightAnchor.constraint(equalToConstant: 64)
-            self.navigationController?.toolbar.widthAnchor.constraint(equalToConstant: view.frame.width)
-            
-            self.navigationController?.toolbar.items = items
-            self.navigationController?.toolbar.barTintColor = UIColor.backgroundColorToolbar
+            saveButton.tintColor = UIColor.lightGray
+            self.navigationItem.leftBarButtonItem = saveButton
         
             self.editButton.title = "Done"
             checkSelected = false
@@ -91,8 +57,8 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
             tableView.setEditing(false, animated: true)
             self.editButton.title = "Select"
             
-            self.tabBarController?.tabBar.isHidden = false
-            self.navigationController?.setToolbarHidden(true, animated: true)
+            sortButton.tintColor = UIColor.lightGray
+            self.navigationItem.leftBarButtonItem = sortButton
         }
     }
     
@@ -120,31 +86,10 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
         super.viewWillAppear(animated)
         
         let checkPortraitWorkoutTable = DispatchQueue(label: "checkPortraitWorkoutTable")
-        
+
         checkPortraitWorkoutTable.sync {
             
             setupBackground()
-            
-            let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
-            let filePath = path.strings(byAppendingPaths: ["userListOfVideoExerciseData"])
-            
-            if let userListOfVideoExercises = NSKeyedUnarchiver.unarchiveObject(withFile: filePath[0]) as? [VideoExercise] {
-                if userListOfVideoExercises.count > 0 {
-                    global.videoExercises = userListOfVideoExercises
-                } else {
-                    global.videoExercises = (global.subWorkoutList["AllVideos"]?.contain)!
-                    
-                    NSKeyedArchiver.archiveRootObject(global.videoExercises, toFile: filePath[0])
-                }
-            } else {
-                global.videoExercises = (global.subWorkoutList["AllVideos"]?.contain)!
-                
-                NSKeyedArchiver.archiveRootObject(global.videoExercises, toFile: filePath[0])
-            }
-            
-//            if (self.navigationController?.navigationBar.isHidden)! {
-//                self.navigationController?.isNavigationBarHidden = false
-//            }
             
             print("[Screen Orientation] check Portrait in Table view")
             if UIApplication.shared.statusBarOrientation.isPortrait == false {
@@ -153,17 +98,28 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
             }
         }
         
-        checkPortraitWorkoutTable.sync {
-            self.setEditing(false, animated: true)
+        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
+        let filePath = path.strings(byAppendingPaths: ["userListOfVideoExerciseData"])
+        
+        if let userListOfVideoExercises = NSKeyedUnarchiver.unarchiveObject(withFile: filePath[0]) as? [VideoExercise] {
+            if userListOfVideoExercises.count > 0 {
+                global.videoExercises = userListOfVideoExercises
+            } else {
+                global.videoExercises = (global.subWorkoutList["AllVideos"]?.contain)!
+                
+                NSKeyedArchiver.archiveRootObject(global.videoExercises, toFile: filePath[0])
+            }
+        } else {
+            global.videoExercises = (global.subWorkoutList["AllVideos"]?.contain)!
+            
+            NSKeyedArchiver.archiveRootObject(global.videoExercises, toFile: filePath[0])
         }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        self.setEditing(false, animated: true)
         tableView.reloadData()
-        print("[Video Exercises] \(global.videoExercises)")
     }
     
     
@@ -180,12 +136,15 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
         
         tableView.allowsMultipleSelectionDuringEditing = true
         
-        let setupBackgroundDispatch = DispatchWorkItem() { self.setupBackground() }
+        let setupBackgroundDispatch = DispatchWorkItem() {
+            self.setupBackground()
+            self.setEditing(false, animated: true)
+        }
         
         DispatchQueue.main.async(execute: setupBackgroundDispatch)
 
         setupBackgroundDispatch.notify(queue: DispatchQueue.main) {
-            self.setEditing(false, animated: true)
+            
             self.tableView.reloadData()
         }
 
@@ -273,24 +232,22 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
         let videoExercise = global.videoExercises[indexPath.row]
         var videoNameFile = videoExercise.name
         videoNameFile = videoNameFile.replacingOccurrences(of: " ", with: "")
+        var videoNameFileThumbnail = videoNameFile
         videoNameFile.append(".mp4")
+        videoNameFileThumbnail.append(".jpeg")
         
         cell.nameVideoExercise.text = videoExercise.name
-        
-        var videoNameFileThumbnail = videoExercise.name
-        videoNameFileThumbnail = videoNameFileThumbnail.replacingOccurrences(of: " ", with: "")
-        videoNameFileThumbnail.append(".jpeg")
         let imageThumbnail = UIImage(named: videoNameFileThumbnail)
         
         cell.progressVideoDownload.isHidden = true
-        cell.progressVideoDownload.progress = 0
         
 //        if videoExercise.localURL == nil {
         
         if checkFileAvailableLocal(nameFileToCheck: videoNameFile) {
             
-            cell.downloadVideoButton.setImage(nil, for: .normal)
-            cell.smallThumbnail.image = imageThumbnail
+            cell.downloadVideoButton.imageView?.transform = CGAffineTransform(scaleX: 0, y: 0)
+//            print("[Scale] 0")
+            cell.Vignette.image = imageThumbnail
 
             // place local URL to file if already downloaded
             let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
@@ -301,18 +258,15 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
             }
 
         } else {
+            
             cell.downloadVideoButton.setImage(UIImage(named: "Download"), for: .normal)
+//            cell.downloadVideoButton.imageView?.transform = CGAffineTransform.identity
+//            print("[Scale] 1")
             cell.downloadVideoButton.adjustsImageWhenHighlighted = true
             cell.downloadVideoButton.addTarget(self, action: #selector(AddCustomizeWorkoutTableViewController.downloadVideoSingle(_:)), for: .touchUpInside)
             cell.downloadVideoButton.tag = indexPath.row // to get index of the cell
-            cell.smallThumbnail.image = imageThumbnail?.noir
-//            cell.videoDuration.isHidden = true
-            cell.videoDuration.text = ""
         }
-//        } else {
-//            cell.downloadVideoButton.setImage(nil, for: .normal)
-//            cell.smallThumbnail.image = imageThumbnail
-//        }
+
         
         cell.videoDuration.text = videoExercise.duration
         
@@ -612,10 +566,9 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
                 
             }
             
-            let doneRemoving = UIAlertController(title: "Remove Exercises Successfully", message: "", preferredStyle: UIAlertController.Style.alert)
-            doneRemoving.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            
             tableView.reloadData()
-            self.present(doneRemoving, animated: true, completion: self.exitEditModeIfTrue)
+            self.exitEditModeIfTrue()
         } else {
             let doneRemoving = UIAlertController(title: "Select exercise", message: "", preferredStyle: UIAlertController.Style.alert)
             doneRemoving.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))

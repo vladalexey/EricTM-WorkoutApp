@@ -28,12 +28,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AddWorkoutView/AddCustomizeWorkoutTableViewController.swift"
-            timestampString = "559110209.88376"
+            timestampString = "559542834.6241421"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "511"
-            endingLineNumber = "511"
-            landmarkName = "downloadVideoSingle(_:)"
+            startingLineNumber = "510"
+            endingLineNumber = "510"
+            landmarkName = "downloadVideo(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -44,12 +44,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AddWorkoutView/AddCustomizeWorkoutTableViewController.swift"
-            timestampString = "559110209.884065"
+            timestampString = "559542834.624472"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "514"
-            endingLineNumber = "514"
-            landmarkName = "downloadVideoSingle(_:)"
+            startingLineNumber = "513"
+            endingLineNumber = "513"
+            landmarkName = "downloadVideo(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -60,12 +60,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AddWorkoutView/AddCustomizeWorkoutTableViewController.swift"
-            timestampString = "559110209.884141"
+            timestampString = "559542834.624705"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "609"
+            endingLineNumber = "609"
+            landmarkName = "saveNewWorkout(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AddWorkoutView/AddCustomizeWorkoutTableViewController.swift"
+            timestampString = "559542834.624933"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "610"
             endingLineNumber = "610"
-            landmarkName = "removeVideo(_:)"
+            landmarkName = "saveNewWorkout(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -76,12 +92,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AddWorkoutView/AddCustomizeWorkoutTableViewController.swift"
-            timestampString = "559110209.884203"
+            timestampString = "559542834.62516"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "611"
-            endingLineNumber = "611"
-            landmarkName = "removeVideo(_:)"
+            startingLineNumber = "514"
+            endingLineNumber = "514"
+            landmarkName = "downloadVideo(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -92,76 +108,60 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AddWorkoutView/AddCustomizeWorkoutTableViewController.swift"
-            timestampString = "559110209.884263"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "515"
-            endingLineNumber = "515"
-            landmarkName = "downloadVideoSingle(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "AddWorkoutView/AddCustomizeWorkoutTableViewController.swift"
-            timestampString = "559110209.88432"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "537"
-            endingLineNumber = "537"
-            landmarkName = "downloadVideoSingle(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "AddWorkoutView/AddCustomizeWorkoutTableViewController.swift"
-            timestampString = "559110209.884378"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "539"
-            endingLineNumber = "539"
-            landmarkName = "downloadVideoSingle(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "AddWorkoutView/AddCustomizeWorkoutTableViewController.swift"
-            timestampString = "559110209.884436"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "541"
-            endingLineNumber = "541"
-            landmarkName = "downloadVideoSingle(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "AddWorkoutView/AddCustomizeWorkoutTableViewController.swift"
-            timestampString = "559110209.884492"
+            timestampString = "559542834.6253819"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "536"
             endingLineNumber = "536"
-            landmarkName = "downloadVideoSingle(_:)"
+            landmarkName = "downloadVideo(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AddWorkoutView/AddCustomizeWorkoutTableViewController.swift"
+            timestampString = "559542834.625633"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "538"
+            endingLineNumber = "538"
+            landmarkName = "downloadVideo(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AddWorkoutView/AddCustomizeWorkoutTableViewController.swift"
+            timestampString = "559542834.6258579"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "540"
+            endingLineNumber = "540"
+            landmarkName = "downloadVideo(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AddWorkoutView/AddCustomizeWorkoutTableViewController.swift"
+            timestampString = "559542834.626103"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "535"
+            endingLineNumber = "535"
+            landmarkName = "downloadVideo(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -172,7 +172,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PlayerViewExercise/PlayerViewExercise.swift"
-            timestampString = "559110209.884553"
+            timestampString = "559121979.517941"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "295"
@@ -188,7 +188,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PlayerViewExercise/PlayerViewExercise.swift"
-            timestampString = "559110209.884764"
+            timestampString = "559121979.518152"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "296"
@@ -203,30 +203,14 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "AddWorkoutView/AddCustomizeWorkoutTableViewController.swift"
-            timestampString = "559110209.884824"
+            filePath = "PlayerViewWorkout/PlayerViewController.swift"
+            timestampString = "559542834.6263601"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "133"
-            endingLineNumber = "133"
-            landmarkName = "viewWillAppear(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "AddWorkoutView/AddCustomizeWorkoutTableViewController.swift"
-            timestampString = "559110209.884882"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "132"
-            endingLineNumber = "132"
-            landmarkName = "viewWillAppear(_:)"
-            landmarkType = "7">
+            startingLineNumber = "1234"
+            endingLineNumber = "1234"
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -236,13 +220,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PlayerViewWorkout/PlayerViewController.swift"
-            timestampString = "559110209.884941"
+            timestampString = "559542834.626637"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1238"
-            endingLineNumber = "1238"
-            landmarkName = "observeValue(forKeyPath:of:change:context:)"
-            landmarkType = "7">
+            startingLineNumber = "1233"
+            endingLineNumber = "1233"
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -252,13 +236,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PlayerViewWorkout/PlayerViewController.swift"
-            timestampString = "559110209.885522"
+            timestampString = "559542834.626862"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1237"
-            endingLineNumber = "1237"
-            landmarkName = "observeValue(forKeyPath:of:change:context:)"
-            landmarkType = "7">
+            startingLineNumber = "1232"
+            endingLineNumber = "1232"
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -268,13 +252,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PlayerViewWorkout/PlayerViewController.swift"
-            timestampString = "559110209.885839"
+            timestampString = "559542834.627081"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1236"
-            endingLineNumber = "1236"
-            landmarkName = "observeValue(forKeyPath:of:change:context:)"
-            landmarkType = "7">
+            startingLineNumber = "1231"
+            endingLineNumber = "1231"
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -284,13 +268,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PlayerViewWorkout/PlayerViewController.swift"
-            timestampString = "559110209.886165"
+            timestampString = "559542834.627299"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1235"
-            endingLineNumber = "1235"
-            landmarkName = "observeValue(forKeyPath:of:change:context:)"
-            landmarkType = "7">
+            startingLineNumber = "803"
+            endingLineNumber = "803"
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -300,13 +284,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PlayerViewWorkout/PlayerViewController.swift"
-            timestampString = "559110209.8866301"
+            timestampString = "559542834.6275229"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "789"
-            endingLineNumber = "789"
-            landmarkName = "viewDidLoad()"
-            landmarkType = "7">
+            startingLineNumber = "1187"
+            endingLineNumber = "1187"
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -316,29 +300,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PlayerViewWorkout/PlayerViewController.swift"
-            timestampString = "559110209.88696"
+            timestampString = "559542834.627749"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1191"
-            endingLineNumber = "1191"
-            landmarkName = "viewDidAppear(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PlayerViewWorkout/PlayerViewController.swift"
-            timestampString = "559110209.8872859"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1192"
-            endingLineNumber = "1192"
-            landmarkName = "viewDidAppear(_:)"
-            landmarkType = "7">
+            startingLineNumber = "1188"
+            endingLineNumber = "1188"
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -348,7 +316,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PlayerViewExercise/PlayerViewExercise.swift"
-            timestampString = "559110209.887587"
+            timestampString = "559121979.5215369"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "656"
@@ -364,7 +332,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PlayerViewExercise/PlayerViewExercise.swift"
-            timestampString = "559110209.887646"
+            timestampString = "559121979.521595"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "555"
@@ -380,7 +348,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PlayerViewExercise/PlayerViewExercise.swift"
-            timestampString = "559110209.8876981"
+            timestampString = "559121979.521651"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "556"
@@ -396,7 +364,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PlayerViewExercise/PlayerViewExercise.swift"
-            timestampString = "559110209.887748"
+            timestampString = "559121979.521728"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "561"
@@ -412,7 +380,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PlayerViewExercise/PlayerViewExercise.swift"
-            timestampString = "559110209.887797"
+            timestampString = "559121979.52178"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "562"
@@ -428,11 +396,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Model/VideoExercise.swift"
-            timestampString = "559110209.887854"
+            timestampString = "559121979.521831"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "76"
-            endingLineNumber = "76"
+            startingLineNumber = "73"
+            endingLineNumber = "73"
             landmarkName = "setDuration(videoDuration:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -444,11 +412,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Model/VideoExercise.swift"
-            timestampString = "559110209.88852"
+            timestampString = "559121979.522117"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "77"
-            endingLineNumber = "77"
+            startingLineNumber = "74"
+            endingLineNumber = "74"
             landmarkName = "setDuration(videoDuration:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -460,11 +428,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Model/VideoExercise.swift"
-            timestampString = "559110209.8888479"
+            timestampString = "559121979.522225"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "63"
-            endingLineNumber = "63"
+            startingLineNumber = "60"
+            endingLineNumber = "60"
             landmarkName = "encode(with:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -476,11 +444,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Model/VideoExercise.swift"
-            timestampString = "559110209.889213"
+            timestampString = "559121979.522294"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "67"
-            endingLineNumber = "67"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
             landmarkName = "encode(with:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -492,27 +460,27 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Model/VideoExercise.swift"
-            timestampString = "559110209.889524"
+            timestampString = "559121979.522344"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "66"
+            endingLineNumber = "66"
+            landmarkName = "encode(with:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Model/VideoExercise.swift"
+            timestampString = "559121979.5223891"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "69"
             endingLineNumber = "69"
-            landmarkName = "encode(with:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Model/VideoExercise.swift"
-            timestampString = "559110209.889848"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "72"
-            endingLineNumber = "72"
             landmarkName = "setLocalURL(localURL:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -524,11 +492,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Model/VideoExercise.swift"
-            timestampString = "559110209.890134"
+            timestampString = "559121979.522434"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "71"
-            endingLineNumber = "71"
+            startingLineNumber = "68"
+            endingLineNumber = "68"
             landmarkName = "setLocalURL(localURL:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -540,27 +508,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AddWorkoutView/AddCustomizeWorkoutTableViewController.swift"
-            timestampString = "559110209.890422"
+            timestampString = "559542834.628078"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "477"
-            endingLineNumber = "477"
-            landmarkName = "setDurationForDownloadedVideo(downloadedVideo:URL:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "AddWorkoutView/AddCustomizeWorkoutTableViewController.swift"
-            timestampString = "559110209.89048"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "512"
-            endingLineNumber = "512"
+            startingLineNumber = "476"
+            endingLineNumber = "476"
             landmarkName = "downloadVideoSingle(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -571,8 +523,24 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
+            filePath = "AddWorkoutView/AddCustomizeWorkoutTableViewController.swift"
+            timestampString = "559542834.628304"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "511"
+            endingLineNumber = "511"
+            landmarkName = "downloadVideo(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
             filePath = "PlayerViewExercise/PlayerViewExercise.swift"
-            timestampString = "559110209.890528"
+            timestampString = "559121979.523103"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "637"
@@ -588,7 +556,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PlayerViewExercise/PlayerViewExercise.swift"
-            timestampString = "559110209.890578"
+            timestampString = "559121979.523155"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "616"
@@ -604,11 +572,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Model/VideoExercise.swift"
-            timestampString = "559110209.890624"
+            timestampString = "559121979.523201"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "46"
-            endingLineNumber = "46"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
             landmarkName = "init(coder:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -620,7 +588,39 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Model/VideoExercise.swift"
-            timestampString = "559110209.890893"
+            timestampString = "559121979.523245"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "42"
+            endingLineNumber = "42"
+            landmarkName = "init(coder:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Model/VideoExercise.swift"
+            timestampString = "559121979.523289"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "44"
+            endingLineNumber = "44"
+            landmarkName = "init(coder:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Model/VideoExercise.swift"
+            timestampString = "559121979.523331"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "45"
@@ -636,11 +636,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Model/VideoExercise.swift"
-            timestampString = "559110209.8911541"
+            timestampString = "559121979.523373"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "47"
-            endingLineNumber = "47"
+            startingLineNumber = "50"
+            endingLineNumber = "50"
             landmarkName = "init(coder:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -652,11 +652,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Model/VideoExercise.swift"
-            timestampString = "559110209.891413"
+            timestampString = "559121979.523415"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "48"
-            endingLineNumber = "48"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
             landmarkName = "init(coder:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -668,11 +668,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Model/VideoExercise.swift"
-            timestampString = "559110209.891685"
+            timestampString = "559121979.5234571"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "53"
-            endingLineNumber = "53"
+            startingLineNumber = "51"
+            endingLineNumber = "51"
             landmarkName = "init(coder:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -684,7 +684,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Model/VideoExercise.swift"
-            timestampString = "559110209.8919359"
+            timestampString = "559121979.523499"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "52"
@@ -699,14 +699,14 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Model/VideoExercise.swift"
-            timestampString = "559110209.892185"
+            filePath = "PlayerViewWorkout/PlayerViewController.swift"
+            timestampString = "559542834.628615"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "54"
-            endingLineNumber = "54"
-            landmarkName = "init(coder:)"
-            landmarkType = "7">
+            startingLineNumber = "606"
+            endingLineNumber = "606"
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -715,14 +715,14 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Model/VideoExercise.swift"
-            timestampString = "559110209.892435"
+            filePath = "PlayerViewWorkout/PlayerViewController.swift"
+            timestampString = "559542834.62885"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "55"
-            endingLineNumber = "55"
-            landmarkName = "init(coder:)"
-            landmarkType = "7">
+            startingLineNumber = "602"
+            endingLineNumber = "602"
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

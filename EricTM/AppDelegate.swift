@@ -40,8 +40,124 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("an error occurred when audio session category.\n \(error)")
         }
         
+        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
+        let filePath = path.strings(byAppendingPaths: ["userListOfVideoExerciseData"])
+        
+        if let userListOfVideoExercises = NSKeyedUnarchiver.unarchiveObject(withFile: filePath[0]) as? [VideoExercise] {
+            if userListOfVideoExercises.count > 0 {
+                global.videoExercises = userListOfVideoExercises
+            } else {
+                global.videoExercises = (global.subWorkoutList["AllVideos"]?.contain)!
+                
+                NSKeyedArchiver.archiveRootObject(global.videoExercises, toFile: filePath[0])
+            }
+        } else {
+            global.videoExercises = (global.subWorkoutList["AllVideos"]?.contain)!
+            
+            NSKeyedArchiver.archiveRootObject(global.videoExercises, toFile: filePath[0])
+        }
+        
         
 
+        let filePath2 = path.strings(byAppendingPaths: ["userListOfWorkoutsData"])
+        
+        if let userListOfWorkouts = NSKeyedUnarchiver.unarchiveObject(withFile: filePath2[0]) as? [WorkOutVideo] {
+            
+            global.workOutVideos = userListOfWorkouts
+            for workoutVideos in global.workOutVideos {
+                print("[Saving UserDefaults] \(workoutVideos.length)")
+                print("[Saving UserDefaults] \(workoutVideos.containSubworkout.count)")
+            }
+            
+        } else {
+            
+            guard let wov1 = WorkOutVideo(name: "FULL BODY Upper",
+                                          length: "TO THE LIMIT",
+                                          workoutLabel: "FullBodyUpper",
+                                          isDefault: true,
+                                          containSubworkout: [global.subWorkoutList["ChestBack"]!,
+                                                              global.subWorkoutList["ChestBack"]!,
+                                                              global.subWorkoutList["Shoulders"]!,
+                                                              global.subWorkoutList["Arms"]!,
+                                                              global.subWorkoutList["GlutesCompound"]!,
+                                                              global.subWorkoutList["AbsFinisher"]!
+                ]) else {
+                    fatalError("Error")
+            }
+            
+            guard let wov2 = WorkOutVideo(name: "FULL BODY Glutes",
+                                          length: "TO THE LIMIT",
+                                          workoutLabel: "FullBodyGlutes",
+                                          isDefault: true,
+                                          containSubworkout: [global.subWorkoutList["GlutesCompound"]!,
+                                                              global.subWorkoutList["Glutes"]!,
+                                                              global.subWorkoutList["ChestBack"]!,
+                                                              global.subWorkoutList["ChestBack"]!,
+                                                              global.subWorkoutList["Shoulders"]!,
+                                                              global.subWorkoutList["AbsFinisher"]!
+                ]) else {
+                    fatalError("Error")
+            }
+            guard let wov3 = WorkOutVideo(name: "UPPER BODY",
+                                          length: "TO THE LIMIT",
+                                          workoutLabel: "UpperBody",
+                                          isDefault: true,
+                                          containSubworkout: [global.subWorkoutList["ChestBack"]!,
+                                                              global.subWorkoutList["ChestBack"]!,
+                                                              global.subWorkoutList["ChestBack"]!,
+                                                              global.subWorkoutList["Shoulders"]!,
+                                                              global.subWorkoutList["Arms"]!,
+                                                              global.subWorkoutList["Abs"]!
+                ]) else {
+                    fatalError("Error")
+            }
+            guard let wov4 = WorkOutVideo(name: "LOWER BODY",
+                                          length: "TO THE LIMIT",
+                                          workoutLabel: "LowerBody",
+                                          isDefault: true,
+                                          containSubworkout: [global.subWorkoutList["GlutesCompound"]!,
+                                                              global.subWorkoutList["GlutesCompound"]!,
+                                                              global.subWorkoutList["GlutesCompound"]!,
+                                                              global.subWorkoutList["GlutesIsolation"]!,
+                                                              global.subWorkoutList["GlutesIsolation"]!,
+                                                              global.subWorkoutList["Abs"]!
+                ]) else {
+                    fatalError("Error")
+            }
+            guard let wov5 = WorkOutVideo(name: "ABS Advance",
+                                          length: "TO THE LIMIT",
+                                          workoutLabel: "Abs",
+                                          isDefault: true,
+                                          containSubworkout: [global.subWorkoutList["Abs"]!,
+                                                              global.subWorkoutList["Abs"]!,
+                                                              global.subWorkoutList["Abs"]!,
+                                                              global.subWorkoutList["Abs"]!,
+                                                              global.subWorkoutList["Abs"]!,
+                                                              global.subWorkoutList["Abs"]!
+                ]) else {
+                    fatalError("Error")
+            }
+            guard let wov6 = WorkOutVideo(name: "ABS Intermediate",
+                                          length: "TO THE LIMIT",
+                                          workoutLabel: "AbsIntermediate",
+                                          isDefault: true,
+                                          containSubworkout: [  global.subWorkoutList["AbsIntermediate"]!,
+                                                                global.subWorkoutList["AbsIntermediate"]!,
+                                                                global.subWorkoutList["AbsIntermediate"]!,
+                                                                global.subWorkoutList["AbsIntermediate"]!,
+                                                                global.subWorkoutList["AbsIntermediate"]!,
+                                                                global.subWorkoutList["AbsIntermediate"]!
+                ]) else {
+                    fatalError("Error")
+            }
+            
+            global.workOutVideos = [wov1, wov2, wov3, wov4, wov5, wov6]
+            
+            let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
+            let filePath2 = path.strings(byAppendingPaths: ["userListOfWorkoutsData"])
+            NSKeyedArchiver.archiveRootObject(global.workOutVideos, toFile: filePath2[0])
+        }
+        
         
         return true
     }
