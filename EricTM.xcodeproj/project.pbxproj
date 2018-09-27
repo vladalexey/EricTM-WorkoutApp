@@ -33,6 +33,7 @@
 		82F7A7082152325600EB920B /* NavControllerVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F7A7072152325600EB920B /* NavControllerVideo.swift */; };
 		82F947182109A2AD00947FEB /* NutritionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F947172109A2AD00947FEB /* NutritionViewController.swift */; };
 		CD5662103D49FA68BDE5AAFD /* Pods_EricTM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04A4D67E757F772902D9E46B /* Pods_EricTM.framework */; };
+		CF3BFF6D215CEB2C0025C805 /* UINavigationControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF3BFF6C215CEB2C0025C805 /* UINavigationControllerExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -67,6 +68,7 @@
 		82F7A705215227EE00EB920B /* Toolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toolbar.swift; sourceTree = "<group>"; };
 		82F7A7072152325600EB920B /* NavControllerVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavControllerVideo.swift; sourceTree = "<group>"; };
 		82F947172109A2AD00947FEB /* NutritionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionViewController.swift; sourceTree = "<group>"; };
+		CF3BFF6C215CEB2C0025C805 /* UINavigationControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigationControllerExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +110,7 @@
 		82340FCB20DCD6BE003079A2 = {
 			isa = PBXGroup;
 			children = (
+				CF3BFF6B215CEB060025C805 /* Extensions */,
 				82F947162109A29300947FEB /* NutritionView */,
 				823876C021099C9D002A8E62 /* Personalize */,
 				823876BF21099C8F002A8E62 /* AddWorkoutView */,
@@ -205,6 +208,14 @@
 				04A4D67E757F772902D9E46B /* Pods_EricTM.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CF3BFF6B215CEB060025C805 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				CF3BFF6C215CEB2C0025C805 /* UINavigationControllerExtension.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -348,6 +359,7 @@
 				82340FD820DCD6BE003079A2 /* AppDelegate.swift in Sources */,
 				82233E672141359800BB8C49 /* AddCustomizeWorkoutTableViewCell.swift in Sources */,
 				82AF323A21363C9B0064A97D /* Global.swift in Sources */,
+				CF3BFF6D215CEB2C0025C805 /* UINavigationControllerExtension.swift in Sources */,
 				82340FEC20DCE2D0003079A2 /* WorkOutTableViewController.swift in Sources */,
 				82340FEE20DCE9C2003079A2 /* WorkOutVideo.swift in Sources */,
 				821EF25C21379C9A0032E6A2 /* VideoExercise.swift in Sources */,
