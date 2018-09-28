@@ -75,7 +75,7 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 250
+        return 60
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -90,9 +90,6 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
         let checkPortraitWorkoutTable = DispatchQueue(label: "checkPortraitWorkoutTable")
 
         checkPortraitWorkoutTable.sync {
-            
-            setupBackground()
-            
             print("[Screen Orientation] check Portrait in Table view")
             if UIApplication.shared.statusBarOrientation.isPortrait == false {
                 print("[Screen Orientation] change to Portrait")
@@ -113,7 +110,7 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
         self.navigationItem.leftBarButtonItem = sortButton
         self.navigationItem.rightBarButtonItem = editButton
         
-        tableView.estimatedRowHeight = 250
+        tableView.estimatedRowHeight = 60
         tableView.rowHeight = UITableView.automaticDimension
         
         tableView.allowsMultipleSelectionDuringEditing = true
@@ -353,7 +350,7 @@ class AddCustomizeWorkoutTableViewController: UITableViewController {
 //            self.present(doneRemoving, animated: true, completion: self.exitEditModeIfTrue)
             
             tableView.reloadData()
-            self.exitEditModeIfTrue
+            self.exitEditModeIfTrue()
             
         }
         remove.backgroundColor = .red

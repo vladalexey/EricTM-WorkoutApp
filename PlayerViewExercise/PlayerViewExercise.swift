@@ -283,10 +283,6 @@ class PlayerViewExercise: AVPlayerViewController {
             
             UIApplication.shared.endReceivingRemoteControlEvents() // when video ends and app in background
             
-            self.player?.pause()
-            self.player = nil
-            
-            NotificationCenter.default.removeObserver(self)
             self.toggleHidden()
             
             checkPortrait()
@@ -296,6 +292,12 @@ class PlayerViewExercise: AVPlayerViewController {
             
             UIApplication.shared.endIgnoringInteractionEvents()
         }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+        self.player?.pause()
+        self.player = nil
     }
     
     func checkPortrait() {
@@ -329,36 +331,15 @@ class PlayerViewExercise: AVPlayerViewController {
             
             print("[Error] OK")
             
-            let checkPortrait = DispatchQueue(label: "checkPortrait")
+            UIApplication.shared.endReceivingRemoteControlEvents()
+            self.toggleHidden()
+        
+            self.navigationController?.popViewController(animated: true)
+            self.navigationController?.setNavigationBarHidden(false, animated: true)
+            self.checkPortrait()
             
-            checkPortrait.sync {
-                
-                UIApplication.shared.endReceivingRemoteControlEvents()
-                self.player = nil
-                NotificationCenter.default.removeObserver(self)
-                self.toggleHidden()
-            }
-            
-            checkPortrait.sync {
-                
-                self.navigationController?.popViewController(animated: true)
-                self.navigationController?.setNavigationBarHidden(false, animated: true)
-            }
-            
-            checkPortrait.sync {
-                
-                if UIApplication.shared.statusBarOrientation.isPortrait == false {
-                    print("[Error] exit changing to Portrait")
-                    AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
-                }
-            }
-            checkPortrait.sync {
-                
-                alertView.dismiss(animated: true, completion: nil)
-            }
-            
-//            self.navigationController?.popViewController(animated: true)
-//            self.navigationController?.setNavigationBarHidden(false, animated: true)
+            alertView.dismiss(animated: true, completion: nil)
+        
         }
         
         alertView.addAction(okAction)
@@ -1260,11 +1241,6 @@ class PlayerViewExercise: AVPlayerViewController {
         NotificationCenter.default.removeObserver(self)
         
         checkPortrait()
-    }
-    
-    deinit {
-        self.player?.pause()
-        NotificationCenter.default.removeObserver(self)
     }
     
     override func didReceiveMemoryWarning() {
