@@ -17,6 +17,7 @@ class WorkOutTableViewCell: UITableViewCell {
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var minuteWorkout: UILabel!
     @IBOutlet weak var Vignette: UIImageView!
+    @IBOutlet weak var workoutDescriptionTextView: UITextView!
     
     
     override func awakeFromNib() {
@@ -38,4 +39,14 @@ class WorkOutTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        if editing {
+            minuteWorkout.isHidden = editing
+        } else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.minuteWorkout.isHidden = editing
+            }
+        }
+    }
 }

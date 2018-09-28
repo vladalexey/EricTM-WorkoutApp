@@ -145,7 +145,7 @@ class WorkOutTableViewController: UITableViewController {
         cell.photoImageView.image = workOutVideo.image
         cell.Vignette.image = workOutVideo.background
         cell.minuteWorkout.text = workOutVideo.length.uppercased()
-
+        cell.workoutDescriptionTextView.text = workOutVideo.workoutLabel
         return cell
     }
     
@@ -433,7 +433,7 @@ class WorkOutTableViewController: UITableViewController {
         } else {
             
             guard let wov1 = WorkOutVideo(name: "FULL BODY Upper",
-                                          length: "TO THE LIMIT",
+                                          length: "45",
                                           workoutLabel: "FullBodyUpper",
                                           isDefault: true,
                                           containSubworkout: [global.subWorkoutList["ChestBack"]!,
@@ -447,7 +447,7 @@ class WorkOutTableViewController: UITableViewController {
             }
             
             guard let wov2 = WorkOutVideo(name: "FULL BODY Glutes",
-                                          length: "TO THE LIMIT",
+                                          length: "45",
                                           workoutLabel: "FullBodyGlutes",
                                           isDefault: true,
                                           containSubworkout: [global.subWorkoutList["GlutesCompound"]!,
@@ -460,7 +460,7 @@ class WorkOutTableViewController: UITableViewController {
                     fatalError("Error")
             }
             guard let wov3 = WorkOutVideo(name: "UPPER BODY",
-                                          length: "TO THE LIMIT",
+                                          length: "45",
                                           workoutLabel: "UpperBody",
                                           isDefault: true,
                                           containSubworkout: [global.subWorkoutList["ChestBack"]!,
@@ -473,7 +473,7 @@ class WorkOutTableViewController: UITableViewController {
                     fatalError("Error")
             }
             guard let wov4 = WorkOutVideo(name: "LOWER BODY",
-                                          length: "TO THE LIMIT",
+                                          length: "45",
                                           workoutLabel: "LowerBody",
                                           isDefault: true,
                                           containSubworkout: [global.subWorkoutList["GlutesCompound"]!,
@@ -486,7 +486,7 @@ class WorkOutTableViewController: UITableViewController {
                     fatalError("Error")
             }
             guard let wov5 = WorkOutVideo(name: "ABS Advance",
-                                          length: "TO THE LIMIT",
+                                          length: "45",
                                           workoutLabel: "Abs",
                                           isDefault: true,
                                           containSubworkout: [global.subWorkoutList["Abs"]!,
@@ -499,7 +499,7 @@ class WorkOutTableViewController: UITableViewController {
                     fatalError("Error")
             }
             guard let wov6 = WorkOutVideo(name: "ABS Intermediate",
-                                          length: "TO THE LIMIT",
+                                          length: "45",
                                           workoutLabel: "AbsIntermediate",
                                           isDefault: true,
                                           containSubworkout: [  global.subWorkoutList["AbsIntermediate"]!,

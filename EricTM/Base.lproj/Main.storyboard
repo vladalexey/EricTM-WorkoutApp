@@ -41,12 +41,7 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="374" height="210"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="45" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MLx-qr-J9G">
-                                                    <rect key="frame" x="345" y="181" width="21" height="21"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="21" id="S7z-TC-K7f"/>
-                                                        <constraint firstAttribute="width" secondItem="MLx-qr-J9G" secondAttribute="height" multiplier="1:1" id="Uku-n2-GLN"/>
-                                                        <constraint firstAttribute="height" constant="21" id="jmc-WH-Ang"/>
-                                                    </constraints>
+                                                    <rect key="frame" x="345" y="181.66666666666666" width="21" height="20.333333333333343"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -102,19 +97,20 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="xdX-8R-Uc1" firstAttribute="centerY" secondItem="tei-q8-YQ0" secondAttribute="centerY" id="DdG-bE-jVJ"/>
-                                        <constraint firstItem="Ara-FY-5Cm" firstAttribute="leading" secondItem="tei-q8-YQ0" secondAttribute="leadingMargin" id="DzI-Cc-h9L"/>
+                                        <constraint firstItem="Ara-FY-5Cm" firstAttribute="leading" secondItem="tei-q8-YQ0" secondAttribute="leading" constant="20" id="DzI-Cc-h9L"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="Ara-FY-5Cm" secondAttribute="bottom" id="LB9-0c-HDq"/>
                                         <constraint firstItem="xdX-8R-Uc1" firstAttribute="centerX" secondItem="tei-q8-YQ0" secondAttribute="centerX" id="e0b-Dp-aCl"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="Ara-FY-5Cm" secondAttribute="trailing" id="iMC-v0-3l8"/>
+                                        <constraint firstAttribute="trailing" secondItem="Ara-FY-5Cm" secondAttribute="trailing" constant="20" id="iMC-v0-3l8"/>
                                         <constraint firstItem="Ara-FY-5Cm" firstAttribute="top" secondItem="tei-q8-YQ0" secondAttribute="topMargin" id="qm6-ac-blJ"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <connections>
                                     <outlet property="Vignette" destination="Hha-60-uwu" id="dFU-xf-l26"/>
-                                    <outlet property="minuteWorkout" destination="ofy-sn-G2g" id="jYD-6g-LgI"/>
+                                    <outlet property="minuteWorkout" destination="MLx-qr-J9G" id="rp2-0a-ObY"/>
                                     <outlet property="nameLabel" destination="4dr-hx-h1G" id="Fdy-Hd-n1U"/>
                                     <outlet property="photoImageView" destination="BCB-cy-KRg" id="drd-kM-pBE"/>
+                                    <outlet property="workoutDescriptionTextView" destination="ofy-sn-G2g" id="eYi-eV-YuL"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>

@@ -72,7 +72,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             
             guard let wov1 = WorkOutVideo(name: "FULL BODY Upper",
-                                          length: "TO THE LIMIT",
+                                          length: "45",
                                           workoutLabel: "FullBodyUpper",
                                           isDefault: true,
                                           containSubworkout: [global.subWorkoutList["ChestBack"]!,
@@ -86,7 +86,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             
             guard let wov2 = WorkOutVideo(name: "FULL BODY Glutes",
-                                          length: "TO THE LIMIT",
+                                          length: "45",
                                           workoutLabel: "FullBodyGlutes",
                                           isDefault: true,
                                           containSubworkout: [global.subWorkoutList["GlutesCompound"]!,
@@ -99,7 +99,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     fatalError("Error")
             }
             guard let wov3 = WorkOutVideo(name: "UPPER BODY",
-                                          length: "TO THE LIMIT",
+                                          length: "45",
                                           workoutLabel: "UpperBody",
                                           isDefault: true,
                                           containSubworkout: [global.subWorkoutList["ChestBack"]!,
@@ -112,7 +112,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     fatalError("Error")
             }
             guard let wov4 = WorkOutVideo(name: "LOWER BODY",
-                                          length: "TO THE LIMIT",
+                                          length: "45",
                                           workoutLabel: "LowerBody",
                                           isDefault: true,
                                           containSubworkout: [global.subWorkoutList["GlutesCompound"]!,
@@ -125,7 +125,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     fatalError("Error")
             }
             guard let wov5 = WorkOutVideo(name: "ABS Advance",
-                                          length: "TO THE LIMIT",
+                                          length: "45",
                                           workoutLabel: "Abs",
                                           isDefault: true,
                                           containSubworkout: [global.subWorkoutList["Abs"]!,
@@ -138,7 +138,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     fatalError("Error")
             }
             guard let wov6 = WorkOutVideo(name: "ABS Intermediate",
-                                          length: "TO THE LIMIT",
+                                          length: "45",
                                           workoutLabel: "AbsIntermediate",
                                           isDefault: true,
                                           containSubworkout: [  global.subWorkoutList["AbsIntermediate"]!,
