@@ -33,6 +33,9 @@
 		82F7A7082152325600EB920B /* NavControllerVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F7A7072152325600EB920B /* NavControllerVideo.swift */; };
 		82F947182109A2AD00947FEB /* NutritionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F947172109A2AD00947FEB /* NutritionViewController.swift */; };
 		CD5662103D49FA68BDE5AAFD /* Pods_EricTM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04A4D67E757F772902D9E46B /* Pods_EricTM.framework */; };
+		CF31F7F3215E2C1B00B5BB43 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF31F7F2215E2C1B00B5BB43 /* UIColorExtension.swift */; };
+		CF31F7F5215E2C4D00B5BB43 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF31F7F4215E2C4D00B5BB43 /* UIViewExtension.swift */; };
+		CF31F7F7215E2C8200B5BB43 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF31F7F6215E2C8200B5BB43 /* UIImageExtension.swift */; };
 		CF3BFF6D215CEB2C0025C805 /* UINavigationControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF3BFF6C215CEB2C0025C805 /* UINavigationControllerExtension.swift */; };
 /* End PBXBuildFile section */
 
@@ -68,6 +71,9 @@
 		82F7A705215227EE00EB920B /* Toolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toolbar.swift; sourceTree = "<group>"; };
 		82F7A7072152325600EB920B /* NavControllerVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavControllerVideo.swift; sourceTree = "<group>"; };
 		82F947172109A2AD00947FEB /* NutritionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionViewController.swift; sourceTree = "<group>"; };
+		CF31F7F2215E2C1B00B5BB43 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
+		CF31F7F4215E2C4D00B5BB43 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
+		CF31F7F6215E2C8200B5BB43 /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		CF3BFF6C215CEB2C0025C805 /* UINavigationControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigationControllerExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -214,6 +220,9 @@
 			isa = PBXGroup;
 			children = (
 				CF3BFF6C215CEB2C0025C805 /* UINavigationControllerExtension.swift */,
+				CF31F7F2215E2C1B00B5BB43 /* UIColorExtension.swift */,
+				CF31F7F4215E2C4D00B5BB43 /* UIViewExtension.swift */,
+				CF31F7F6215E2C8200B5BB43 /* UIImageExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -364,8 +373,11 @@
 				82340FEE20DCE9C2003079A2 /* WorkOutVideo.swift in Sources */,
 				821EF25C21379C9A0032E6A2 /* VideoExercise.swift in Sources */,
 				829FBCB720E0E5070052601F /* TabBarViewController.swift in Sources */,
+				CF31F7F5215E2C4D00B5BB43 /* UIViewExtension.swift in Sources */,
+				CF31F7F3215E2C1B00B5BB43 /* UIColorExtension.swift in Sources */,
 				82F7A706215227EE00EB920B /* Toolbar.swift in Sources */,
 				82340FEA20DCDBCC003079A2 /* WorkOutTableViewCell.swift in Sources */,
+				CF31F7F7215E2C8200B5BB43 /* UIImageExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
